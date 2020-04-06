@@ -10,7 +10,8 @@ class Settings extends React.Component {
       <Switch
         checkedChildren={<CheckOutlined />}
         unCheckedChildren={<CloseOutlined />}
-        defaultChecked
+        checked={this.props.settings.darkMode}
+        onChange={(checked) => this.props.dispatch(setDarkMode(checked))}
       />
     );
   }

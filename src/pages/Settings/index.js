@@ -23,7 +23,7 @@ class Settings extends React.Component {
           <Form.Item label="Menu trigger">
             <Select
               defaultValue={this.props.settings.menuTrigger}
-              style={{ width: 120 }}
+              style={{ width: 200 }}
               onChange={(value) =>
                 this.props.dispatch(
                   setSetting({ setting: "menuTrigger", value })

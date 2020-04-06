@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import { MenuProvider, Menu, theme, animation } from "react-contexify";
 function Page({ menu, children, settings }) {
   return (
-    <div>
-      <MenuProvider id="menu_id" component="span">
+    <>
+      <Menu id="menu_id">{menu}</Menu>
+      <MenuProvider
+        id="menu_id"
+        style={{
+          border: "1px solid purple",
+          display: "flex",
+        }}
+      >
         {children}
       </MenuProvider>
-      <Menu
-        id="menu_id"
-        theme={settings.darkMode ? theme.dark : theme.light}
-        animation={animation.flip}
-      >
-        {menu}
-      </Menu>
-    </div>
+    </>
   );
 }
 

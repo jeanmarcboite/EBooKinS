@@ -6,7 +6,7 @@ class Toc extends React.PureComponent {
     return (
       <Menu
         mode="inline"
-        onClick={this.props.toc ? this.props.toc.onClick : null}
+        onClick={this.props.selectChapter}
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
         style={{ height: "100%" }}

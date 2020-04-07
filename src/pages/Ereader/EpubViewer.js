@@ -22,6 +22,7 @@ const Arrow = styled.a`
   user-select: none;
   text-decoration: none;
   color: papayawhip;
+  z-index: 99;
   &:active {
     color: rgb(211, 28, 28);
   }
@@ -30,7 +31,7 @@ const Arrow = styled.a`
   }
 `;
 const LeftArrow = styled(Arrow)`
-  left: 30px;
+  left: 230px;
 `;
 const RightArrow = styled(Arrow)`
   right: 30px;
@@ -52,7 +53,7 @@ export default class EpubViewer extends React.PureComponent {
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
     // we will have a problem with this later
-    this.state = { url: this.props.url };
+    this.state = { url: this.props.url, tableOfContents: null, chapter: null };
   }
   loadTableOfContents({ toc }) {
     this.setState({
@@ -80,6 +81,11 @@ export default class EpubViewer extends React.PureComponent {
     });
   }
 
+  selectChapter = (chapter) => {
+    console.log(chapter);
+    this.epub.rendition.display(chapter.key);
+    this.setState({ chapter });
+  };
   componentDidMount() {
     this.loadBook();
   }
@@ -119,7 +125,10 @@ export default class EpubViewer extends React.PureComponent {
           style={{ padding: "24px 0" }}
         >
           <Layout.Sider className="site-layout-background" width={200}>
-            <Toc toc={this.state.tableOfContents} />
+            <Toc
+              toc={this.state.tableOfContents}
+              selectChapter={this.selectChapter}
+            />
           </Layout.Sider>
           <Layout.Content style={{ padding: "0 0", minHeight: 280 }}>
             <LeftArrow ref={this.$prev} onClick={this.prev}>

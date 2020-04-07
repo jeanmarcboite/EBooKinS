@@ -4,14 +4,12 @@ import RoutesMenu from "routes/Menu";
 
 import { Layout } from "antd";
 
-import Sider from "./Sider";
+import Toc from "./Toc";
 import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
-
-const { Content } = Layout;
 
 const handleClick = (e) => console.log(e);
 
@@ -86,10 +84,12 @@ export default class Settings extends React.Component {
           className="site-layout-background"
           style={{ padding: "24px 0" }}
         >
-          <Sider toc={toc} />
-          <Content style={{ padding: "0 24px", minHeight: 280 }}>
+          <Layout.Sider className="site-layout-background" width={200}>
+            <Toc toc={toc} />
+          </Layout.Sider>
+          <Layout.Content style={{ padding: "0 24px", minHeight: 280 }}>
             Content
-          </Content>
+          </Layout.Content>
         </Layout>
       </Page>
     );

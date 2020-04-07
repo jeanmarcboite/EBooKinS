@@ -3,7 +3,6 @@ import { Menu } from "antd";
 
 class Toc extends React.PureComponent {
   render() {
-    console.log(this.props);
     return (
       <Menu
         mode="inline"
@@ -16,7 +15,9 @@ class Toc extends React.PureComponent {
           ? this.props.toc.subMenus.map((item, key) => (
               <Menu.SubMenu key={item.id} title={item.title}>
                 {item.items.map((subitem, subkey) => (
-                  <Menu.Item key={subkey}>{subitem.content}</Menu.Item>
+                  <Menu.Item key={subitem.id} href={subitem.href}>
+                    {subitem.label}
+                  </Menu.Item>
                 ))}
               </Menu.SubMenu>
             ))

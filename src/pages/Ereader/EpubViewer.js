@@ -46,69 +46,6 @@ const Viewer = styled.div``;
 
 const handleClick = (e) => console.log(e);
 
-let tableOfContents = {
-  onClick: handleClick,
-  subMenus: [
-    {
-      id: "sub1",
-      title: (
-        <>
-          <UserOutlined />
-          subnav 1
-        </>
-      ),
-      items: [
-        {
-          id: "1",
-          content: "option1",
-        },
-        {
-          id: "2",
-          content: "option2",
-        },
-      ],
-    },
-    {
-      id: "sub2",
-      title: (
-        <>
-          <LaptopOutlined />
-          subnav 2
-        </>
-      ),
-      items: [
-        {
-          id: "5",
-          content: "option5",
-        },
-        {
-          id: "6",
-          content: "option6",
-        },
-      ],
-    },
-    {
-      id: "sub3",
-      title: (
-        <>
-          <NotificationOutlined />
-          subnav 3
-        </>
-      ),
-      items: [
-        {
-          id: "31",
-          content: "option1",
-        },
-        {
-          id: "32",
-          content: "option2",
-        },
-      ],
-    },
-  ],
-};
-
 export default class EpubViewer extends React.PureComponent {
   static whyDidYouRender = true;
   constructor(props) {
@@ -140,7 +77,7 @@ export default class EpubViewer extends React.PureComponent {
             return {
               id: item.id,
               href: item.href,
-              content: item.label,
+              label: item.label,
             };
           }),
         },

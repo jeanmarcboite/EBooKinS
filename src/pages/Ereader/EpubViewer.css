@@ -6,7 +6,7 @@
   right: 20px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 9000px) {
   #viewer.spreads:after {
     position: absolute;
     width: 1px;

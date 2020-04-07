@@ -46,7 +46,7 @@ const Viewer = styled.div``;
 
 const handleClick = (e) => console.log(e);
 
-const toc = {
+let tableOfContents = {
   onClick: handleClick,
   subMenus: [
     {
@@ -118,7 +118,36 @@ export default class EpubViewer extends React.PureComponent {
     this.$prev = React.createRef();
     this.$next = React.createRef();
 
+    this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
+    // we will have a problem with this later
+    this.state = { url: this.props.url };
+  }
+  loadTableOfContents({ toc }) {
+    console.warn(toc);
+    this.tableOfContents = {
+      onClick: handleClick,
+      subMenus: [
+        {
+          id: "sub1",
+          title: (
+            <>
+              <UserOutlined />
+              chapters
+            </>
+          ),
+          items: toc.map((item, key) => {
+            return {
+              id: item.id,
+              href: item.href,
+              content: item.label,
+            };
+          }),
+        },
+      ],
+    };
+    console.warn(this.tableOfContents);
+    this.setState({ tableOfContents: this.tableOfContents });
   }
 
   componentDidMount() {
@@ -134,13 +163,14 @@ export default class EpubViewer extends React.PureComponent {
 
   loadBook() {
     if (this.book) {
+      console.log(this.book);
       this.book.destroy();
     }
 
     this.book = new Epub({
       url: this.props.url,
       $viewer: this.$viewer,
-      loadTableOfContents: (nav) => console.log(nav),
+      loadTableOfContents: this.loadTableOfContents,
     });
   }
 
@@ -148,14 +178,14 @@ export default class EpubViewer extends React.PureComponent {
     if (true)
       return (
         <Layout
-          id="viewer"
+          id="viewer-container"
           className="site-layout-background"
           style={{ padding: "24px 0" }}
         >
           <Layout.Sider className="site-layout-background" width={200}>
-            <Toc toc={toc} />
+            <Toc toc={this.state.tableOfContents} />
           </Layout.Sider>
-          <Layout.Content style={{ padding: "0 24px", minHeight: 280 }}>
+          <Layout.Content style={{ padding: "0 0", minHeight: 280 }}>
             <LeftArrow id="prev" ref={this.$prev} className="arrow">
               <LeftOutlined />
             </LeftArrow>

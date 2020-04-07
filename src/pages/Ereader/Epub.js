@@ -1,7 +1,7 @@
 import EpubJS from "epubjs";
 
 class Epub {
-  constructor({ url, loadTableOfContents, $viewer, debug }) {
+  constructor({ url, loadTableOfContents, loadMetadata, $viewer, debug }) {
     this.settings = {
       width: "100%",
       height: 400,
@@ -19,7 +19,8 @@ class Epub {
     });
     //this.rendition = this.book.renderTo($viewer.current, this.settings);
     this.rendition.display();
-    this.book.loaded.navigation.then((nav) => loadTableOfContents(nav));
+    this.book.loaded.navigation.then(loadTableOfContents);
+    this.book.loaded.metadata.then(loadMetadata);
 
     if (debug) {
       this.book.ready.then((book) => {
@@ -30,9 +31,6 @@ class Epub {
       });
       this.book.loaded.spine.then((spine) => {
         console.log(spine);
-      });
-      this.book.loaded.metadata.then((metadata) => {
-        console.log(metadata);
       });
       this.book.loaded.cover.then((cover) => {
         console.log(cover);

@@ -59,7 +59,11 @@ export default class EpubViewer extends React.PureComponent {
       chapter: null,
     };
   }
+  loadMetadata(metadata) {
+    document.title = metadata.title;
+  }
   loadTableOfContents({ toc }) {
+    console.log(toc);
     this.setState({
       tableOfContents: {
         onClick: handleClick,
@@ -87,7 +91,7 @@ export default class EpubViewer extends React.PureComponent {
 
   selectChapter = (chapter) => {
     console.log(chapter);
-    this.epub.rendition.display(chapter.key);
+    this.epub.rendition.display(chapter.item.props.href);
     this.setState({ chapter });
   };
   componentDidMount() {
@@ -110,6 +114,8 @@ export default class EpubViewer extends React.PureComponent {
       url: this.props.url,
       $viewer: this.$viewer,
       loadTableOfContents: this.loadTableOfContents,
+      loadMetadata: this.loadMetadata,
+      debug: false,
     });
   }
 

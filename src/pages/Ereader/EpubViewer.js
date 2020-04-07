@@ -10,6 +10,8 @@ import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
+  RightOutlined,
+  LeftOutlined,
 } from "@ant-design/icons";
 
 const handleClick = (e) => console.log(e);
@@ -124,7 +126,13 @@ export default class EpubViewer extends React.PureComponent {
             <Toc toc={toc} />
           </Layout.Sider>
           <Layout.Content style={{ padding: "0 24px", minHeight: 280 }}>
+            <a id="prev" ref={this.$prev} href="#prev" className="arrow">
+              <LeftOutlined />
+            </a>
             <div id="viewer" ref={this.$viewer} className="spreads"></div>
+            <a id="next" ref={this.$next} href="#next" className="arrow">
+              <RightOutlined />
+            </a>
           </Layout.Content>
         </Layout>
       );

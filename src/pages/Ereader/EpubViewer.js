@@ -14,6 +14,34 @@ import {
   LeftOutlined,
 } from "@ant-design/icons";
 
+import styled from "styled-components";
+const Arrow = styled.a`
+  position: absolute;
+  top: 50%;
+  margin-top: -32px;
+  font-size: 64px;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  text-decoration: none;
+  color: papayawhip;
+  &:active {
+    color: rgb(211, 28, 28);
+  }
+  &:hover {
+    color: rgb(117, 15, 233);
+  }
+`;
+const LeftArrow = styled(Arrow)`
+  left: 30px;
+`;
+const RightArrow = styled(Arrow)`
+  right: 30px;
+`;
+
 const handleClick = (e) => console.log(e);
 
 const toc = {
@@ -126,13 +154,13 @@ export default class EpubViewer extends React.PureComponent {
             <Toc toc={toc} />
           </Layout.Sider>
           <Layout.Content style={{ padding: "0 24px", minHeight: 280 }}>
-            <a id="prev" ref={this.$prev} href="#prev" className="arrow">
+            <LeftArrow id="prev" ref={this.$prev} className="arrow">
               <LeftOutlined />
-            </a>
+            </LeftArrow>
             <div id="viewer" ref={this.$viewer} className="spreads"></div>
-            <a id="next" ref={this.$next} href="#next" className="arrow">
+            <RightArrow id="next" ref={this.$next}>
               <RightOutlined />
-            </a>
+            </RightArrow>
           </Layout.Content>
         </Layout>
       );

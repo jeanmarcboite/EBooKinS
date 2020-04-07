@@ -92,11 +92,11 @@ export default class EpubViewer extends React.PureComponent {
   }
 
   loadBook() {
-    if (this.book) {
-      this.book.destroy();
+    if (this.epub) {
+      this.epub.destroy();
     }
 
-    this.book = new Epub({
+    this.epub = new Epub({
       url: this.props.url,
       $viewer: this.$viewer,
       loadTableOfContents: this.loadTableOfContents,
@@ -104,10 +104,10 @@ export default class EpubViewer extends React.PureComponent {
   }
 
   prev = (e) => {
-    this.book.renditionPrev(e);
+    this.epub.renditionPrev(e);
   };
   next = (e) => {
-    this.book.renditionNext(e);
+    this.epub.renditionNext(e);
   };
 
   render() {

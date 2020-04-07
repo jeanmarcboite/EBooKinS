@@ -6,13 +6,7 @@ import Toc from "./Toc";
 
 import Epub from "./Epub";
 import "./examples.css";
-import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-  RightOutlined,
-  LeftOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 import styled from "styled-components";
 const Arrow = styled.a`
@@ -99,7 +93,6 @@ export default class EpubViewer extends React.PureComponent {
 
   loadBook() {
     if (this.book) {
-      console.log(this.book);
       this.book.destroy();
     }
 
@@ -109,6 +102,13 @@ export default class EpubViewer extends React.PureComponent {
       loadTableOfContents: this.loadTableOfContents,
     });
   }
+
+  prev = (e) => {
+    this.book.renditionPrev(e);
+  };
+  next = (e) => {
+    this.book.renditionNext(e);
+  };
 
   render() {
     if (true)
@@ -122,11 +122,11 @@ export default class EpubViewer extends React.PureComponent {
             <Toc toc={this.state.tableOfContents} />
           </Layout.Sider>
           <Layout.Content style={{ padding: "0 0", minHeight: 280 }}>
-            <LeftArrow id="prev" ref={this.$prev} className="arrow">
+            <LeftArrow ref={this.$prev} onClick={this.prev}>
               <LeftOutlined />
             </LeftArrow>
             <Viewer id="viewer" ref={this.$viewer} className="spreads"></Viewer>
-            <RightArrow id="next" ref={this.$next}>
+            <RightArrow ref={this.$next} onClick={this.next}>
               <RightOutlined />
             </RightArrow>
           </Layout.Content>

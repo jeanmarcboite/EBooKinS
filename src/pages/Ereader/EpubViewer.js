@@ -61,30 +61,29 @@ export default class EpubViewer extends React.PureComponent {
     this.state = { url: this.props.url };
   }
   loadTableOfContents({ toc }) {
-    console.warn(toc);
-    this.tableOfContents = {
-      onClick: handleClick,
-      subMenus: [
-        {
-          id: "sub1",
-          title: (
-            <>
-              <UserOutlined />
-              chapters
-            </>
-          ),
-          items: toc.map((item, key) => {
-            return {
-              id: item.id,
-              href: item.href,
-              label: item.label,
-            };
-          }),
-        },
-      ],
-    };
-    console.warn(this.tableOfContents);
-    this.setState({ tableOfContents: this.tableOfContents });
+    this.setState({
+      tableOfContents: {
+        onClick: handleClick,
+        subMenus: [
+          {
+            id: "sub1",
+            title: (
+              <>
+                <UserOutlined />
+                chapters
+              </>
+            ),
+            items: toc.map((item, key) => {
+              return {
+                id: item.id,
+                href: item.href,
+                label: item.label,
+              };
+            }),
+          },
+        ],
+      },
+    });
   }
 
   componentDidMount() {

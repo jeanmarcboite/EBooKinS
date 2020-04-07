@@ -5,7 +5,7 @@ import { Layout } from "antd";
 import Toc from "./Toc";
 
 import Epub from "./Epub";
-import "./EpubViewer.css";
+import "./examples.css";
 import {
   UserOutlined,
   LaptopOutlined,
@@ -41,6 +41,8 @@ const LeftArrow = styled(Arrow)`
 const RightArrow = styled(Arrow)`
   right: 30px;
 `;
+
+const Viewer = styled.div``;
 
 const handleClick = (e) => console.log(e);
 
@@ -157,7 +159,7 @@ export default class EpubViewer extends React.PureComponent {
             <LeftArrow id="prev" ref={this.$prev} className="arrow">
               <LeftOutlined />
             </LeftArrow>
-            <div id="viewer" ref={this.$viewer} className="spreads"></div>
+            <Viewer id="viewer" ref={this.$viewer} className="spreads"></Viewer>
             <RightArrow id="next" ref={this.$next}>
               <RightOutlined />
             </RightArrow>

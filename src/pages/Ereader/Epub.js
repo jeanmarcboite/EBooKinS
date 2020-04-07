@@ -4,7 +4,7 @@ class Epub {
   constructor({ url, loadTableOfContent, $viewer }) {
     this.settings = {
       width: "100%",
-      height: "100%",
+      height: "100vh",
       spread: "always",
     };
     this.url = url;

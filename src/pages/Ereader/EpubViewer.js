@@ -52,8 +52,12 @@ export default class EpubViewer extends React.PureComponent {
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
-    // we will have a problem with this later
-    this.state = { url: this.props.url, tableOfContents: null, chapter: null };
+    this.state = {
+      // if state.url != props.url, we need to load the book
+      url: this.props.url,
+      tableOfContents: null,
+      chapter: null,
+    };
   }
   loadTableOfContents({ toc }) {
     this.setState({

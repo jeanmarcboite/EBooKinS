@@ -1,0 +1,76 @@
+#prev {
+    left: 20px;
+}
+
+#next {
+    right: 20px;
+}
+
+@media (min-width: 900px) {
+    #viewer.spreads:after {
+        position: absolute;
+        width: 1px;
+        border-right: 1px #000 solid;
+        height: 90%;
+        z-index: 1;
+        left: 50%;
+        margin-left: -1px;
+        top: 5%;
+        opacity: 0.15;
+        box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
+        content: "";
+    }
+
+    #viewer.spreads.single:after {
+        display: none;
+    }
+
+    #prev {
+        left: 40px;
+    }
+
+    #next {
+        right: 40px;
+    }
+}
+
+.arrow {
+    position: fixed;
+    top: 50%;
+    margin-top: -32px;
+    font-size: 64px;
+    color: #e2e2e2;
+    font-family: arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    text-decoration: none;
+}
+
+.arrow:hover,
+.navlink:hover {
+    color: rgb(211, 28, 28);
+}
+
+.arrow:active,
+.navlink:hover {
+    color: #000;
+}
+
+#viewer.spreads {
+    width: 80vw;
+    height: 80vh;
+    box-shadow: 0 0 4px #ccc;
+    border-radius: 5px;
+    padding: 0;
+    position: relative;
+    margin: 10px auto;
+    background: white url("ajax-loader.gif") center center no-repeat;
+    top: 10vh;
+}
+
+#viewer.spreads .epub-view > iframe {
+    background: rgb(224, 193, 127);
+}

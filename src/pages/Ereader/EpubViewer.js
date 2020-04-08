@@ -6,7 +6,12 @@ import Toc from "./Toc";
 
 import Epub from "./Epub";
 import "./examples.css";
-import { UserOutlined, RightOutlined, LeftOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  RightOutlined,
+  LeftOutlined,
+  FullscreenOutlined,
+} from "@ant-design/icons";
 
 import styled from "styled-components";
 const Arrow = styled.a`
@@ -22,7 +27,7 @@ const Arrow = styled.a`
   user-select: none;
   text-decoration: none;
   color: papayawhip;
-  z-index: 99;
+  z-index: 49;
   &:active {
     color: rgb(211, 28, 28);
   }
@@ -35,6 +40,20 @@ const LeftArrow = styled(Arrow)`
 `;
 const RightArrow = styled(Arrow)`
   right: 30px;
+`;
+
+const Fullscreen = styled.div`
+  position: "absolute",
+  top: "20px",
+  right: "20px",
+  color: papayawhip;
+  z-index: 99;
+  &:active {
+    color: rgb(211, 28, 28);
+  }
+  &:hover {
+    color: rgb(117, 15, 233);
+  }
 `;
 
 const Viewer = styled.div``;
@@ -131,6 +150,27 @@ export default class EpubViewer extends React.PureComponent {
     this.epub.renditionNext(e);
   };
 
+  setFullscreen = () => {
+    document.fullscreenEnabled =
+      document.fullscreenEnabled ||
+      document.mozFullScreenEnabled ||
+      document.documentElement.webkitRequestFullScreen;
+
+    let requestFullscreen = (element) => {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    };
+
+    if (document.fullscreenEnabled) {
+      requestFullscreen(document.documentElement);
+    }
+  };
+
   renderError = () => {
     if (!this.state.error) return null;
     return <Alert message={this.state.error.toString()} type="error" />;
@@ -143,18 +183,19 @@ export default class EpubViewer extends React.PureComponent {
       return <h1>{this.state.error.toString()}</h1>;
     } else
       return (
-        <Layout
-          id="viewer-container"
-          className="site-layout-background"
-          style={{ padding: "24px 0" }}
-        >
-          <Layout.Sider className="site-layout-background" width={200}>
+        <Layout id="viewer-container" className="site-layout-background">
+          <Layout.Sider
+            className="site-layout-background"
+            width={200}
+            collapsible
+            collapsedWidth={60}
+          >
             <Toc
               toc={this.state.tableOfContents}
               selectChapter={this.selectChapter}
             />
           </Layout.Sider>
-          <Layout.Content style={{ padding: "0 0", minHeight: 280 }}>
+          <Layout.Content>
             <LeftArrow ref={this.$prev} onClick={this.prev}>
               <LeftOutlined />
             </LeftArrow>
@@ -166,6 +207,9 @@ export default class EpubViewer extends React.PureComponent {
             <RightArrow ref={this.$next} onClick={this.next}>
               <RightOutlined />
             </RightArrow>
+            <Fullscreen>
+              <FullscreenOutlined onClick={this.setFullscreen} />
+            </Fullscreen>
           </Layout.Content>
         </Layout>
       );

@@ -120,7 +120,7 @@ export default class EpubViewer extends React.PureComponent {
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
-      debug: false,
+      debug: true,
     });
   }
 

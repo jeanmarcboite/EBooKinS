@@ -15,17 +15,25 @@ class Epub {
       width: "100%",
       height: 400,
       spread: "always",
+      restore: false,
+      reload: false,
+      bookmarks: undefined,
+      annotations: undefined,
+      contained: undefined,
+      bookKey: undefined,
+      styles: undefined,
+      sidebarReflow: false,
+      generatePagination: false,
+      history: true,
     };
+
     this.url = url;
     this.book = EpubJS();
     this.book
       .open(this.url)
       .then(() => {
         console.assert($viewer.current);
-        this.rendition = this.book.renderTo($viewer.current, {
-          width: "100%",
-          height: "100%",
-        });
+        this.rendition = this.book.renderTo($viewer.current, this.settings);
         //this.rendition = this.book.renderTo($viewer.current, this.settings);
         this.rendition.display();
         this.book.loaded.navigation.then(loadTableOfContents);

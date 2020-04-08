@@ -1,19 +1,20 @@
 .viewer.spreads {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
     box-shadow: 0 0 4px #ccc;
     border: 4px solid blue;
     border-radius: 30px;
     padding: 0;
     position: relative;
-    margin: 10px auto;
+    margin: 0 auto;
+    z-index: 2;
+    position: relative;
+    overflow: hidden;
     background: white url("ajax-loader.gif") center center no-repeat;
     top: 0px;
 }
 
 .viewer.spreads .epub-view > iframe {
-    width: 100%;
-    height: 100%;
     background: rgb(22, 219, 16);
     border: 20px solid purple;
     border-radius: 60px;

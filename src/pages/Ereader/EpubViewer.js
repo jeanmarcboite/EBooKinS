@@ -207,6 +207,13 @@ export default class EpubViewer extends React.PureComponent {
     return (
       <>
         <div>
+          <Arrow>
+            {this.state.fullscreen ? (
+              <FullscreenExitOutlined onClick={this.exitFullscreen} />
+            ) : (
+              <FullscreenOutlined onClick={this.setFullscreen} />
+            )}
+          </Arrow>
           <LeftArrow onClick={this.prev}>
             <LeftOutlined />
           </LeftArrow>
@@ -245,13 +252,6 @@ export default class EpubViewer extends React.PureComponent {
             </div>
           </div>
           <div style={{ background: "#40739e", height: "100%", width: "100%" }}>
-            <Fullscreen>
-              {this.state.fullscreen ? (
-                <FullscreenExitOutlined onClick={this.exitFullscreen} />
-              ) : (
-                <FullscreenOutlined onClick={this.setFullscreen} />
-              )}
-            </Fullscreen>
             <div
               ref={this.$viewer}
               className="spreads viewer"

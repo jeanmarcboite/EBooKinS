@@ -19,7 +19,8 @@ import {
 import ResizablePanels from "resizable-panels-react";
 
 import styled from "styled-components";
-const Arrow = styled.a`
+
+const Anchor = styled.a`
   position: absolute;
   top: 50%;
   margin-top: -32px;
@@ -40,26 +41,18 @@ const Arrow = styled.a`
     color: rgb(117, 15, 233);
   }
 `;
-const LeftArrow = styled(Arrow)`
+const LeftArrow = styled(Anchor)`
+  top: 50%;
   left: 230px;
 `;
-const RightArrow = styled(Arrow)`
+const RightArrow = styled(Anchor)`
+  top: 50%;
   right: 30px;
 `;
 
-const Fullscreen = styled.a`
-  position: absolute,
+const Fullscreen = styled(Anchor)`
   top: 20px;
   right: 20px;
-  font-size: 48px;
-  color: red;
-  z-index: 49;
-  &:active {
-    color: rgb(211, 28, 28);
-  }
-  &:hover {
-    color: rgb(117, 15, 233);
-  }
 `;
 
 const handleClick = (e) => console.log(e);
@@ -207,13 +200,13 @@ export default class EpubViewer extends React.PureComponent {
     return (
       <>
         <div>
-          <Arrow>
+          <Fullscreen>
             {this.state.fullscreen ? (
               <FullscreenExitOutlined onClick={this.exitFullscreen} />
             ) : (
               <FullscreenOutlined onClick={this.setFullscreen} />
             )}
-          </Arrow>
+          </Fullscreen>
           <LeftArrow onClick={this.prev}>
             <LeftOutlined />
           </LeftArrow>

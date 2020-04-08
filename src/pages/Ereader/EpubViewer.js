@@ -254,9 +254,26 @@ export default class EpubViewer extends React.PureComponent {
               />
             </div>
           </div>
-          <div style={{ background: "#40739e", height: "100%", width: "100%" }}>
-            <div id="epub_viewer" style={{ height: "100%", width: "100%" }}>
-              <div ref={this.$viewer} className="spreads viewer"></div>
+          <div
+            style={{
+              display: "flex",
+              background: "yellow",
+              height: "100%",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              id="epub_viewer"
+              className="epub_viewer"
+              style={{ height: "100%", width: "100%" }}
+            >
+              <div
+                ref={this.$viewer}
+                className="spreads viewer"
+                style={{ height: "100%", width: "100%" }}
+              ></div>
               {this.renderArrows()}
             </div>
           </div>

@@ -21,6 +21,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "redux-persist": "^6.0.0",
+    "resizable-panels-react": "^2.0.8",
     "styled-components": "^5.1.0"
   },
   "scripts": {

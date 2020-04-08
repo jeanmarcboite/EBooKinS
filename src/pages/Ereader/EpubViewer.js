@@ -13,6 +13,8 @@ import {
   FullscreenOutlined,
 } from "@ant-design/icons";
 
+import ResizablePanels from "resizable-panels-react";
+
 import styled from "styled-components";
 const Arrow = styled.a`
   position: absolute;
@@ -177,6 +179,46 @@ export default class EpubViewer extends React.PureComponent {
   };
 
   render() {
+    return (
+      <ResizablePanels
+        bkcolor="#e1b12c"
+        displayDirection="row"
+        width="100%"
+        height="800px"
+        panelsSize={[40, 60]}
+        sizeUnitMeasure="%"
+        resizerColor="#353b48"
+        resizerSize="30px"
+      >
+        <div
+          style={{
+            background: "#44bd32",
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Toc
+            toc={this.state.tableOfContents}
+            selectChapter={this.selectChapter}
+          />
+        </div>
+        <div
+          id="viewer"
+          ref={this.$viewer}
+          className="spreads"
+          style={{ height: "100%", width: "100%" }}
+        >
+          {this.state.error ? (
+            <Alert message={this.state.error.toString()} type="error" />
+          ) : null}
+        </div>
+      </ResizablePanels>
+    );
+  }
+  srender() {
     if (false && this.state.error) {
       console.log(typeof this.state.error);
       console.log("Error", JSON.stringify(this.state.error));

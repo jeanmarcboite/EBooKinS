@@ -69,9 +69,6 @@ export default class EpubViewer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.$viewer = React.createRef();
-    this.$toc = React.createRef();
-    this.$prev = React.createRef();
-    this.$next = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -219,6 +216,12 @@ export default class EpubViewer extends React.PureComponent {
               <Alert message={this.state.error.toString()} type="error" />
             ) : null}
           </div>
+          <LeftArrow onClick={this.prev}>
+            <LeftOutlined />
+          </LeftArrow>
+          <RightArrow onClick={this.next}>
+            <RightOutlined />
+          </RightArrow>
           <Fullscreen>
             <FullscreenOutlined onClick={this.setFullscreen} />
           </Fullscreen>

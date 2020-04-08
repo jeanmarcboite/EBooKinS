@@ -12,8 +12,8 @@ class Epub {
   }) {
     this.eventListeners = [];
     this.settings = {
-      width: "100%",
-      height: 400,
+      width: "80%",
+      height: "100%",
       spread: "always",
       restore: false,
       reload: false,

@@ -184,6 +184,26 @@ export default class EpubViewer extends React.PureComponent {
     return <Alert message={this.state.error.toString()} type="error" />;
   };
 
+  renderArrows = () => {
+    return (
+      <>
+        <Fullscreen>
+          {this.state.fullscreen ? (
+            <FullscreenExitOutlined onClick={this.exitFullscreen} />
+          ) : (
+            <FullscreenOutlined onClick={this.setFullscreen} />
+          )}
+        </Fullscreen>
+        <LeftArrow onClick={this.prev}>
+          <LeftOutlined />
+        </LeftArrow>
+        <RightArrow onClick={this.next}>
+          <RightOutlined />
+        </RightArrow>
+      </>
+    );
+  };
+
   /*
      Props:
 
@@ -199,21 +219,6 @@ export default class EpubViewer extends React.PureComponent {
   render() {
     return (
       <>
-        <div>
-          <Fullscreen>
-            {this.state.fullscreen ? (
-              <FullscreenExitOutlined onClick={this.exitFullscreen} />
-            ) : (
-              <FullscreenOutlined onClick={this.setFullscreen} />
-            )}
-          </Fullscreen>
-          <LeftArrow onClick={this.prev}>
-            <LeftOutlined />
-          </LeftArrow>
-          <RightArrow onClick={this.next}>
-            <RightOutlined />
-          </RightArrow>
-        </div>
         <ResizablePanels
           bkcolor="#e1b12c"
           displayDirection="row"
@@ -225,6 +230,7 @@ export default class EpubViewer extends React.PureComponent {
           resizerSize="30px"
         >
           <div
+            id="toc_viewer"
             style={{
               background: "#44bd32",
               height: "100%",
@@ -245,11 +251,14 @@ export default class EpubViewer extends React.PureComponent {
             </div>
           </div>
           <div style={{ background: "#40739e", height: "100%", width: "100%" }}>
-            <div
-              ref={this.$viewer}
-              className="spreads viewer"
-              style={{ height: "100%", width: "100%" }}
-            ></div>
+            <div id="epub_viewer" style={{ height: "100%", width: "100%" }}>
+              <div
+                ref={this.$viewer}
+                className="spreads viewer"
+                style={{ height: "100%", width: "80%" }}
+              ></div>
+              {this.renderArrows()}
+            </div>
           </div>
         </ResizablePanels>
       </>

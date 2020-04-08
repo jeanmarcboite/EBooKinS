@@ -180,44 +180,50 @@ export default class EpubViewer extends React.PureComponent {
     return <Alert message={this.state.error.toString()} type="error" />;
   };
 
+  /*
+     Props:
+
+        bkcolor: set a background color
+        displayDirection: its like flex direction, you can choose "row" for horizontal resizing or "column" for vertical resizing
+        width: set a width for you component
+        height: set a height for you component
+        panelsSize: a array to set your panels sizes, if you have 2 panels
+        sizeUnitMeasure: unit used to calculate the amount to resize (px or %)
+        resizerColor: change resizer color
+        resizerSize: change resizer size
+  */
   render() {
     return (
-      <ResizablePanels
-        bkcolor="#e1b12c"
-        displayDirection="row"
-        width="100%"
-        height="800px"
-        panelsSize={[40, 60]}
-        sizeUnitMeasure="%"
-        resizerColor="#353b48"
-        resizerSize="30px"
-      >
-        <div
-          style={{
-            background: "#44bd32",
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+      <>
+        <ResizablePanels
+          bkcolor="grey"
+          displayDirection="row"
+          width="100%"
+          height="100%"
+          panelsSize={[20, 80]}
+          sizeUnitMeasure="%"
+          resizerColor="#353b48"
+          resizerSize="5px"
         >
           <Toc
+            className="toc"
             toc={this.state.tableOfContents}
             selectChapter={this.selectChapter}
           />
-        </div>
-        <div
-          id="viewer"
-          ref={this.$viewer}
-          className="spreads"
-          style={{ height: "100%", width: "100%" }}
-        >
-          {this.state.error ? (
-            <Alert message={this.state.error.toString()} type="error" />
-          ) : null}
-        </div>
-      </ResizablePanels>
+          <div
+            ref={this.$viewer}
+            className="spreads viewer"
+            style={{ height: "100%", width: "100%" }}
+          >
+            {this.state.error ? (
+              <Alert message={this.state.error.toString()} type="error" />
+            ) : null}
+          </div>
+          <Fullscreen>
+            <FullscreenOutlined onClick={this.setFullscreen} />
+          </Fullscreen>
+        </ResizablePanels>
+      </>
     );
   }
   srender() {

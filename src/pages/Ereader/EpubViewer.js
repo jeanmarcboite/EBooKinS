@@ -80,12 +80,11 @@ export default class EpubViewer extends React.PureComponent {
                 chapters
               </>
             ),
-            items: toc.map((item, key) => {
-              return {
-                id: item.id,
-                href: item.href,
-                label: item.label,
-              };
+            items: toc.map((chapter, key) => {
+              if (chapter.subitems && chapter.subitems.length > 0) {
+                console.log(chapter);
+              }
+              return chapter;
             }),
           },
         ],

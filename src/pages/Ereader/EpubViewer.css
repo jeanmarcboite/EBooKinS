@@ -1,59 +1,30 @@
-#prev {
-  left: 20px;
+.viewer.spreads {
+    width: 100%;
+    height: 100vh;
+    box-shadow: 0 0 4px #ccc;
+    border-radius: 5px;
+    padding: 0;
+    position: relative;
+    margin: 10px auto;
+    background: white url("ajax-loader.gif") center center no-repeat;
+    top: calc(50vh - 400px);
 }
 
-#next {
-  right: 20px;
+.viewer.spreads .epub-view > iframe {
+    background: rgb(224, 193, 127);
 }
 
-@media (min-width: 9000px) {
-  #viewer.spreads:after {
-    position: absolute;
-    width: 1px;
-    border-right: 1px #000 solid;
-    height: 80%;
-    z-index: 1;
-    left: 50%;
-    margin-left: -1px;
-    top: 5%;
-    opacity: 0.15;
-    box-shadow: -2px 0 15px rgba(0, 0, 0, 1);
-    content: "";
-  }
-
-  #viewer.spreads.single:after {
-    display: none;
-  }
-
-  #prev {
-    left: 40px;
-  }
-
-  #next {
-    right: 40px;
-  }
+.viewer.scrolled {
+    overflow: hidden;
+    width: 800px;
+    margin: 0 auto;
+    position: relative;
+    background: url("ajax-loader.gif") center center no-repeat;
+    box-shadow: 0 0 4px #ccc;
+    padding: 20px;
+    background: white;
 }
 
-.navlink:hover {
-  color: rgb(211, 28, 28);
-}
-
-.navlink:hover {
-  color: #000;
-}
-
-#viewer.spreads {
-  width: 100%;
-  height: 80vh;
-  box-shadow: 0 0 4px #ccc;
-  border-radius: 5px;
-  padding: 0;
-  position: relative;
-  margin: 10px auto;
-  background: white url("ajax-loader.gif") center center no-repeat;
-  top: 10vh;
-}
-
-#viewer.spreads .epub-view > iframe {
-  background: rgb(224, 193, 127);
+.viewer.scrolled .epub-view > iframe {
+    background: white;
 }

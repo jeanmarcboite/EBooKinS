@@ -5,7 +5,9 @@ import { Layout, Alert } from "antd";
 import Toc from "./Toc";
 
 import Epub from "./Epub";
-import "./examples.css";
+
+import "./EpubViewer.css";
+
 import {
   UserOutlined,
   RightOutlined,

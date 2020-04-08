@@ -241,7 +241,11 @@ export default class EpubViewer extends React.PureComponent {
             }}
           >
             <div
-              style={{ background: "#40739e", width: "80%", minWidth: "100px" }}
+              style={{
+                background: "#40739e",
+                width: "100%",
+                height: "90%",
+              }}
             >
               <Toc
                 className="toc"

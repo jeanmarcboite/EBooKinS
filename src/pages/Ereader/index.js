@@ -12,10 +12,13 @@ import {
   Menu,
   theme,
   animation,
+  contextMenu,
 } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
 
 import EpubViewer from "./EpubViewer";
+
+const menuId = "EreaderMenuID";
 class Ereader extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +37,20 @@ class Ereader extends React.Component {
       reader.readAsArrayBuffer(file);
     }
   };
+  openContextMenu = (e) => {
+    e.preventDefault();
+    contextMenu.show({
+      id: menuId,
+      event: e,
+    });
+  };
+  componentDidMount = () => {
+    document.addEventListener("contextmenu", this.openContextMenu);
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener("contextmenu", this.openContextMenu);
+  };
 
   render() {
     let url = null;
@@ -50,7 +67,7 @@ class Ereader extends React.Component {
           style={{ display: "none" }}
         />
         <Menu
-          id="menu_id"
+          id={menuId}
           theme={this.props.settings.darkMode ? theme.dark : theme.light}
           animation={animation.flip}
         >
@@ -63,15 +80,10 @@ class Ereader extends React.Component {
           <Separator />
           <RoutesMenu />
         </Menu>
-        <MenuProvider
-          id="menu_id"
-          style={{
-            border: "1px solid purple",
-            height: "100vh",
-          }}
-        >
-          <EpubViewer url={this.props.ereader.data} />
-        </MenuProvider>
+        <EpubViewer
+          url={this.props.ereader.data}
+          onContextMenu={this.openContextMenu}
+        />
       </>
     );
   }

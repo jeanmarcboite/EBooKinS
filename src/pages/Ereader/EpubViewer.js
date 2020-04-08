@@ -115,6 +115,7 @@ export default class EpubViewer extends React.PureComponent {
       $viewer: this.$viewer,
       loadTableOfContents: this.loadTableOfContents,
       loadMetadata: this.loadMetadata,
+      onContextMenu: this.props.onContextMenu,
       debug: false,
     });
   }

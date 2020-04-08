@@ -1,7 +1,15 @@
 import EpubJS from "epubjs";
 
 class Epub {
-  constructor({ url, loadTableOfContents, loadMetadata, $viewer, debug }) {
+  constructor({
+    url,
+    loadTableOfContents,
+    loadMetadata,
+    onContextMenu,
+    $viewer,
+    debug,
+  }) {
+    this.eventListeners = [];
     this.settings = {
       width: "100%",
       height: 400,
@@ -21,7 +29,14 @@ class Epub {
     this.rendition.display();
     this.book.loaded.navigation.then(loadTableOfContents);
     this.book.loaded.metadata.then(loadMetadata);
-
+    this.rendition.on("rendered", (section, iFrameView) => {
+      this.addEventListener(
+        iFrameView.document.documentElement,
+        "contextmenu",
+        onContextMenu
+      );
+      return false;
+    });
     if (debug) {
       this.book.ready.then((book) => {
         console.log(book);
@@ -41,7 +56,22 @@ class Epub {
     }
   }
 
+  addEventListener = (target, type, callback, useCapture) => {
+    target.addEventListener(type, callback, useCapture);
+
+    this.eventListeners.push({ target, type, callback, useCapture });
+  };
+
+  removeEventListeners = () => {
+    this.eventListeners.forEach((listener) => {
+      listener.target.removeEventListener(listener.type, listener.callback);
+    });
+
+    this.eventListeners = [];
+  };
+
   destroy = () => {
+    this.removeEventListeners();
     if (this.book) {
       this.book.destroy();
       delete this.book;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Layout, Alert } from "antd";
+import { Alert } from "antd";
 
 import Toc from "./Toc";
 
@@ -13,6 +13,7 @@ import {
   RightOutlined,
   LeftOutlined,
   FullscreenOutlined,
+  FullscreenExitOutlined,
 } from "@ant-design/icons";
 
 import ResizablePanels from "resizable-panels-react";
@@ -22,7 +23,7 @@ const Arrow = styled.a`
   position: absolute;
   top: 50%;
   margin-top: -32px;
-  font-size: 64px;
+  font-size: 48px;
   font-family: arial, sans-serif;
   font-weight: bold;
   cursor: pointer;
@@ -46,12 +47,13 @@ const RightArrow = styled(Arrow)`
   right: 30px;
 `;
 
-const Fullscreen = styled.div`
+const Fullscreen = styled.a`
   position: "absolute",
-  top: "20px",
-  right: "20px",
+  top: 20px;
+  right: 20px;
+  font-size: 48px;
   color: papayawhip;
-  z-index: 99;
+  z-index: 49;
   &:active {
     color: rgb(211, 28, 28);
   }
@@ -78,7 +80,11 @@ export default class EpubViewer extends React.PureComponent {
       tableOfContents: null,
       chapter: null,
       error: null,
+      fullscreen: false,
     };
+    document.addEventListener("fullscreenchange", (event) => {
+      this.setState({ fullscreen: document.fullscreenElement !== null });
+    });
   }
   loadError = (error) => {
     this.setState({ error });
@@ -150,7 +156,17 @@ export default class EpubViewer extends React.PureComponent {
   next = (e) => {
     this.epub.renditionNext(e);
   };
-
+  exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  };
   setFullscreen = () => {
     document.fullscreenEnabled =
       document.fullscreenEnabled ||
@@ -200,7 +216,7 @@ export default class EpubViewer extends React.PureComponent {
           panelsSize={[20, 80]}
           sizeUnitMeasure="%"
           resizerColor="#353b48"
-          resizerSize="5px"
+          resizerSize="15px"
         >
           <Toc
             className="toc"
@@ -223,48 +239,14 @@ export default class EpubViewer extends React.PureComponent {
             <RightOutlined />
           </RightArrow>
           <Fullscreen>
-            <FullscreenOutlined onClick={this.setFullscreen} />
+            {this.state.fullscreen ? (
+              <FullscreenExitOutlined onClick={this.exitFullscreen} />
+            ) : (
+              <FullscreenOutlined onClick={this.setFullscreen} />
+            )}
           </Fullscreen>
         </ResizablePanels>
       </>
     );
-  }
-  srender() {
-    if (false && this.state.error) {
-      console.log(typeof this.state.error);
-      console.log("Error", JSON.stringify(this.state.error));
-      return <h1>{this.state.error.toString()}</h1>;
-    } else
-      return (
-        <Layout id="viewer-container" className="site-layout-background">
-          <Layout.Sider
-            className="site-layout-background"
-            width={200}
-            collapsible
-            collapsedWidth={60}
-          >
-            <Toc
-              toc={this.state.tableOfContents}
-              selectChapter={this.selectChapter}
-            />
-          </Layout.Sider>
-          <Layout.Content>
-            <LeftArrow ref={this.$prev} onClick={this.prev}>
-              <LeftOutlined />
-            </LeftArrow>
-            <Viewer id="viewer" ref={this.$viewer} className="spreads">
-              {this.state.error ? (
-                <Alert message={this.state.error.toString()} type="error" />
-              ) : null}
-            </Viewer>
-            <RightArrow ref={this.$next} onClick={this.next}>
-              <RightOutlined />
-            </RightArrow>
-            <Fullscreen>
-              <FullscreenOutlined onClick={this.setFullscreen} />
-            </Fullscreen>
-          </Layout.Content>
-        </Layout>
-      );
   }
 }

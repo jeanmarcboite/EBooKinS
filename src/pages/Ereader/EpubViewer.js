@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Layout } from "antd";
+import { Layout, Alert } from "antd";
 
 import Toc from "./Toc";
 
@@ -57,8 +57,12 @@ export default class EpubViewer extends React.PureComponent {
       url: this.props.url,
       tableOfContents: null,
       chapter: null,
+      error: null,
     };
   }
+  loadError = (error) => {
+    this.setState({ error });
+  };
   loadMetadata(metadata) {
     document.title = metadata.title;
   }
@@ -100,7 +104,7 @@ export default class EpubViewer extends React.PureComponent {
 
   componentDidUpdate() {
     if (this.state.url !== this.props.url) {
-      this.setState({ url: this.props.url });
+      this.setState({ url: this.props.url, error: null });
       this.loadBook();
     }
   }
@@ -116,6 +120,7 @@ export default class EpubViewer extends React.PureComponent {
       loadTableOfContents: this.loadTableOfContents,
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
+      onError: this.loadError,
       debug: false,
     });
   }
@@ -127,8 +132,17 @@ export default class EpubViewer extends React.PureComponent {
     this.epub.renditionNext(e);
   };
 
+  renderError = () => {
+    if (!this.state.error) return null;
+    return <Alert message={this.state.error.toString()} type="error" />;
+  };
+
   render() {
-    if (true)
+    if (false && this.state.error) {
+      console.log(typeof this.state.error);
+      console.log("Error", JSON.stringify(this.state.error));
+      return <h1>{this.state.error.toString()}</h1>;
+    } else
       return (
         <Layout
           id="viewer-container"
@@ -145,7 +159,11 @@ export default class EpubViewer extends React.PureComponent {
             <LeftArrow ref={this.$prev} onClick={this.prev}>
               <LeftOutlined />
             </LeftArrow>
-            <Viewer id="viewer" ref={this.$viewer} className="spreads"></Viewer>
+            <Viewer id="viewer" ref={this.$viewer} className="spreads">
+              {this.state.error ? (
+                <Alert message={this.state.error.toString()} type="error" />
+              ) : null}
+            </Viewer>
             <RightArrow ref={this.$next} onClick={this.next}>
               <RightOutlined />
             </RightArrow>

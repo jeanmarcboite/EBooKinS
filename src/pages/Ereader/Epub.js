@@ -6,6 +6,7 @@ class Epub {
     loadTableOfContents,
     loadMetadata,
     onContextMenu,
+    onError,
     $viewer,
     debug,
   }) {
@@ -17,43 +18,45 @@ class Epub {
     };
     this.url = url;
     this.book = EpubJS();
-    this.book.open(this.url).catch((err) => {
-      console.error(err);
-    });
-    console.assert($viewer.current);
-    this.rendition = this.book.renderTo($viewer.current, {
-      width: "100%",
-      height: "100%",
-    });
-    //this.rendition = this.book.renderTo($viewer.current, this.settings);
-    this.rendition.display();
-    this.book.loaded.navigation.then(loadTableOfContents);
-    this.book.loaded.metadata.then(loadMetadata);
-    this.rendition.on("rendered", (section, iFrameView) => {
-      this.addEventListener(
-        iFrameView.document.documentElement,
-        "contextmenu",
-        onContextMenu
-      );
-      return false;
-    });
-    if (debug) {
-      this.book.ready.then((book) => {
-        console.log(book);
-      });
-      this.book.loaded.manifest.then((manifest) => {
-        console.log(manifest);
-      });
-      this.book.loaded.spine.then((spine) => {
-        console.log(spine);
-      });
-      this.book.loaded.cover.then((cover) => {
-        console.log(cover);
-      });
-      this.book.loaded.resources.then((resources) => {
-        console.log(resources);
-      });
-    }
+    this.book
+      .open(this.url)
+      .then(() => {
+        console.assert($viewer.current);
+        this.rendition = this.book.renderTo($viewer.current, {
+          width: "100%",
+          height: "100%",
+        });
+        //this.rendition = this.book.renderTo($viewer.current, this.settings);
+        this.rendition.display();
+        this.book.loaded.navigation.then(loadTableOfContents);
+        this.book.loaded.metadata.then(loadMetadata);
+        this.rendition.on("rendered", (section, iFrameView) => {
+          this.addEventListener(
+            iFrameView.document.documentElement,
+            "contextmenu",
+            onContextMenu
+          );
+          return false;
+        });
+        if (debug) {
+          this.book.ready.then((book) => {
+            console.log(book);
+          });
+          this.book.loaded.manifest.then((manifest) => {
+            console.log(manifest);
+          });
+          this.book.loaded.spine.then((spine) => {
+            console.log(spine);
+          });
+          this.book.loaded.cover.then((cover) => {
+            console.log(cover);
+          });
+          this.book.loaded.resources.then((resources) => {
+            console.log(resources);
+          });
+        }
+      })
+      .catch(onError);
   }
 
   addEventListener = (target, type, callback, useCapture) => {

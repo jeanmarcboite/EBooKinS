@@ -31,7 +31,7 @@ const Arrow = styled.a`
   -moz-user-select: none;
   user-select: none;
   text-decoration: none;
-  color: papayawhip;
+  color: red;
   z-index: 49;
   &:active {
     color: rgb(211, 28, 28);
@@ -48,11 +48,11 @@ const RightArrow = styled(Arrow)`
 `;
 
 const Fullscreen = styled.a`
-  position: "absolute",
+  position: absolute,
   top: 20px;
   right: 20px;
   font-size: 48px;
-  color: papayawhip;
+  color: red;
   z-index: 49;
   &:active {
     color: rgb(211, 28, 28);
@@ -61,8 +61,6 @@ const Fullscreen = styled.a`
     color: rgb(117, 15, 233);
   }
 `;
-
-const Viewer = styled.div``;
 
 const handleClick = (e) => console.log(e);
 
@@ -208,30 +206,74 @@ export default class EpubViewer extends React.PureComponent {
   render() {
     return (
       <>
+        <div>
+          <LeftArrow onClick={this.prev}>
+            <LeftOutlined />
+          </LeftArrow>
+          <RightArrow onClick={this.next}>
+            <RightOutlined />
+          </RightArrow>
+        </div>
         <ResizablePanels
-          bkcolor="grey"
+          bkcolor="#e1b12c"
           displayDirection="row"
           width="100%"
-          height="100%"
-          panelsSize={[20, 80]}
+          height="800px"
+          panelsSize={[40, 60]}
           sizeUnitMeasure="%"
           resizerColor="#353b48"
-          resizerSize="15px"
+          resizerSize="30px"
         >
+          <div
+            style={{
+              background: "#44bd32",
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{ background: "#40739e", width: "80%", minWidth: "100px" }}
+            >
+              <Toc
+                className="toc"
+                toc={this.state.tableOfContents}
+                selectChapter={this.selectChapter}
+              />
+            </div>
+          </div>
+          <div style={{ background: "#40739e", height: "100%", width: "100%" }}>
+            <Fullscreen>
+              {this.state.fullscreen ? (
+                <FullscreenExitOutlined onClick={this.exitFullscreen} />
+              ) : (
+                <FullscreenOutlined onClick={this.setFullscreen} />
+              )}
+            </Fullscreen>
+            <div
+              ref={this.$viewer}
+              className="spreads viewer"
+              style={{ height: "100%", width: "100%" }}
+            ></div>
+          </div>
+        </ResizablePanels>
+      </>
+    );
+  }
+
+  surrender() {
+    return (
+      <>
+        <div>
           <Toc
             className="toc"
             toc={this.state.tableOfContents}
             selectChapter={this.selectChapter}
           />
-          <div
-            ref={this.$viewer}
-            className="spreads viewer"
-            style={{ height: "100%", width: "100%" }}
-          >
-            {this.state.error ? (
-              <Alert message={this.state.error.toString()} type="error" />
-            ) : null}
-          </div>
+        </div>
+        <div>
           <LeftArrow onClick={this.prev}>
             <LeftOutlined />
           </LeftArrow>
@@ -245,7 +287,12 @@ export default class EpubViewer extends React.PureComponent {
               <FullscreenOutlined onClick={this.setFullscreen} />
             )}
           </Fullscreen>
-        </ResizablePanels>
+        </div>
+        <div ref={this.$viewer} className="spreads viewerr">
+          {this.state.error ? (
+            <Alert message={this.state.error.toString()} type="error" />
+          ) : null}
+        </div>
       </>
     );
   }

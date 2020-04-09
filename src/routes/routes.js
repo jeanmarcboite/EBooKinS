@@ -7,6 +7,7 @@ import {
 
 import Ereader from "pages/Ereader";
 import Settings from "pages/Settings";
+import Lab from "pages/Lab";
 
 const routes = [
   {
@@ -21,6 +22,12 @@ const routes = [
     label: "About",
     icon: <ExperimentTwoTone twoToneColor="#52c41a" />,
     component: Settings,
+  },
+  {
+    to: "/lab",
+    label: "Le Lab",
+    icon: <ExperimentTwoTone twoToneColor="#770077" />,
+    component: Lab,
   },
   {
     to: "/settings",

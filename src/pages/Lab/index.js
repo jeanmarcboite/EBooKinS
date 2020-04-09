@@ -1,14 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import RoutesMenu from "routes/Menu";
-import {
-  Separator,
-  Item,
-  Menu,
-  theme,
-  animation,
-  contextMenu,
-} from "react-contexify";
+import { Menu, theme, animation, contextMenu } from "react-contexify";
 
 import ResizeablePanels from "./lab";
 
@@ -42,13 +35,19 @@ class Lab extends React.Component {
           sizes={[100, 100, 100, 100]}
           onContextMenu={this.openContextMenu}
         >
-          <div>
+          <div style={{ width: "100px" }}>
             This is the first panel. It will use the rest of the available
             space.
           </div>
-          <div>This is the second panel. Starts with 300px.</div>
-          <div>This is the third panel. Starts with 300px.</div>
-          <div>This is the 4th panel. Starts with 300px.</div>
+          <div style={{ width: "100px" }}>
+            This is the second panel. Starts with 100px.
+          </div>
+          <div style={{ width: "100px" }}>
+            This is the third panel. Starts with 300px.
+          </div>
+          <div style={{ width: "100px" }}>
+            This is the 4th panel. Starts with 300px.
+          </div>
         </ResizeablePanels>
       </>
     );

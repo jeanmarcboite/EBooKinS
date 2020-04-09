@@ -6,7 +6,6 @@ import styled from "styled-components";
 const Resizer = styled(
   styled.div({
     width: "15px",
-    background: "darkGray",
     position: "relative",
     cursor: "col-resize",
     "flex-shrink": 0,
@@ -16,6 +15,8 @@ const Resizer = styled(
     "user-select": "none",
   })
 )`
+  background: ${(props) => props.background || "papayawhip"};
+
   &::after,
   &::before {
     content: "";

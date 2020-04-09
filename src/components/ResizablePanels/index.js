@@ -76,6 +76,9 @@ class ResizablePanels extends React.Component {
         delta: 0,
         currentPanel: null,
       });
+      if (this.props.onResizeEnd) {
+        this.props.onResizeEnd({ panelsSize: panels });
+      }
     }
   };
 

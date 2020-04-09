@@ -204,6 +204,15 @@ export default class EpubViewer extends React.PureComponent {
     );
   };
 
+  onResizeEnd = (event) => {
+    console.group();
+    console.log(event);
+    console.log(this.$viewer.current);
+    console.log(getComputedStyle(this.$viewer.current).width);
+    console.groupEnd();
+    this.epub.rendition.resize();
+  };
+
   /*
      Props:
 
@@ -224,6 +233,7 @@ export default class EpubViewer extends React.PureComponent {
           sizeUnitMeasure="%"
           resizerColor="papayawhip"
           resizerSize="30px"
+          onResizeEnd={this.onResizeEnd}
         >
           <div
             id="toc_viewer"

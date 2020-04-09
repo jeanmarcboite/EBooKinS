@@ -16,7 +16,7 @@ import {
   FullscreenExitOutlined,
 } from "@ant-design/icons";
 
-import ResizablePanels from "resizable-panels-react";
+import ResizablePanels from "components/ResizablePanels";
 
 import styled from "styled-components";
 
@@ -224,6 +224,7 @@ export default class EpubViewer extends React.PureComponent {
           displayDirection="row"
           width="100%"
           height="800px"
+          sizes={[100, 800]}
           panelsSize={[40, 60]}
           sizeUnitMeasure="%"
           resizerColor="#353b48"

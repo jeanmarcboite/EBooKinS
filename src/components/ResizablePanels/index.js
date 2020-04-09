@@ -5,7 +5,6 @@ import styled from "styled-components";
 /* https://codepen.io/lopis/pen/XYgRKz */
 const Resizer = styled(
   styled.div({
-    width: "15px",
     position: "relative",
     cursor: "col-resize",
     "flex-shrink": 0,
@@ -15,7 +14,8 @@ const Resizer = styled(
     "user-select": "none",
   })
 )`
-  background: ${(props) => props.background || "papayawhip"};
+  background: ${(props) => props.background || "darkGray"};
+  width: ${(props) => props.width || "8px"};
 
   &::after,
   &::before {
@@ -110,6 +110,8 @@ class ResizablePanels extends React.Component {
               <Resizer
                 onMouseDown={(e) => this.startResize(e, i + 1)}
                 key={2 * i}
+                background={this.props.resizerColor}
+                width={this.props.resizerSize}
                 style={
                   this.state.currentPanel === i + 1
                     ? { left: this.state.delta }

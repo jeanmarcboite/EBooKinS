@@ -10,6 +10,8 @@ import {
   contextMenu,
 } from "react-contexify";
 
+import ResizeablePanels from "./lab";
+
 const menuID = "menu_id";
 class Lab extends React.Component {
   constructor(props) {
@@ -36,7 +38,18 @@ class Lab extends React.Component {
           <RoutesMenu />
         </Menu>
 
-        <div onContextMenu={this.openContextMenu} />
+        <ResizeablePanels
+          sizes={[100, 100, 100, 100]}
+          onContextMenu={this.openContextMenu}
+        >
+          <div>
+            This is the first panel. It will use the rest of the available
+            space.
+          </div>
+          <div>This is the second panel. Starts with 300px.</div>
+          <div>This is the third panel. Starts with 300px.</div>
+          <div>This is the 4th panel. Starts with 300px.</div>
+        </ResizeablePanels>
       </>
     );
   }

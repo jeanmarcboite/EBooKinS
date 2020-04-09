@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import "./x.css";
+
 /* https://codepen.io/lopis/pen/XYgRKz */
 const Resizer = styled(
   styled.div({
@@ -109,7 +109,6 @@ class ResizablePanels extends React.Component {
               <Resizer
                 onMouseDown={(e) => this.startResize(e, i + 1)}
                 key={2 * i}
-                className="resizer"
                 style={
                   this.state.currentPanel === i + 1
                     ? { left: this.state.delta }

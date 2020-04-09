@@ -220,12 +220,7 @@ export default class EpubViewer extends React.PureComponent {
     return (
       <>
         <ResizablePanels
-          bkcolor="#e1b12c"
-          displayDirection="row"
-          width="100%"
-          height="800px"
-          sizes={[100, 800]}
-          panelsSize={[40, 60]}
+          panelsSize={[100, 800]}
           sizeUnitMeasure="%"
           resizerColor="#353b48"
           resizerSize="30px"

@@ -65,8 +65,8 @@ class ResizablePanels extends React.Component {
     });
   };
 
-  stopResize = () => {
-    console.log("stopResize");
+  stopResize = (e) => {
+    console.log("stopResize", e);
     if (this.state.isDragging) {
       let { panels, currentPanel, delta } = this.state;
       panels[currentPanel] = (panels[currentPanel] || 0) - delta;
@@ -99,7 +99,7 @@ class ResizablePanels extends React.Component {
       <div
         ref={this.ref}
         style={{ display: "flex" }}
-        onMouseUp={() => this.stopResize()}
+        onMouseUp={this.stopResize}
       >
         <Panel
           style={{

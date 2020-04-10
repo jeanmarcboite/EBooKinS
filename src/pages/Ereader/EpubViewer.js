@@ -62,6 +62,7 @@ export default class EpubViewer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.$viewer = React.createRef();
+    this.$container = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -84,7 +85,6 @@ export default class EpubViewer extends React.PureComponent {
     document.title = metadata.title;
   }
   loadTableOfContents({ toc }) {
-    console.log(toc);
     this.setState({
       tableOfContents: {
         onClick: handleClick,
@@ -116,6 +116,7 @@ export default class EpubViewer extends React.PureComponent {
   };
   componentDidMount() {
     this.loadBook();
+    this._logSizes();
   }
 
   componentDidUpdate() {
@@ -204,12 +205,20 @@ export default class EpubViewer extends React.PureComponent {
     );
   };
 
-  onResizeEnd = (event) => {
+  _logSizes = (data) => {
     console.group();
-    console.log(event);
-    console.log(this.$viewer.current);
-    console.log(getComputedStyle(this.$viewer.current).width);
+    console.log(data);
+    console.log(this.$container.current);
+    console.log(
+      "container size: ",
+      getComputedStyle(this.$container.current).width,
+      getComputedStyle(this.$container.current).height
+    );
+    console.log("viewer width: ", getComputedStyle(this.$viewer.current).width);
     console.groupEnd();
+  };
+  onResizeEnd = (event) => {
+    this._logSizes(event);
     this.epub.rendition.resize();
   };
 
@@ -227,7 +236,7 @@ export default class EpubViewer extends React.PureComponent {
   */
   render() {
     return (
-      <>
+      <div ref={this.$container}>
         <ResizablePanels
           panelsSize={[100, 800]}
           sizeUnitMeasure="%"
@@ -282,7 +291,7 @@ export default class EpubViewer extends React.PureComponent {
             </div>
           </div>
         </ResizablePanels>
-      </>
+      </div>
     );
   }
 

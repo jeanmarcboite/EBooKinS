@@ -98,7 +98,7 @@ class ResizablePanels extends React.Component {
     return (
       <div
         ref={this.ref}
-        className="panel-container"
+        style={{ display: "flex" }}
         onMouseUp={() => this.stopResize()}
       >
         <Panel

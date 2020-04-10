@@ -291,46 +291,17 @@ export default class EpubViewer extends React.PureComponent {
                 ref={this.$viewer}
                 className="spreads viewer"
                 style={{ height: "100%", width: "100%" }}
-              ></div>
+              >
+                {" "}
+                {this.state.error ? (
+                  <Alert message={this.state.error.toString()} type="error" />
+                ) : null}
+              </div>
               {this.renderArrows()}
             </div>
           </div>
         </ResizablePanels>
       </div>
-    );
-  }
-
-  surrender() {
-    return (
-      <>
-        <div>
-          <Toc
-            className="toc"
-            toc={this.state.tableOfContents}
-            selectChapter={this.selectChapter}
-          />
-        </div>
-        <div>
-          <LeftArrow onClick={this.prev}>
-            <LeftOutlined />
-          </LeftArrow>
-          <RightArrow onClick={this.next}>
-            <RightOutlined />
-          </RightArrow>
-          <Fullscreen>
-            {this.state.fullscreen ? (
-              <FullscreenExitOutlined onClick={this.exitFullscreen} />
-            ) : (
-              <FullscreenOutlined onClick={this.setFullscreen} />
-            )}
-          </Fullscreen>
-        </div>
-        <div ref={this.$viewer} className="spreads viewerr">
-          {this.state.error ? (
-            <Alert message={this.state.error.toString()} type="error" />
-          ) : null}
-        </div>
-      </>
     );
   }
 }

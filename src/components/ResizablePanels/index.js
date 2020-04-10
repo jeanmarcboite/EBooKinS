@@ -69,17 +69,12 @@ class ResizablePanels extends React.Component {
   stopResize = (e) => {
     if (this.state.isDragging) {
       console.log("stopResize", e.clientX);
-      let { panels, currentPanel, delta } = this.state;
-      panels[currentPanel] = (panels[currentPanel] || 0) - delta;
-      panels[currentPanel - 1] = (panels[currentPanel - 1] || 0) + delta;
       this.setState({
         isDragging: false,
-        panels,
-        delta: 0,
         currentPanel: null,
       });
       if (this.props.onResizeEnd) {
-        this.props.onResizeEnd({ panelsSize: panels });
+        this.props.onResizeEnd(this.state.panels);
       }
     }
   };
@@ -93,7 +88,6 @@ class ResizablePanels extends React.Component {
       console.log(delta);
       this.setState({
         panels,
-        delta: 0,
         initialPos: event.clientX,
       });
       if (this.props.onResize) {

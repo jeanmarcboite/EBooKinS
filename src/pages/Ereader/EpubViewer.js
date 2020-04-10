@@ -236,7 +236,12 @@ export default class EpubViewer extends React.PureComponent {
   */
   render() {
     return (
-      <div ref={this.$container}>
+      <div
+        ref={this.$container}
+        style={{
+          border: "3px solid red",
+        }}
+      >
         <ResizablePanels
           panelsSize={[100, 800]}
           sizeUnitMeasure="%"
@@ -271,7 +276,7 @@ export default class EpubViewer extends React.PureComponent {
             style={{
               display: "flex",
               background: "yellow",
-              height: "100%",
+              height: "100vh",
               width: "100%",
               justifyContent: "center",
               alignItems: "center",

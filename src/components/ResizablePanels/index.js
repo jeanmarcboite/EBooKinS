@@ -91,7 +91,7 @@ class ResizablePanels extends React.Component {
         initialPos: event.clientX,
       });
       if (this.props.onResize) {
-        this.props.onResize();
+        this.props.onResize(panels);
       }
     }
   };

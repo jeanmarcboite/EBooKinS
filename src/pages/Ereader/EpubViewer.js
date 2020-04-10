@@ -225,7 +225,7 @@ export default class EpubViewer extends React.PureComponent {
   };
   onResize = (event) => {
     this._logSizes(event);
-    //this.epub.rendition.resize();
+    this.epub.rendition.resize();
   };
 
   /*

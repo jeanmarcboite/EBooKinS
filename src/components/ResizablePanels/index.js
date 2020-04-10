@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
+import "./ResizablePanel.css";
 /* https://codepen.io/lopis/pen/XYgRKz */
 const Resizer = styled(
   styled.div({
     position: "relative",
     cursor: "col-resize",
+    "z-index": 99,
     "flex-shrink": 0,
     "-webkit-user-select": "none",
     "-moz-user-select": "none",
@@ -17,8 +18,8 @@ const Resizer = styled(
   background: ${(props) => props.background || "darkGray"};
   width: ${(props) => props.width || "8px"};
 
-  &::after,
-  &::before {
+  &:after,
+  &:before {
     content: "";
     border-left: "1px solid #333;
     position: " absolute;
@@ -120,6 +121,7 @@ class ResizablePanels extends React.Component {
                     ? { left: this.state.delta }
                     : {}
                 }
+                className="resizer"
               ></Resizer>,
               <Panel
                 key={2 * i + 1}

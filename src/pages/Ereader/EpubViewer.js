@@ -231,8 +231,6 @@ export default class EpubViewer extends React.PureComponent {
         <ResizablePanels
           panelsSize={[100, 800]}
           sizeUnitMeasure="%"
-          resizerColor="papayawhip"
-          resizerSize="30px"
           onResizeEnd={this.onResizeEnd}
         >
           <div

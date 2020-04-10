@@ -75,7 +75,9 @@ export default class EpubViewer extends React.PureComponent {
       fullscreen: false,
     };
     document.addEventListener("fullscreenchange", (event) => {
-      this.setState({ fullscreen: document.fullscreenElement !== null });
+      this.setState({
+        fullscreen: document.fullscreenElement !== null,
+      });
     });
   }
   loadError = (error) => {
@@ -221,6 +223,10 @@ export default class EpubViewer extends React.PureComponent {
     this._logSizes(event);
     this.epub.rendition.resize();
   };
+  onResize = (event) => {
+    this._logSizes(event);
+    //this.epub.rendition.resize();
+  };
 
   /*
      Props:
@@ -243,8 +249,9 @@ export default class EpubViewer extends React.PureComponent {
         }}
       >
         <ResizablePanels
-          panelsSize={[100, 1200]}
+          panelsSize={[550, 1200]}
           sizeUnitMeasure="%"
+          onResize={this.onResize}
           onResizeEnd={this.onResizeEnd}
         >
           <div

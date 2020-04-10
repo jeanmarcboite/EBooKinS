@@ -57,17 +57,18 @@ class ResizablePanels extends React.Component {
     this.ref.current.addEventListener("mouseleave", this.stopResize);
   }
 
-  startResize = (event, index) => {
+  startResize = (event, currentPanel) => {
+    console.log("startResize", event.clientX, event);
     this.setState({
       isDragging: true,
-      currentPanel: index,
+      currentPanel,
       initialPos: event.clientX,
     });
   };
 
   stopResize = (e) => {
-    console.log("stopResize", e);
     if (this.state.isDragging) {
+      console.log("stopResize", e.clientX);
       let { panels, currentPanel, delta } = this.state;
       panels[currentPanel] = (panels[currentPanel] || 0) - delta;
       panels[currentPanel - 1] = (panels[currentPanel - 1] || 0) + delta;
@@ -85,53 +86,59 @@ class ResizablePanels extends React.Component {
 
   resizePanel = (event) => {
     if (this.state.isDragging) {
+      let { panels, currentPanel } = this.state;
       const delta = event.clientX - this.state.initialPos;
+      panels[currentPanel] = (panels[currentPanel] || 0) - delta;
+      panels[currentPanel - 1] = (panels[currentPanel - 1] || 0) + delta;
+      console.log(delta);
       this.setState({
-        delta: delta,
+        panels,
+        delta: 0,
+        initialPos: event.clientX,
       });
+      if (this.props.onResize) {
+        this.props.onResize();
+      }
     }
   };
 
   render() {
-    const rest = this.props.children.slice(1);
-    var sum = this.state.panels.slice(1).reduce((a, b) => a + b, 0);
+    const rest = this.props.children.slice(0, -1);
+    var sum = this.state.panels.slice(0, -1).reduce((a, b) => a + b, 0);
     return (
       <div
         ref={this.ref}
         style={{ display: "flex" }}
         onMouseUp={this.stopResize}
       >
-        <Panel
-          style={{
-            width: `calc(100% - ${sum}px)`,
-          }}
-        >
-          {this.props.children[0]}
-        </Panel>
         {[].concat(
           ...rest.map((child, i) => {
             return [
+              <Panel key={2 * i + 1} style={{ width: this.state.panels[i] }}>
+                {child}
+              </Panel>,
               <Resizer
                 onMouseDown={(e) => this.startResize(e, i + 1)}
                 key={2 * i}
                 background={this.props.resizerColor}
                 width={this.props.resizerSize}
                 style={
-                  this.state.currentPanel === i + 1
+                  this.state.currentPanel === i
                     ? { left: this.state.delta }
                     : {}
                 }
                 className="resizer"
               ></Resizer>,
-              <Panel
-                key={2 * i + 1}
-                style={{ width: this.state.panels[i + 1] }}
-              >
-                {child}
-              </Panel>,
             ];
           })
         )}
+        <Panel
+          style={{
+            width: `calc(100% - ${sum}px)`,
+          }}
+        >
+          {this.props.children[this.props.children.length - 1]}
+        </Panel>
       </div>
     );
   }

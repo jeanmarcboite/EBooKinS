@@ -218,30 +218,11 @@ export default class EpubViewer extends React.PureComponent {
           onResize={this.onResize}
           onResizeEnd={this.onResizeEnd}
         >
-          <div
-            id="toc_viewer"
-            style={{
-              background: "#44bd32",
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                background: "#40739e",
-                width: "100%",
-                height: "90%",
-              }}
-            >
-              <Toc
-                className="toc"
-                toc={this.state.tableOfContents}
-                selectChapter={this.selectChapter}
-              />
-            </div>
+          <div className={style.toc}>
+            <Toc
+              toc={this.state.tableOfContents}
+              selectChapter={this.selectChapter}
+            />
           </div>
           <div
             style={{

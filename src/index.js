@@ -10,7 +10,9 @@ import { ThemeContextProvider } from "ThemeProvider";
 const App = () => {
   return (
     <PersistGate loading={null} persistor={persistor}>
-      <Routes />
+      <ThemeContextProvider>
+        <Routes />
+      </ThemeContextProvider>
     </PersistGate>
   );
 };

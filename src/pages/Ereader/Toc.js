@@ -2,9 +2,10 @@ import React from "react";
 import { Menu } from "antd";
 
 import { ThemeContext } from "ThemeProvider";
+import style from "./Toc.module.css";
 
 class Toc extends React.PureComponent {
-  //static contextType = ThemeContext;
+  static contextType = ThemeContext;
   render() {
     return (
       <Menu
@@ -12,7 +13,8 @@ class Toc extends React.PureComponent {
         onClick={this.props.selectChapter}
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
-        style={{ height: "100%" }}
+        style={{ height: "90%" }}
+        className={style.toc}
       >
         {this.props.toc
           ? this.props.toc.subMenus.map((item, key) => (

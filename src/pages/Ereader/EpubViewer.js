@@ -208,7 +208,7 @@ export default class EpubViewer extends React.PureComponent {
   };
 
   _logSizes = (data) => {
-    console.group();
+    console.groupCollapsed("Resize panels");
     console.log(data);
     console.log(this.$container.current);
     console.log(
@@ -224,7 +224,6 @@ export default class EpubViewer extends React.PureComponent {
     this.epub.rendition.resize();
   };
   onResize = (event) => {
-    this._logSizes(event);
     this.epub.rendition.resize();
   };
 

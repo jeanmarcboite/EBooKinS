@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import "./ResizablePanel.css";
+
+import style from "./ResizablePanels.module.css";
 /* https://codepen.io/lopis/pen/XYgRKz */
 const Resizer = styled(
   styled.div({
@@ -125,13 +127,14 @@ class ResizablePanels extends React.Component {
             ];
           })
         )}
-        <Panel
+        <div
+          className={style.panel}
           style={{
             width: `calc(100% - ${sum}px)`,
           }}
         >
           {this.props.children[this.props.children.length - 1]}
-        </Panel>
+        </div>
       </div>
     );
   }

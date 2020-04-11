@@ -1,46 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import "./ResizablePanel.css";
 
 import style from "./ResizablePanels.module.css";
 /* https://codepen.io/lopis/pen/XYgRKz */
-const Resizer = styled(
-  styled.div({
-    position: "relative",
-    cursor: "col-resize",
-    "z-index": 99,
-    "flex-shrink": 0,
-    "-webkit-user-select": "none",
-    "-moz-user-select": "none",
-    "-ms-user-select": "none",
-    "user-select": "none",
-  })
-)`
-  background: ${(props) => props.background || "darkGray"};
-  width: ${(props) => props.width || "8px"};
 
-  &:after,
-  &:before {
-    content: "";
-    border-left: "1px solid #333;
-    position: " absolute;
-    top: "50%";
-    transform: "translateY(-100%)";
-    right: "0";
-    display: "inline-block";
-    height: "20px";
-    margin: "0 2px";
-  }
-  ,
-  &:before {
-    left: "0";
-  }
-`;
-
-const Panel = styled.div`
-  background: "red";
-`;
 class ResizablePanels extends React.Component {
   constructor(props) {
     super(props);
@@ -109,10 +72,15 @@ class ResizablePanels extends React.Component {
         {[].concat(
           ...rest.map((child, i) => {
             return [
-              <Panel key={2 * i + 1} style={{ width: this.state.panels[i] }}>
+              <div
+                className={style.panel}
+                key={2 * i + 1}
+                style={{ width: this.state.panels[i] }}
+              >
                 {child}
-              </Panel>,
-              <Resizer
+              </div>,
+              <div
+                className={style.resizer}
                 onMouseDown={(e) => this.startResize(e, i + 1)}
                 key={2 * i}
                 background={this.props.resizerColor}
@@ -122,8 +90,7 @@ class ResizablePanels extends React.Component {
                     ? { left: this.state.delta }
                     : {}
                 }
-                className="resizer"
-              ></Resizer>,
+              ></div>,
             ];
           })
         )}

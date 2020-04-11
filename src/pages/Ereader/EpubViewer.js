@@ -31,6 +31,8 @@ export default class EpubViewer extends React.PureComponent {
     super(props);
     this.$viewer = React.createRef();
     this.$container = React.createRef();
+    this.$leftArrow = React.createRef();
+    this.$rightArrow = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -87,6 +89,7 @@ export default class EpubViewer extends React.PureComponent {
   componentDidMount() {
     this.loadBook();
     this._logSizes();
+    this.positionArrows();
   }
 
   componentDidUpdate() {
@@ -165,10 +168,18 @@ export default class EpubViewer extends React.PureComponent {
             <FullscreenOutlined onClick={this.setFullscreen} />
           )}
         </button>
-        <button className={style.leftArrow} onClick={this.prev}>
+        <button
+          ref={this.$leftArrow}
+          className={style.leftArrow}
+          onClick={this.prev}
+        >
           <LeftOutlined />
         </button>
-        <button className={style.rightArrow} onClick={this.next}>
+        <button
+          ref={this.$rightArrow}
+          className={style.rightArrow}
+          onClick={this.next}
+        >
           <RightOutlined />
         </button>
       </>
@@ -193,6 +204,11 @@ export default class EpubViewer extends React.PureComponent {
   };
   onResize = (event) => {
     this.epub.rendition.resize();
+    this.positionArrows();
+  };
+  positionArrows = () => {
+    let w = getComputedStyle(this.$viewer.current).width;
+    this.$leftArrow.current.style.right = `calc(${w} - 60px)`;
   };
 
   /*

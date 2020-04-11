@@ -1,7 +1,10 @@
 import React from "react";
 import { Menu } from "antd";
 
+import { ThemeContext } from "ThemeProvider";
+
 class Toc extends React.PureComponent {
+  //static contextType = ThemeContext;
   render() {
     return (
       <Menu

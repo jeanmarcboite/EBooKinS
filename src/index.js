@@ -6,16 +6,13 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
 import Routes from "./routes";
+import { ThemeContextProvider } from "ThemeProvider";
 const App = () => {
-  if (false) {
-    return <Routes />;
-  } else {
-    return (
-      <PersistGate loading={null} persistor={persistor}>
-        <Routes />
-      </PersistGate>
-    );
-  }
+  return (
+    <PersistGate loading={null} persistor={persistor}>
+      <Routes />
+    </PersistGate>
+  );
 };
 
 ReactDOM.render(

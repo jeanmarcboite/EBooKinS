@@ -18,42 +18,7 @@ import {
 
 import ResizablePanels from "components/ResizablePanels";
 
-import styled from "styled-components";
-
-const Anchor = styled.a`
-  position: absolute;
-  top: 50%;
-  margin-top: -32px;
-  font-size: 48px;
-  font-family: arial, sans-serif;
-  font-weight: bold;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  text-decoration: none;
-  color: red;
-  z-index: 49;
-  &:active {
-    color: rgb(211, 28, 28);
-  }
-  &:hover {
-    color: rgb(117, 15, 233);
-  }
-`;
-const LeftArrow = styled(Anchor)`
-  top: 50%;
-  left: 230px;
-`;
-const RightArrow = styled(Anchor)`
-  top: 50%;
-  right: 30px;
-`;
-
-const Fullscreen = styled(Anchor)`
-  top: 20px;
-  right: 20px;
-`;
+import style from "./Ereader.module.css";
 
 const handleClick = (e) => console.log(e);
 
@@ -190,19 +155,19 @@ export default class EpubViewer extends React.PureComponent {
   renderArrows = () => {
     return (
       <>
-        <Fullscreen>
+        <button className={style.fullscreen}>
           {this.state.fullscreen ? (
             <FullscreenExitOutlined onClick={this.exitFullscreen} />
           ) : (
             <FullscreenOutlined onClick={this.setFullscreen} />
           )}
-        </Fullscreen>
-        <LeftArrow onClick={this.prev}>
+        </button>
+        <button className={style.leftArrow} onClick={this.prev}>
           <LeftOutlined />
-        </LeftArrow>
-        <RightArrow onClick={this.next}>
+        </button>
+        <button className={style.rightArrow} onClick={this.next}>
           <RightOutlined />
-        </RightArrow>
+        </button>
       </>
     );
   };
@@ -298,7 +263,6 @@ export default class EpubViewer extends React.PureComponent {
                 className="spreads viewer"
                 style={{ height: "100%", width: "100%" }}
               >
-                {" "}
                 {this.state.error ? (
                   <Alert message={this.state.error.toString()} type="error" />
                 ) : null}

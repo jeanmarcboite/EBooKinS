@@ -1,8 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Menu } from "antd";
 
 import { ThemeContext } from "ThemeProvider";
 import style from "./Toc.module.css";
+import "./Toc.css";
 
 class Toc extends React.PureComponent {
   static contextType = ThemeContext;
@@ -13,15 +15,25 @@ class Toc extends React.PureComponent {
         onClick={this.props.selectChapter}
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
-        style={{ height: "90%" }}
-        className={style.toc}
+        style={{ height: "80%" }}
+        className={style.menu}
+        theme={this.props.settings.darkMode ? "dark" : "light"}
       >
         {this.props.toc
           ? this.props.toc.subMenus.map((item, key) => (
-              <Menu.SubMenu key={item.id} title={item.title}>
+              <Menu.SubMenu
+                className={style.subMenu}
+                key={item.id}
+                title={item.title}
+                style={{ color: "blue", background: "gray" }}
+              >
                 {item.items.map((subitem, subkey) => (
-                  <Menu.Item key={subitem.id} href={subitem.href}>
-                    {subitem.label}
+                  <Menu.Item
+                    className="style.menuItem"
+                    key={subitem.id}
+                    href={subitem.href}
+                  >
+                    <div className={style.menuItemLabel}>{subitem.label}</div>
                   </Menu.Item>
                 ))}
               </Menu.SubMenu>
@@ -32,4 +44,11 @@ class Toc extends React.PureComponent {
   }
 }
 
-export default Toc;
+function mapStateToProps(state) {
+  return {
+    ereader: state.ereader,
+    settings: state.settings,
+  };
+}
+
+export default connect(mapStateToProps)(Toc);

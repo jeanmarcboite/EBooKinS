@@ -1,8 +1,17 @@
-.toc {
+.menu {
     background: red;
     height: "100%";
     width: "100%";
     display: "flex";
     justify-content: "center";
     align-items: "center";
+}
+
+.subMenu {
+    color: blue;
+    background-color: brown;
+}
+
+.menuItemLabel {
+    color: gray;
 }

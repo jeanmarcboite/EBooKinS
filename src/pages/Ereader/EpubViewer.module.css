@@ -1,0 +1,28 @@
+/* These classes cannot be renamed, they are set by epub.js */
+
+.epub_viewer {
+    width: 100%;
+    height: 90%;
+}
+
+.viewer {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 4px #ccc;
+    border: 6px solid black;
+    border-radius: 30px;
+    padding: 0;
+    position: relative;
+    margin: 0 auto;
+    z-index: 2;
+    position: relative;
+    overflow: hidden;
+    background: white url("ajax-loader.gif") center center no-repeat;
+    top: 0px;
+}
+
+.viewer .epub-view > iframe {
+    background: #ffddb0; /* caramel */
+    border: 4px solid blue;
+    border-radius: 60px;
+}

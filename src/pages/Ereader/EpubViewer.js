@@ -6,8 +6,6 @@ import Toc from "./Toc";
 
 import Epub from "./Epub";
 
-import "./EpubViewer.css";
-
 import {
   UserOutlined,
   RightOutlined,
@@ -19,6 +17,7 @@ import {
 import ResizablePanels from "components/ResizablePanels";
 
 import style from "./Ereader.module.css";
+import viewerStyle from "./EpubViewer.module.css";
 
 const handleClick = (e) => console.log(e);
 
@@ -235,14 +234,13 @@ export default class EpubViewer extends React.PureComponent {
             }}
           >
             <div
-              id="epub_viewer"
-              className="epub_viewer"
+              className={viewerStyle.epub_viewer}
               style={{ height: "100%", width: "100%" }}
             >
               <div
                 ref={this.$viewer}
-                className="spreads viewer"
-                style={{ height: "100%", width: "100%" }}
+                className={viewerStyle.viewer}
+                style={{ height: "100%", width: "100%", background: "#ffddb0" }}
               >
                 {this.state.error ? (
                   <Alert message={this.state.error.toString()} type="error" />

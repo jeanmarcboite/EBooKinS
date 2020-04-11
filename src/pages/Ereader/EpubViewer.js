@@ -1,6 +1,8 @@
 import React from "react";
 
 import { Alert } from "antd";
+import { connect } from "react-redux";
+import { setSetting } from "pages/Settings/store";
 
 import { ThemeContext } from "ThemeProvider";
 
@@ -23,7 +25,7 @@ import viewerStyle from "./EpubViewer.module.css";
 
 const handleClick = (e) => console.log(e);
 
-export default class EpubViewer extends React.PureComponent {
+class EpubViewer extends React.PureComponent {
   static whyDidYouRender = true;
   static contextType = ThemeContext;
 
@@ -33,6 +35,7 @@ export default class EpubViewer extends React.PureComponent {
     this.$container = React.createRef();
     this.$leftArrow = React.createRef();
     this.$rightArrow = React.createRef();
+    this.$toc = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -196,10 +199,14 @@ export default class EpubViewer extends React.PureComponent {
       getComputedStyle(this.$container.current).height
     );
     console.log("viewer width: ", getComputedStyle(this.$viewer.current).width);
+    console.log("toc width: ", getComputedStyle(this.$toc.current).width);
     console.groupEnd();
   };
   onResizeEnd = (event) => {
     this._logSizes(event);
+    this.props.dispatch(
+      setSetting({ setting: "leftPanelSize", value: event[0] })
+    );
     this.epub.rendition.resize();
   };
   onResize = (event) => {
@@ -208,7 +215,7 @@ export default class EpubViewer extends React.PureComponent {
   };
   positionArrows = () => {
     let w = getComputedStyle(this.$viewer.current).width;
-    this.$leftArrow.current.style.right = `calc(${w} - 60px)`;
+    this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
   };
 
   /*
@@ -237,12 +244,12 @@ export default class EpubViewer extends React.PureComponent {
         }}
       >
         <ResizablePanels
-          panelsSize={[550, 1200]}
+          panelsSize={[this.props.settings.leftPanelSize]}
           sizeUnitMeasure="%"
           onResize={this.onResize}
           onResizeEnd={this.onResizeEnd}
         >
-          <div className={style.toc}>
+          <div className={style.toc} ref={this.$toc}>
             <Toc
               toc={this.state.tableOfContents}
               selectChapter={this.selectChapter}
@@ -279,3 +286,11 @@ export default class EpubViewer extends React.PureComponent {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    settings: state.settings,
+  };
+}
+
+export default connect(mapStateToProps)(EpubViewer);

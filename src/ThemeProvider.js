@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { RedEnvelopeFilled } from "@ant-design/icons";
 // https://github.com/mateenkiani/react-tutorials.git
 export const ThemeContext = React.createContext({
   theme: {
@@ -21,6 +22,11 @@ export const ThemeContextProvider = (props) => {
       primary: "#212121",
       text: "white",
     },
+    chocolat: {
+      type: "chocolat",
+      background: "#ffddb0",
+      text: "#ff0000",
+    },
   };
 
   const setTheme = (type) => {
@@ -28,7 +34,7 @@ export const ThemeContextProvider = (props) => {
   };
 
   const initState = {
-    theme: theme.light,
+    theme: theme.chocolat,
     setTheme: setTheme,
   };
 

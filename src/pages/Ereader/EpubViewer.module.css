@@ -20,9 +20,3 @@
     background: white url("ajax-loader.gif") center center no-repeat;
     top: 0px;
 }
-
-.viewer .epub-view > iframe {
-    background: #ffddb0; /* caramel */
-    border: 4px solid blue;
-    border-radius: 60px;
-}

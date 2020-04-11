@@ -2,6 +2,8 @@ import React from "react";
 
 import { Alert } from "antd";
 
+import { ThemeContext } from "ThemeProvider";
+
 import Toc from "./Toc";
 
 import Epub from "./Epub";
@@ -23,6 +25,8 @@ const handleClick = (e) => console.log(e);
 
 export default class EpubViewer extends React.PureComponent {
   static whyDidYouRender = true;
+  static contextType = ThemeContext;
+
   constructor(props) {
     super(props);
     this.$viewer = React.createRef();
@@ -204,6 +208,11 @@ export default class EpubViewer extends React.PureComponent {
         resizerSize: change resizer size
   */
   render() {
+    const viewerStyle = {
+      backgroundColor: this.context.theme.background,
+      color: this.context.theme.text,
+      height: "100vh",
+    };
     return (
       <div
         ref={this.$container}
@@ -240,7 +249,7 @@ export default class EpubViewer extends React.PureComponent {
               <div
                 ref={this.$viewer}
                 className={viewerStyle.viewer}
-                style={{ height: "100%", width: "100%", background: "#ffddb0" }}
+                style={viewerStyle}
               >
                 {this.state.error ? (
                   <Alert message={this.state.error.toString()} type="error" />

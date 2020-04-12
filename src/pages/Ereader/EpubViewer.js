@@ -270,10 +270,11 @@ class EpubViewer extends React.PureComponent {
                 defaultValue={{ key: this.context.theme.name }}
                 onChange={({ value }) => this.context.setTheme(value)}
               >
-                <Select.Option value="default">default</Select.Option>
-                <Select.Option value="light">light</Select.Option>
-                <Select.Option value="chocolate">Chocolate</Select.Option>
-                <Select.Option value="dark">dark</Select.Option>
+                {Object.keys(themes).map((theme, key) => (
+                  <Select.Option key={key} value={themes[theme].name}>
+                    {themes[theme].name}
+                  </Select.Option>
+                ))}
               </Select>
             </div>
           </div>

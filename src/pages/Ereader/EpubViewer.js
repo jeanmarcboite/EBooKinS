@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Alert } from "antd";
+import { Alert, Select } from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
@@ -36,6 +36,7 @@ class EpubViewer extends React.PureComponent {
     this.$leftArrow = React.createRef();
     this.$rightArrow = React.createRef();
     this.$toc = React.createRef();
+    this.$theme = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -216,6 +217,9 @@ class EpubViewer extends React.PureComponent {
   positionArrows = () => {
     let w = getComputedStyle(this.$viewer.current).width;
     this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
+    console.log(this.$leftArrow.current);
+    console.log(this.$theme.current);
+    this.$theme.current.style.width = getComputedStyle(this.$toc.current).width;
   };
 
   /*
@@ -250,11 +254,29 @@ class EpubViewer extends React.PureComponent {
           onResize={this.onResize}
           onResizeEnd={this.onResizeEnd}
         >
-          <div className={style.toc} ref={this.$toc}>
-            <Toc
-              toc={this.state.tableOfContents}
-              selectChapter={this.selectChapter}
-            />
+          <div>
+            <div className={style.toc} ref={this.$toc}>
+              <Toc
+                toc={this.state.tableOfContents}
+                selectChapter={this.selectChapter}
+              />
+            </div>
+            <div
+              ref={this.$theme}
+              style={{ position: "absolute", bottom: "20px" }}
+            >
+              <Select
+                labelInValue
+                style={{ width: "100%" }}
+                defaultValue={{ key: this.context.theme.type }}
+                onChange={({ value }) => this.context.setTheme(value)}
+              >
+                <Select.Option value="default">default</Select.Option>
+                <Select.Option value="light">light</Select.Option>
+                <Select.Option value="chocolate">Chocolate</Select.Option>
+                <Select.Option value="dark">dark</Select.Option>
+              </Select>
+            </div>
           </div>
           <div
             style={{

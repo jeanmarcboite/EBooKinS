@@ -1,5 +1,7 @@
 import EpubJS from "epubjs";
 
+import { themes } from "ThemeProvider";
+
 class Epub {
   constructor({
     url,
@@ -34,11 +36,20 @@ class Epub {
       .then(() => {
         if ($viewer.current) {
           this.rendition = this.book.renderTo($viewer.current, this.settings);
+          for (let theme in themes) {
+            console.log(theme, themes[theme].ebook_iframe_body);
+            this.rendition.themes.register(theme, {
+              body: themes[theme].ebook_iframe_body,
+            });
+          }
+          this.rendition.themes.select("chocolate");
+          //rendition.themes.register("dark", "themes.css");
           //this.rendition = this.book.renderTo($viewer.current, this.settings);
           this.rendition.display();
           this.book.loaded.navigation.then(loadTableOfContents);
           this.book.loaded.metadata.then(loadMetadata);
           this.rendition.on("rendered", (section, iFrameView) => {
+            this.rendered = true;
             this.addEventListener(
               iFrameView.document.documentElement,
               "contextmenu",
@@ -67,6 +78,22 @@ class Epub {
       })
       .catch(onError);
   }
+
+  renditionInit = () => {};
+
+  renditionDisplay = (href) => {
+    console.assert(this.rendition);
+    if (this.rendered) {
+      this.rendition.display(href);
+    }
+  };
+
+  renditionTheme = (theme) => {
+    if (this.rendered) {
+      this.rendition.resize();
+      this.rendition.themes.select(theme);
+    }
+  };
 
   addEventListener = (target, type, callback, useCapture) => {
     target.addEventListener(type, callback, useCapture);

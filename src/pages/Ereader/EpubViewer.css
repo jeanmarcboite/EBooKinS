@@ -1,4 +1,8 @@
-#viewer .epub-view > iframe {
+#vviewer .epub-view > iframe {
     background: white;
+    color: purple;
+}
+
+.epub-view {
     color: purple;
 }

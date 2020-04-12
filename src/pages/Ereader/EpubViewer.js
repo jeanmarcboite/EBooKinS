@@ -22,6 +22,7 @@ import ResizablePanels from "components/ResizablePanels";
 
 import style from "./Ereader.module.css";
 import viewerStyle from "./EpubViewer.module.css";
+import "./EpubViewer.css";
 
 const handleClick = (e) => console.log(e);
 
@@ -86,13 +87,13 @@ class EpubViewer extends React.PureComponent {
   }
 
   selectChapter = (chapter) => {
-    this.epub.rendition.display(chapter.item.props.href);
+    this.epub.renditionDisplay(chapter.item.props.href);
     this.setState({ chapter });
   };
   componentDidMount() {
     this.loadBook();
     this._logSizes();
-    this.positionArrows();
+    this.updateView();
   }
 
   componentDidUpdate() {
@@ -100,6 +101,7 @@ class EpubViewer extends React.PureComponent {
       this.setState({ url: this.props.url, error: null });
       this.loadBook();
     }
+    this.updateView();
   }
 
   loadBook() {
@@ -114,7 +116,7 @@ class EpubViewer extends React.PureComponent {
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
-      debug: true,
+      debug: false,
     });
   }
 
@@ -207,13 +209,13 @@ class EpubViewer extends React.PureComponent {
     this.props.dispatch(
       setSetting({ setting: "leftPanelSize", value: event[0] })
     );
-    this.epub.rendition.resize();
+    this.updateView();
   };
   onResize = (event) => {
-    this.epub.rendition.resize();
-    this.positionArrows();
+    this.updateView();
   };
-  positionArrows = () => {
+  updateView = () => {
+    this.epub.renditionTheme(this.context.theme.name);
     let w = getComputedStyle(this.$viewer.current).width;
     this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
     this.$theme.current.style.width = getComputedStyle(this.$toc.current).width;
@@ -234,7 +236,7 @@ class EpubViewer extends React.PureComponent {
   render() {
     const viewer_style = {
       backgroundColor: this.context.theme.background,
-      color: this.context.theme.text,
+      color: "purple",
       height: "100vh",
     };
     return (

@@ -9,8 +9,8 @@ export const ThemeContext = React.createContext({
   },
 });
 
-const light = {
-  name: "light",
+const defaultTheme = {
+  name: "default",
   type: "light",
   background: "white",
   primary: "#0277bd",
@@ -19,41 +19,66 @@ const light = {
     color: "#000000",
     background: "#FFFFFF",
   },
+  ebook_iframe_body: {
+    color: "#000000",
+    background: "#FFFFFF",
+  },
 };
-export const ThemeContextProvider = (props) => {
-  const theme = {
-    light,
-    default: light,
-    dark: {
-      name: "dark",
-      type: "dark",
-      background: "gray",
-      primary: "#212121",
-      text: "white",
-      submenu: {
-        background: "#000000",
-        color: "#FFFFFF",
-      },
-    },
-    chocolate: {
-      name: "chocolate",
-      type: "light",
-      background: "#ffddb0",
-      text: "#ff0000",
-      submenu: {
-        color: "blue",
-        background: "papayawhip",
-      },
-    },
-  };
 
+const light = {
+  ...defaultTheme,
+  name: "light",
+  submenu: {
+    ...defaultTheme.submenu,
+    background: "papayawhip",
+  },
+  ebook_iframe_body: {
+    ...defaultTheme.ebook_viewer,
+    background: "papayawhip",
+  },
+};
+
+const chocolate = {
+  ...defaultTheme,
+  name: "chocolate",
+  submenu: {
+    ...defaultTheme.submenu,
+    background: "papayawhip",
+  },
+  ebook_iframe_body: {
+    color: "blue",
+    background: "#ffddb0",
+  },
+};
+const dark = {
+  ...defaultTheme,
+  name: "dark",
+  type: "dark",
+  submenu: {
+    color: "#eeeeee",
+    background: "#212121",
+  },
+  ebook_iframe_body: {
+    color: "white",
+    background: "#121212",
+  },
+};
+
+export const themes = {
+  default: defaultTheme,
+  light,
+  chocolate,
+  dark,
+};
+
+export const ThemeContextProvider = (props) => {
   const setTheme = (name) => {
     localStorage.setItem("theme", name);
-    setState({ ...state, theme: theme[name] });
+    setState({ ...state, theme: themes[name] });
   };
 
   const initState = {
-    theme: theme[localStorage.getItem("theme") || "light"],
+    theme: themes[localStorage.getItem("theme") || "default"],
     setTheme,
   };
 

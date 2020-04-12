@@ -17,7 +17,7 @@ class Toc extends React.PureComponent {
         defaultOpenKeys={["sub1"]}
         style={{ height: "80%" }}
         className={style.menu}
-        theme={this.context.theme.type}
+        theme={this.context.theme.name}
       >
         {this.props.toc
           ? this.props.toc.subMenus.map((item, key) => (
@@ -25,7 +25,7 @@ class Toc extends React.PureComponent {
                 className={style.subMenu}
                 key={item.id}
                 title={item.title}
-                style={{ color: "blue", background: "gray" }}
+                style={this.context.theme.submenu}
               >
                 {item.items.map((subitem, subkey) => (
                   <Menu.Item

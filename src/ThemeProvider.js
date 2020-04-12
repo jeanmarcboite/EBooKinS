@@ -16,18 +16,30 @@ export const ThemeContextProvider = (props) => {
       type: "light",
       primary: "#0277bd",
       text: "black",
+      submenu: {
+        color: "#000000",
+        background: "#FFFFFF",
+      },
     },
     dark: {
       name: "dark",
       type: "dark",
       primary: "#212121",
       text: "white",
+      submenu: {
+        background: "#000000",
+        color: "#FFFFFF",
+      },
     },
     chocolate: {
       name: "chocolate",
       type: "light",
       background: "#ffddb0",
       text: "#ff0000",
+      submenu: {
+        color: "blue",
+        background: "papayawhip",
+      },
     },
   };
 

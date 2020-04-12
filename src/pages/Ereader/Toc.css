@@ -1,3 +1,18 @@
-.ant-menu-chocolate .ant-menu-inline.ant-menu-sub {
-    background: #ff0c17;
+.ant-menu.ant-menu-chocolate,
+.ant-menu.ant-menu-chocolate .ant-menu-sub {
+    background: papayawhip;
+}
+
+.ant-menu.ant-menu-chocolate .ant-menu-submenu-title .ant-menu-submenu-arrow,
+.ant-menu.ant-menu-chocolate .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow {
+    opacity: 0.45;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.ant-menu.ant-menu-chocolate .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+.ant-menu.ant-menu-chocolate .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+.ant-menu.ant-menu-chocolate .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+.ant-menu.ant-menu-chocolate .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow::before {
+    background: papayawhip;
 }

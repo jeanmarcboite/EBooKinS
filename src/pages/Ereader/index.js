@@ -64,7 +64,7 @@ class Ereader extends React.Component {
       />
       <Menu
         id={menuID}
-        theme={this.context.theme.type === "dark" ? theme.dark : theme.light}
+        theme={theme[this.context.theme.type]}
         animation={animation.flip}
       >
         <Item>

@@ -11,7 +11,7 @@ function Page({ menu, children, settings }) {
     <>
       <Menu
         id={menuID}
-        theme={context.theme.type === "dark" ? theme.dark : theme.light}
+        theme={theme[context.theme.type]}
         animation={animation.flip}
       >
         {menu}

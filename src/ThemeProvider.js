@@ -12,26 +12,29 @@ export const ThemeContext = React.createContext({
 export const ThemeContextProvider = (props) => {
   const theme = {
     light: {
+      name: "light",
       type: "light",
       primary: "#0277bd",
       text: "black",
     },
     dark: {
+      name: "dark",
       type: "dark",
       primary: "#212121",
       text: "white",
     },
     chocolate: {
-      type: "chocolate",
+      name: "chocolate",
+      type: "light",
       background: "#ffddb0",
       text: "#ff0000",
     },
   };
 
-  const setTheme = (type) => {
-    console.log("settheme", type);
-    localStorage.setItem("theme", type);
-    setState({ ...state, theme: theme[type] });
+  const setTheme = (name) => {
+    console.log("settheme", name);
+    localStorage.setItem("theme", name);
+    setState({ ...state, theme: theme[name] });
   };
 
   const initState = {

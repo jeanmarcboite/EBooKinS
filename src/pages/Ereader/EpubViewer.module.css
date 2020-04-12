@@ -14,9 +14,17 @@
     padding: 0;
     position: relative;
     margin: 0 auto;
-    z-index: 2;
     position: relative;
     overflow: hidden;
-    background: white url("ajax-loader.gif") center center no-repeat;
     top: 0px;
+    color: purple;
+    background: white;
+}
+
+.viewer.spreads .epub-view > iframe {
+    background: white;
+}
+
+.gif_viewer {
+    background: white url("ajax-loader.gif") center center no-repeat;
 }

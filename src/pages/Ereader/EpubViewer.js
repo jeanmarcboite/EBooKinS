@@ -86,7 +86,6 @@ class EpubViewer extends React.PureComponent {
   }
 
   selectChapter = (chapter) => {
-    console.log(chapter);
     this.epub.rendition.display(chapter.item.props.href);
     this.setState({ chapter });
   };
@@ -217,8 +216,6 @@ class EpubViewer extends React.PureComponent {
   positionArrows = () => {
     let w = getComputedStyle(this.$viewer.current).width;
     this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
-    console.log(this.$leftArrow.current);
-    console.log(this.$theme.current);
     this.$theme.current.style.width = getComputedStyle(this.$toc.current).width;
   };
 
@@ -235,8 +232,7 @@ class EpubViewer extends React.PureComponent {
         resizerSize: change resizer size
   */
   render() {
-    console.log(this.context);
-    const viewerStyle = {
+    const viewer_style = {
       backgroundColor: this.context.theme.background,
       color: this.context.theme.text,
       height: "100vh",
@@ -268,7 +264,7 @@ class EpubViewer extends React.PureComponent {
               <Select
                 labelInValue
                 style={{ width: "100%" }}
-                defaultValue={{ key: this.context.theme.type }}
+                defaultValue={{ key: this.context.theme.name }}
                 onChange={({ value }) => this.context.setTheme(value)}
               >
                 <Select.Option value="default">default</Select.Option>
@@ -281,7 +277,7 @@ class EpubViewer extends React.PureComponent {
           <div
             style={{
               display: "flex",
-              background: "yellow",
+              background: "papayawhip",
               height: "100vh",
               width: "100%",
               justifyContent: "center",
@@ -294,8 +290,9 @@ class EpubViewer extends React.PureComponent {
             >
               <div
                 ref={this.$viewer}
+                id="viewer"
                 className={viewerStyle.viewer}
-                style={viewerStyle}
+                style={viewer_style}
               >
                 {this.state.error ? (
                   <Alert message={this.state.error.toString()} type="error" />

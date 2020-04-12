@@ -9,21 +9,25 @@ export const ThemeContext = React.createContext({
   },
 });
 
+const light = {
+  name: "light",
+  type: "light",
+  background: "white",
+  primary: "#0277bd",
+  text: "black",
+  submenu: {
+    color: "#000000",
+    background: "#FFFFFF",
+  },
+};
 export const ThemeContextProvider = (props) => {
   const theme = {
-    light: {
-      name: "light",
-      type: "light",
-      primary: "#0277bd",
-      text: "black",
-      submenu: {
-        color: "#000000",
-        background: "#FFFFFF",
-      },
-    },
+    light,
+    default: light,
     dark: {
       name: "dark",
       type: "dark",
+      background: "gray",
       primary: "#212121",
       text: "white",
       submenu: {
@@ -44,7 +48,6 @@ export const ThemeContextProvider = (props) => {
   };
 
   const setTheme = (name) => {
-    console.log("settheme", name);
     localStorage.setItem("theme", name);
     setState({ ...state, theme: theme[name] });
   };

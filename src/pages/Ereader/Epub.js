@@ -10,6 +10,7 @@ class Epub {
     onContextMenu,
     onError,
     $viewer,
+    themes,
     debug,
   }) {
     this.eventListeners = [];
@@ -37,12 +38,10 @@ class Epub {
         if ($viewer.current) {
           this.rendition = this.book.renderTo($viewer.current, this.settings);
           for (let theme in themes) {
-            console.log(theme, themes[theme].ebook_iframe_body);
             this.rendition.themes.register(theme, {
               body: themes[theme].ebook_iframe_body,
             });
           }
-          this.rendition.themes.select("chocolate");
           //rendition.themes.register("dark", "themes.css");
           //this.rendition = this.book.renderTo($viewer.current, this.settings);
           this.rendition.display();

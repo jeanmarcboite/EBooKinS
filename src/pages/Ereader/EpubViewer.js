@@ -4,7 +4,7 @@ import { Alert, Select } from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
-import { ThemeContext } from "ThemeProvider";
+import { ThemeContext, themes } from "ThemeProvider";
 
 import Toc from "./Toc";
 
@@ -116,6 +116,7 @@ class EpubViewer extends React.PureComponent {
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
+      themes,
       debug: false,
     });
   }

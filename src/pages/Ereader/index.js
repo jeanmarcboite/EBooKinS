@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
 import { loadFile } from "./store";
+import { ThemeContext } from "ThemeProvider";
 
 import RoutesMenu from "routes/Menu";
 import {
@@ -16,8 +17,9 @@ import "react-contexify/dist/ReactContexify.min.css";
 
 import EpubViewer from "./EpubViewer";
 
-const menuId = "EreaderMenuID";
+const menuID = "EreaderMenuID";
 class Ereader extends React.Component {
+  static contextType = ThemeContext;
   constructor(props) {
     super(props);
 
@@ -38,7 +40,7 @@ class Ereader extends React.Component {
   openContextMenu = (e) => {
     e.preventDefault();
     contextMenu.show({
-      id: menuId,
+      id: menuID,
       event: e,
     });
   };
@@ -61,8 +63,8 @@ class Ereader extends React.Component {
         style={{ display: "none" }}
       />
       <Menu
-        id={menuId}
-        theme={this.props.settings.darkMode ? theme.dark : theme.light}
+        id={menuID}
+        theme={this.context.theme.type === "dark" ? theme.dark : theme.light}
         animation={animation.flip}
       >
         <Item>

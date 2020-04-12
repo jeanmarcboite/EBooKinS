@@ -5,12 +5,27 @@ import { Form, Switch, Select } from "antd";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Page from "pages/Page";
 import RoutesMenu from "routes/Menu";
+import { ThemeContext } from "ThemeProvider";
 
 class Settings extends React.Component {
+  static contextType = ThemeContext;
   render() {
     return (
       <Page menu={<RoutesMenu />}>
         <Form>
+          <Form.Item label="Theme">
+            <Select
+              labelInValue
+              defaultValue={{ key: this.context.theme.type }}
+              style={{ width: 120 }}
+              onChange={({ value }) => this.context.setTheme(value)}
+            >
+              <Select.Option value="default">default</Select.Option>
+              <Select.Option value="light">light</Select.Option>
+              <Select.Option value="chocolate">Chocolate</Select.Option>
+              <Select.Option value="dark">dark</Select.Option>
+            </Select>
+          </Form.Item>
           <Form.Item label="Dark Mode">
             <Switch
               checkedChildren={<CheckOutlined />}
@@ -47,6 +62,7 @@ class Settings extends React.Component {
 function mapStateToProps(state) {
   return {
     settings: state.settings,
+    theme: state.settings.theme,
   };
 }
 

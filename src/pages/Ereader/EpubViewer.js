@@ -231,6 +231,7 @@ class EpubViewer extends React.PureComponent {
         resizerSize: change resizer size
   */
   render() {
+    console.log(this.context);
     const viewerStyle = {
       backgroundColor: this.context.theme.background,
       color: this.context.theme.text,

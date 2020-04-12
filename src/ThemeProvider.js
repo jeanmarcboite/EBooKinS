@@ -7,7 +7,6 @@ export const ThemeContext = React.createContext({
     primary: "#00bfa5",
     text: "#black",
   },
-  setTheme: () => {},
 });
 
 export const ThemeContextProvider = (props) => {
@@ -22,20 +21,22 @@ export const ThemeContextProvider = (props) => {
       primary: "#212121",
       text: "white",
     },
-    chocolat: {
-      type: "chocolat",
+    chocolate: {
+      type: "chocolate",
       background: "#ffddb0",
       text: "#ff0000",
     },
   };
 
   const setTheme = (type) => {
-    setState({ ...state, theme: type === "dark" ? theme.light : theme.dark });
+    console.log("settheme", type);
+    localStorage.setItem("theme", type);
+    setState({ ...state, theme: theme[type] });
   };
 
   const initState = {
-    theme: theme.chocolat,
-    setTheme: setTheme,
+    theme: theme[localStorage.getItem("theme") || "light"],
+    setTheme,
   };
 
   const [state, setState] = useState(initState);

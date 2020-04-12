@@ -5,7 +5,7 @@ export const slice = createSlice({
   initialState: {
     darkMode: false,
     menuTrigger: "right",
-    leftPanelSize: 250
+    leftPanelSize: 250,
   },
   reducers: {
     setSetting: (state, action) => {

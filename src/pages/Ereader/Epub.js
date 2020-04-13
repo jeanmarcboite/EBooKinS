@@ -27,7 +27,7 @@ class Epub {
       generatePagination: false,
       history: true,
     };
-
+    this.$viewer = $viewer;
     this.url = url;
     this.book = EpubJS();
     this.book
@@ -53,7 +53,7 @@ class Epub {
           this.book.loaded.metadata.then(loadMetadata);
 
           this.rendition.on("rendered", (section, iFrameView) => {
-            console.log("rendered");
+            console.log("rendered", this.rendition);
             this.rendered = true;
             this.removeEventListeners();
             this.addEventListener(
@@ -61,8 +61,13 @@ class Epub {
               "contextmenu",
               onContextMenu
             );
+            this.renditionUpdate();
 
             return false;
+          });
+
+          this.rendition.on("resized", function (size) {
+            console.log("Resized to:", size);
           });
 
           if (debug) {
@@ -112,10 +117,16 @@ class Epub {
     }
   };
 
-  renditionTheme = (theme) => {
+  renditionUpdate = (theme, width) => {
+    if (theme) this.theme = theme;
+    if (width) this.width = width;
     if (this.rendered) {
-      this.rendition.resize();
-      this.rendition.themes.select(theme);
+      console.log("update rendition: ", this.theme, this.width);
+      this.settings.width = this.width;
+      this.rendition = this.book.renderTo(this.$viewer.current, this.settings);
+      //this.rendition.resize(this.width, "900px");
+      this.rendition.themes.select(this.theme);
+      this.rendition.display();
     }
   };
 

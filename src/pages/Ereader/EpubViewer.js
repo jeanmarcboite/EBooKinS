@@ -237,7 +237,9 @@ class EpubViewer extends React.PureComponent {
     this.updateView();
   };
   updateView = () => {
-    this.epub.renditionTheme(this.context.theme.name);
+    let w = getComputedStyle(this.$viewer.current).width;
+    let width = (parseInt(w) - 30).toString() + "px";
+    this.epub.renditionUpdate(this.context.theme.name, width);
     if (false) {
       let w = getComputedStyle(this.$viewer.current).width;
       this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
@@ -249,6 +251,10 @@ class EpubViewer extends React.PureComponent {
 
   onResizerDragStarted = (e) => {
     console.log("onDragStarted", e);
+  };
+
+  onResizerDrag = (e) => {
+    console.log("onDrag", e);
   };
 
   onResizerDragFinished = (leftPanelSize) => {
@@ -282,6 +288,8 @@ class EpubViewer extends React.PureComponent {
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}
           resizerClassName={viewerStyle.Resizer}
+          onDragStarted={this.onResizerDragStarted}
+          onDrag={this.onResizerDrag}
           onDragFinished={this.onResizerDragFinished}
         >
           <div>

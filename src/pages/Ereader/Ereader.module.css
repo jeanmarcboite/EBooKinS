@@ -32,7 +32,7 @@ button:focus {
 .leftArrow {
     composes: button;
     top: 50%;
-    right: 200px;
+    left: 20px;
 }
 
 .rightArrow {

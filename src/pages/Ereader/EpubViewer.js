@@ -215,9 +215,13 @@ class EpubViewer extends React.PureComponent {
   };
   updateView = () => {
     this.epub.renditionTheme(this.context.theme.name);
-    let w = getComputedStyle(this.$viewer.current).width;
-    this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
-    this.$theme.current.style.width = getComputedStyle(this.$toc.current).width;
+    if (false) {
+      let w = getComputedStyle(this.$viewer.current).width;
+      this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
+      this.$theme.current.style.width = getComputedStyle(
+        this.$toc.current
+      ).width;
+    }
   };
 
   onResizerDragStarted = (e) => {
@@ -228,6 +232,7 @@ class EpubViewer extends React.PureComponent {
     this.props.dispatch(
       setSetting({ setting: "leftPanelSize", value: leftPanelSize })
     );
+    this.updateView();
   };
 
   onResizerChanged = (e) => {
@@ -250,9 +255,7 @@ class EpubViewer extends React.PureComponent {
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}
           resizerClassName={viewerStyle.Resizer}
-          onDragStarted={this.onResizerDragStarted}
           onDragFinished={this.onResizerDragFinished}
-          onChange={this.onResizerChange}
         >
           <div>
             <div className={style.toc} ref={this.$toc}>

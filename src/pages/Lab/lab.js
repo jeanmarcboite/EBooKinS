@@ -1,7 +1,9 @@
 import React from "react";
 import "./lab.css";
+
+import SplitPane from "react-split-pane";
 /* https://codepen.io/lopis/pen/XYgRKz */
-class ResizablePanels extends React.Component {
+export class ResizablePanels extends React.Component {
   eventHandler = null;
 
   constructor(props) {
@@ -96,4 +98,42 @@ class ResizablePanels extends React.Component {
     );
   }
 }
-export default ResizablePanels;
+
+class SplitPanels extends React.Component {
+  render = () => {
+    const styleA = { background: "#eee" };
+    const styleB = { background: "#aaa4ba" };
+    const styleC = { background: "#000", width: "30px" };
+    const styleD = { padding: "2em", fontStyle: "italic" };
+    return (
+      <SplitPane
+        split="vertical"
+        minSize={50}
+        maxSize={300}
+        defaultSize={100}
+        className="primary"
+        pane1Style={styleA}
+        resizerStyle={styleC}
+      >
+        <div>
+          <button
+            style={{
+              background: "red",
+              width: "20px",
+              position: "absolute",
+              right: "20px",
+            }}
+          >
+            LEFT
+          </button>
+        </div>
+        <SplitPane split="horizontal" paneStyle={styleD} pane2Style={styleB}>
+          <div>Hello...</div>
+          <div> ...world.</div>
+        </SplitPane>
+      </SplitPane>
+    );
+  };
+}
+
+export default SplitPanels;

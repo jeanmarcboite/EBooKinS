@@ -18,11 +18,10 @@ import {
   FullscreenExitOutlined,
 } from "@ant-design/icons";
 
-import ResizablePanels from "components/ResizablePanels";
-
 import style from "./Ereader.module.css";
 import viewerStyle from "./EpubViewer.module.css";
 import "./EpubViewer.css";
+import SplitPane from "react-split-pane";
 
 const handleClick = (e) => console.log(e);
 
@@ -222,18 +221,19 @@ class EpubViewer extends React.PureComponent {
     this.$theme.current.style.width = getComputedStyle(this.$toc.current).width;
   };
 
-  /*
-     Props:
+  onResizerDragStarted = (e) => {
+    console.log("onDragStarted", e);
+  };
 
-        bkcolor: set a background color
-        displayDirection: its like flex direction, you can choose "row" for horizontal resizing or "column" for vertical resizing
-        width: set a width for you component
-        height: set a height for you component
-        panelsSize: a array to set your panels sizes, if you have 2 panels
-        sizeUnitMeasure: unit used to calculate the amount to resize (px or %)
-        resizerColor: change resizer color
-        resizerSize: change resizer size
-  */
+  onResizerDragFinished = (leftPanelSize) => {
+    this.props.dispatch(
+      setSetting({ setting: "leftPanelSize", value: leftPanelSize })
+    );
+  };
+
+  onResizerChanged = (e) => {
+    console.log("onResizerChanged", e);
+  };
   render() {
     const viewer_style = {
       backgroundColor: this.context.theme.background,
@@ -247,11 +247,13 @@ class EpubViewer extends React.PureComponent {
           border: "3px solid red",
         }}
       >
-        <ResizablePanels
-          panelsSize={[this.props.settings.leftPanelSize]}
-          sizeUnitMeasure="%"
-          onResize={this.onResize}
-          onResizeEnd={this.onResizeEnd}
+        <SplitPane
+          split="vertical"
+          defaultSize={this.props.settings.leftPanelSize}
+          resizerClassName={viewerStyle.Resizer}
+          onDragStarted={this.onResizerDragStarted}
+          onDragFinished={this.onResizerDragFinished}
+          onChange={this.onResizerChange}
         >
           <div>
             <div className={style.toc} ref={this.$toc}>
@@ -305,7 +307,7 @@ class EpubViewer extends React.PureComponent {
               {this.renderArrows()}
             </div>
           </div>
-        </ResizablePanels>
+        </SplitPane>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import RoutesMenu from "routes/Menu";
 import { Menu, theme, animation, contextMenu } from "react-contexify";
 
-import ResizeablePanels from "./lab";
+import SplitPanels from "./lab";
 
 const menuID = "menu_id";
 class Lab extends React.Component {
@@ -31,7 +31,7 @@ class Lab extends React.Component {
           <RoutesMenu />
         </Menu>
 
-        <ResizeablePanels
+        <SplitPanels
           sizes={[100, 100, 100, 100]}
           onContextMenu={this.openContextMenu}
         >
@@ -48,7 +48,7 @@ class Lab extends React.Component {
           <div style={{ width: "100px" }}>
             This is the 4th panel. Starts with 300px.
           </div>
-        </ResizeablePanels>
+        </SplitPanels>
       </>
     );
   }

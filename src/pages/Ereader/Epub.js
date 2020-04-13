@@ -1,10 +1,10 @@
 import EpubJS from "epubjs";
-
 class Epub {
   constructor({
     url,
     loadTableOfContents,
     loadMetadata,
+    onKeyPress,
     onContextMenu,
     onError,
     $viewer,
@@ -35,25 +35,36 @@ class Epub {
       .then(() => {
         if ($viewer.current) {
           this.rendition = this.book.renderTo($viewer.current, this.settings);
+
+          this.rendition.on("relocated", (location) => {
+            console.log("relocated", location);
+          });
+
           for (let theme in themes) {
             this.rendition.themes.register(theme, {
               body: themes[theme].ebook_iframe_body,
             });
           }
-          //rendition.themes.register("dark", "themes.css");
-          //this.rendition = this.book.renderTo($viewer.current, this.settings);
           this.rendition.display();
+          this.rendition.on("keyup", this.keyListener);
+          document.addEventListener("keyup", this.keyListener, false);
+
           this.book.loaded.navigation.then(loadTableOfContents);
           this.book.loaded.metadata.then(loadMetadata);
+
           this.rendition.on("rendered", (section, iFrameView) => {
+            console.log("rendered");
             this.rendered = true;
+            this.removeEventListeners();
             this.addEventListener(
               iFrameView.document.documentElement,
               "contextmenu",
               onContextMenu
             );
+
             return false;
           });
+
           if (debug) {
             this.book.ready.then((book) => {
               console.log(book);
@@ -76,6 +87,22 @@ class Epub {
       .catch(onError);
   }
 
+  keyListener = (e) => {
+    //e.preventDefault();
+    if (e.key) {
+      switch (e.key) {
+        case "ArrowLeft":
+          this.rendition.prev();
+          break;
+        case "ArrowRight":
+          this.rendition.next();
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   renditionInit = () => {};
 
   renditionDisplay = (href) => {
@@ -96,6 +123,7 @@ class Epub {
     target.addEventListener(type, callback, useCapture);
 
     this.eventListeners.push({ target, type, callback, useCapture });
+    //console.verbose("event listeners: ", this.eventListeners);
   };
 
   removeEventListeners = () => {
@@ -103,6 +131,7 @@ class Epub {
       listener.target.removeEventListener(listener.type, listener.callback);
     });
 
+    //console.verbose("event listeners removed");
     this.eventListeners = [];
   };
 
@@ -113,14 +142,12 @@ class Epub {
       delete this.book;
     }
   };
-  renditionPrev = (e) => {
+  renditionPrev = () => {
     this.rendition.prev();
-    e.preventDefault();
   };
 
-  renditionNext = (e) => {
+  renditionNext = () => {
     this.rendition.next();
-    e.preventDefault();
   };
 }
 

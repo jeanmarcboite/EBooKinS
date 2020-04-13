@@ -22,7 +22,6 @@ import style from "./Ereader.module.css";
 import viewerStyle from "./EpubViewer.module.css";
 import "./EpubViewer.css";
 import SplitPane from "react-split-pane";
-
 const handleClick = (e) => console.log(e);
 
 class EpubViewer extends React.PureComponent {
@@ -114,17 +113,35 @@ class EpubViewer extends React.PureComponent {
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
+      onKeyPress: this.onKeyPress,
       themes,
       debug: false,
     });
   }
 
   prev = (e) => {
-    this.epub.renditionPrev(e);
+    this.epub.renditionPrev();
   };
   next = (e) => {
-    this.epub.renditionNext(e);
+    this.epub.renditionNext();
   };
+  onKeyPress = (e) => {
+    console.log(e);
+    //e.preventDefault();
+    if (e.key) {
+      switch (e.key) {
+        case "ArrowLeft":
+          this.prev();
+          break;
+        case "ArrowRight":
+          this.next();
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   exitFullscreen = () => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -175,14 +192,20 @@ class EpubViewer extends React.PureComponent {
         <button
           ref={this.$leftArrow}
           className={style.leftArrow}
-          onClick={this.prev}
+          onClick={(e) => {
+            e.preventDefault();
+            this.prev();
+          }}
         >
           <LeftOutlined />
         </button>
         <button
           ref={this.$rightArrow}
           className={style.rightArrow}
-          onClick={this.next}
+          onClick={(e) => {
+            e.preventDefault();
+            this.next();
+          }}
         >
           <RightOutlined />
         </button>
@@ -238,6 +261,9 @@ class EpubViewer extends React.PureComponent {
   onResizerChanged = (e) => {
     console.log("onResizerChanged", e);
   };
+  onKeyDown = (e) => {
+    console.log("onKeyDown", e);
+  };
   render() {
     const viewer_style = {
       backgroundColor: this.context.theme.background,
@@ -250,6 +276,7 @@ class EpubViewer extends React.PureComponent {
         style={{
           border: "3px solid red",
         }}
+        onKeyPress={this.onKeyDown}
       >
         <SplitPane
           split="vertical"
@@ -258,7 +285,11 @@ class EpubViewer extends React.PureComponent {
           onDragFinished={this.onResizerDragFinished}
         >
           <div>
-            <div className={style.toc} ref={this.$toc}>
+            <div
+              className={style.toc}
+              ref={this.$toc}
+              onKeyPress={this.onKeyDown}
+            >
               <Toc
                 toc={this.state.tableOfContents}
                 selectChapter={this.selectChapter}

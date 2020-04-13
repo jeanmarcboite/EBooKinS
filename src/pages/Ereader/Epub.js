@@ -1,4 +1,30 @@
 import EpubJS from "epubjs";
+
+const render = ({ viewer, book, settings, themes }) => {
+  if (viewer) {
+    console.groupCollapsed("Book open, viewer mounted");
+    console.log(settings);
+    console.log(getComputedStyle(viewer).width);
+
+    let rendition = book.renderTo(viewer, settings);
+    for (let theme in themes) {
+      rendition.themes.register(theme, {
+        body: themes[theme].ebook_iframe_body,
+      });
+    }
+
+    rendition.on("relocated", (location) => {
+      console.log("relocated", location);
+    });
+
+    rendition.on("resized", function (size) {
+      console.log("Resized to:", size);
+    });
+    rendition.display();
+    console.groupEnd();
+  }
+};
+
 class Epub {
   constructor({
     url,
@@ -13,7 +39,7 @@ class Epub {
   }) {
     this.eventListeners = [];
     this.settings = {
-      width: "100%",
+      width: "600px",
       height: "100%",
       spread: "always",
       restore: false,
@@ -33,26 +59,25 @@ class Epub {
     this.book
       .open(this.url)
       .then(() => {
-        if ($viewer.current) {
-          this.rendition = this.book.renderTo($viewer.current, this.settings);
-
-          this.rendition.on("relocated", (location) => {
-            console.log("relocated", location);
+        if (!$viewer.current) {
+          console.log(`Book ${this.url} open, no viewer`);
+        } else {
+          console.log(`Book ${this.url} open, render`);
+          render({
+            viewer: this.$viewer.current,
+            book: this.book,
+            settings: this.settings,
+            themes,
           });
+          this.rendered = true;
 
-          for (let theme in themes) {
-            this.rendition.themes.register(theme, {
-              body: themes[theme].ebook_iframe_body,
-            });
-          }
-          this.rendition.display();
-          this.rendition.on("keyup", this.keyListener);
+          this.book.rendition.on("keyup", this.keyListener);
           document.addEventListener("keyup", this.keyListener, false);
 
           this.book.loaded.navigation.then(loadTableOfContents);
           this.book.loaded.metadata.then(loadMetadata);
 
-          this.rendition.on("rendered", (section, iFrameView) => {
+          this.book.rendition.on("rendered", (section, iFrameView) => {
             console.log("rendered", this.rendition);
             this.rendered = true;
             this.removeEventListeners();
@@ -61,13 +86,9 @@ class Epub {
               "contextmenu",
               onContextMenu
             );
-            this.renditionUpdate();
+            this.update();
 
             return false;
-          });
-
-          this.rendition.on("resized", function (size) {
-            console.log("Resized to:", size);
           });
 
           if (debug) {
@@ -91,16 +112,15 @@ class Epub {
       })
       .catch(onError);
   }
-
   keyListener = (e) => {
     //e.preventDefault();
     if (e.key) {
       switch (e.key) {
         case "ArrowLeft":
-          this.rendition.prev();
+          this.prev();
           break;
         case "ArrowRight":
-          this.rendition.next();
+          this.next();
           break;
         default:
           break;
@@ -108,25 +128,31 @@ class Epub {
     }
   };
 
-  renditionInit = () => {};
-
-  renditionDisplay = (href) => {
-    console.assert(this.rendition);
+  display = (href) => {
+    console.assert(this.book.rendition);
     if (this.rendered) {
-      this.rendition.display(href);
+      this.book.rendition.display(href);
     }
   };
 
-  renditionUpdate = (theme, width) => {
+  update = (theme, width) => {
     if (theme) this.theme = theme;
     if (width) this.width = width;
     if (this.rendered) {
       console.log("update rendition: ", this.theme, this.width);
+      let r = this.book.rendition;
+      for (let k in r) {
+        console.log(k);
+      }
+      console.log("manager" in r);
+      console.log(this.book.rendition);
+      console.log(this.book.rendition.manager);
       this.settings.width = this.width;
-      this.rendition = this.book.renderTo(this.$viewer.current, this.settings);
-      //this.rendition.resize(this.width, "900px");
-      this.rendition.themes.select(this.theme);
-      this.rendition.display();
+      //this.rendition = this.book.renderTo(this.$viewer.current, this.settings);
+      //this.book.rendition.resize(this.width);
+      this.book.rendition.themes.select(this.theme);
+      //this.book.rendition.display();
+      //console.log("display");
     }
   };
 
@@ -153,12 +179,13 @@ class Epub {
       delete this.book;
     }
   };
-  renditionPrev = () => {
-    this.rendition.prev();
+
+  prev = () => {
+    this.book.rendition.prev();
   };
 
-  renditionNext = () => {
-    this.rendition.next();
+  next = () => {
+    this.book.rendition.next();
   };
 }
 

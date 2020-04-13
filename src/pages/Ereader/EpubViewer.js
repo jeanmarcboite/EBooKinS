@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Alert, Select } from "antd";
+import { Alert, Select, Card } from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
@@ -57,6 +57,7 @@ class EpubViewer extends React.PureComponent {
     this.setState({ error });
   };
   loadMetadata(metadata) {
+    console.log("Book metadata: ", metadata);
     document.title = metadata.title;
   }
   loadTableOfContents({ toc }) {
@@ -85,7 +86,7 @@ class EpubViewer extends React.PureComponent {
   }
 
   selectChapter = (chapter) => {
-    this.epub.renditionDisplay(chapter.item.props.href);
+    this.epub.display(chapter.item.props.href);
     this.setState({ chapter });
   };
   componentDidMount() {
@@ -106,6 +107,7 @@ class EpubViewer extends React.PureComponent {
       this.epub.destroy();
     }
 
+    console.log("load book", this.$viewer);
     this.epub = new Epub({
       url: this.props.url,
       $viewer: this.$viewer,
@@ -113,33 +115,16 @@ class EpubViewer extends React.PureComponent {
       loadMetadata: this.loadMetadata,
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
-      onKeyPress: this.onKeyPress,
       themes,
       debug: false,
     });
   }
 
   prev = (e) => {
-    this.epub.renditionPrev();
+    this.epub.prev();
   };
   next = (e) => {
-    this.epub.renditionNext();
-  };
-  onKeyPress = (e) => {
-    console.log(e);
-    //e.preventDefault();
-    if (e.key) {
-      switch (e.key) {
-        case "ArrowLeft":
-          this.prev();
-          break;
-        case "ArrowRight":
-          this.next();
-          break;
-        default:
-          break;
-      }
-    }
+    this.epub.next();
   };
 
   exitFullscreen = () => {
@@ -237,21 +222,17 @@ class EpubViewer extends React.PureComponent {
     this.updateView();
   };
   updateView = () => {
-    let w = getComputedStyle(this.$viewer.current).width;
-    let width = (parseInt(w) - 30).toString() + "px";
-    this.epub.renditionUpdate(this.context.theme.name, width);
-    if (false) {
-      let w = getComputedStyle(this.$viewer.current).width;
-      this.$leftArrow.current.style.right = `calc(${w} - 90px)`;
-      this.$theme.current.style.width = getComputedStyle(
-        this.$toc.current
-      ).width;
-    }
+    let sizes = {
+      container: getComputedStyle(this.$container.current).width,
+      toc: getComputedStyle(this.$toc.current).width,
+      viewer: getComputedStyle(this.$viewer.current).width,
+    };
+    let width =
+      (parseInt(sizes.container) - parseInt(sizes.toc)).toString() + "px";
+    this.epub.update(this.context.theme.name, width);
   };
 
-  onResizerDragStarted = (e) => {
-    console.log("onDragStarted", e);
-  };
+  onResizerDragStarted = () => {};
 
   onResizerDrag = (e) => {
     console.log("onDrag", e);
@@ -276,6 +257,15 @@ class EpubViewer extends React.PureComponent {
       color: "purple",
       height: "100vh",
     };
+    let sizes = { container: 0, toc: 0, viewer: 0 };
+    if (this.$container.current) {
+      sizes = {
+        container: getComputedStyle(this.$container.current).width,
+        toc: getComputedStyle(this.$toc.current).width,
+        viewer: getComputedStyle(this.$viewer.current).width,
+      };
+    }
+
     return (
       <div
         ref={this.$container}
@@ -307,6 +297,18 @@ class EpubViewer extends React.PureComponent {
               ref={this.$theme}
               style={{ position: "absolute", bottom: "20px" }}
             >
+              <div>
+                <Card
+                  size="small"
+                  title="Small size card"
+                  extra={<a href="#">More</a>}
+                  style={{ width: 200 }}
+                >
+                  <p>container: {sizes.container}</p>
+                  <p>toc: {sizes.toc}</p>
+                  <p>viewer: {sizes.viewer}</p>
+                </Card>
+              </div>
               <Select
                 labelInValue
                 style={{ width: "100%" }}

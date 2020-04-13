@@ -91,7 +91,6 @@ class EpubViewer extends React.PureComponent {
   };
   componentDidMount() {
     this.loadBook();
-    this._logSizes();
     this.updateView();
   }
 

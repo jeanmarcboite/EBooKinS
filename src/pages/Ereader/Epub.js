@@ -1,7 +1,5 @@
 import EpubJS from "epubjs";
 
-import { themes } from "ThemeProvider";
-
 class Epub {
   constructor({
     url,

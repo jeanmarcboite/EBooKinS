@@ -31,7 +31,7 @@ class EpubViewer extends React.PureComponent {
     this.$container = React.createRef();
     this.$leftArrow = React.createRef();
     this.$rightArrow = React.createRef();
-    this.$toc = React.createRef();
+    this.$leftPane = React.createRef();
     this.$theme = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
@@ -137,18 +137,18 @@ class EpubViewer extends React.PureComponent {
       getComputedStyle(this.$container.current).height
     );
     console.log("viewer width: ", getComputedStyle(this.$viewer.current).width);
-    console.log("toc width: ", getComputedStyle(this.$toc.current).width);
+    console.log("toc width: ", getComputedStyle(this.$leftPane.current).width);
     console.groupEnd();
   };
 
   updateView = () => {
     let sizes = {
       container: getComputedStyle(this.$container.current).width,
-      toc: getComputedStyle(this.$toc.current).width,
+      leftPane: getComputedStyle(this.$leftPane.current).width,
       viewer: getComputedStyle(this.$viewer.current).width,
     };
     let width =
-      (parseInt(sizes.container) - parseInt(sizes.toc)).toString() + "px";
+      (parseInt(sizes.container) - parseInt(sizes.leftPane)).toString() + "px";
     this.epub.updateRendition(this.context.theme.name, width);
   };
 
@@ -185,17 +185,12 @@ class EpubViewer extends React.PureComponent {
           onDrag={this.onResizerDrag}
           onDragFinished={this.onResizerDragFinished}
         >
-          <div>
-            <div
+          <div className={style.leftPane} ref={this.$leftPane}>
+            <Toc
               className={style.toc}
-              ref={this.$toc}
-              onKeyPress={this.onKeyDown}
-            >
-              <Toc
-                toc={this.state.tableOfContents}
-                selectChapter={this.selectChapter}
-              />
-            </div>
+              toc={this.state.tableOfContents}
+              selectChapter={this.selectChapter}
+            />
             <div
               ref={this.$theme}
               style={{ position: "absolute", bottom: "20px" }}
@@ -203,7 +198,7 @@ class EpubViewer extends React.PureComponent {
               <Cards
                 elems={{
                   container: this.$container,
-                  toc: this.$toc,
+                  leftPane: this.$leftPane,
                   viewer: this.$viewer,
                 }}
               />

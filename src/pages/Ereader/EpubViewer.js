@@ -10,7 +10,7 @@ import Toc from "./components/Toc";
 
 import Epub from "./Epub";
 
-import Cards from "components/Cards";
+import ComputedStyles from "components/ComputedStyles";
 
 import { UserOutlined } from "@ant-design/icons";
 
@@ -193,12 +193,14 @@ class EpubViewer extends React.PureComponent {
               ref={this.$theme}
               style={{ position: "absolute", bottom: "20px" }}
             >
-              <Cards
+              <ComputedStyles
                 elems={{
                   container: this.$container,
                   leftPane: this.$leftPane,
                   viewer: this.$viewer,
                 }}
+                style_attribute="width"
+                title="Elements Width"
               />
               <Select
                 labelInValue

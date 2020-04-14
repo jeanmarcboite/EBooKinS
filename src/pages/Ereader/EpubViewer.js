@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Alert, Select, Card } from "antd";
+import { Alert, Select} from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
@@ -213,16 +213,7 @@ class EpubViewer extends React.PureComponent {
     console.log("toc width: ", getComputedStyle(this.$toc.current).width);
     console.groupEnd();
   };
-  onResizeEnd = (event) => {
-    this._logSizes(event);
-    this.props.dispatch(
-      setSetting({ setting: "leftPanelSize", value: event[0] })
-    );
-    this.updateView();
-  };
-  onResize = (event) => {
-    this.updateView();
-  };
+  
   updateView = () => {
     let sizes = {
       container: getComputedStyle(this.$container.current).width,
@@ -241,15 +232,12 @@ class EpubViewer extends React.PureComponent {
   };
 
   onResizerDragFinished = (leftPanelSize) => {
+    // this will trigger update
     this.props.dispatch(
       setSetting({ setting: "leftPanelSize", value: leftPanelSize })
     );
-    this.updateView();
   };
 
-  onResizerChanged = (e) => {
-    console.log("onResizerChanged", e);
-  };
   onKeyDown = (e) => {
     console.log("onKeyDown", e);
   };

@@ -16,6 +16,11 @@ const render = ({ viewer, book, settings, themes }) => {
 
     rendition.on("relocated", (location) => {
       console.log("relocated", location);
+      //console.trace();
+    });
+    rendition.on("locationChanged", (location) => {
+      console.log("locationChanged", location);
+      //console.trace();
     });
 
     rendition.on("resized", function (size) {
@@ -28,7 +33,6 @@ const render = ({ viewer, book, settings, themes }) => {
 
 class Epub {
   constructor(props) {
-    this.props = props;
     const {
       url,
       loadTableOfContents,
@@ -40,6 +44,7 @@ class Epub {
       themes,
       debug,
     } = props;
+    this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
     this.settings = {
       width: "600px",
@@ -57,15 +62,14 @@ class Epub {
       history: true,
     };
     this.$viewer = $viewer;
-    this.url = url;
     this.book = EpubJS();
     this.book
-      .open(this.url)
+      .open(this.props.url)
       .then(() => {
         if (!$viewer.current) {
-          console.log(`Book ${this.url} open, no viewer`);
+          console.log(`Book ${this.props.url} open, no viewer`);
         } else {
-          console.log(`Book ${this.url} open, render`);
+          console.log(`Book ${this.props.url} open, render`);
           if (debug) {
             this.book.ready.then((book) => {
               console.log(book);
@@ -107,7 +111,7 @@ class Epub {
 
   display = (href) => {
     console.assert(this.book.rendition);
-    if (this.rendered) {
+    if (this.book.rendition) {
       this.book.rendition.display(href);
     }
   };
@@ -121,14 +125,12 @@ class Epub {
       settings: this.settings,
       themes: this.props.themes,
     });
-    this.rendered = true;
 
     this.book.rendition.on("keyup", this.keyListener);
     document.addEventListener("keyup", this.keyListener, false);
 
     this.book.rendition.on("rendered", (section, iFrameView) => {
       console.log("rendered", this.book.rendition);
-      this.rendered = true;
       this.removeEventListeners();
       this.addEventListener(
         iFrameView.document.documentElement,

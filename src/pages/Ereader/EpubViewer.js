@@ -10,6 +10,8 @@ import Toc from "./Toc";
 
 import Epub from "./Epub";
 
+import Cards from "components/Cards";
+
 import {
   UserOutlined,
   RightOutlined,
@@ -61,6 +63,7 @@ class EpubViewer extends React.PureComponent {
     document.title = metadata.title;
   }
   loadTableOfContents({ toc }) {
+    console.log("load toc", toc);
     this.setState({
       tableOfContents: {
         onClick: handleClick,
@@ -91,7 +94,6 @@ class EpubViewer extends React.PureComponent {
   };
   componentDidMount() {
     this.loadBook();
-    this.updateView();
   }
 
   componentDidUpdate() {
@@ -229,7 +231,7 @@ class EpubViewer extends React.PureComponent {
     };
     let width =
       (parseInt(sizes.container) - parseInt(sizes.toc)).toString() + "px";
-    this.epub.update(this.context.theme.name, width);
+    this.epub.updateRendition(this.context.theme.name, width);
   };
 
   onResizerDragStarted = () => {};
@@ -257,14 +259,6 @@ class EpubViewer extends React.PureComponent {
       color: "purple",
       height: "100vh",
     };
-    let sizes = { container: 0, toc: 0, viewer: 0 };
-    if (this.$container.current) {
-      sizes = {
-        container: getComputedStyle(this.$container.current).width,
-        toc: getComputedStyle(this.$toc.current).width,
-        viewer: getComputedStyle(this.$viewer.current).width,
-      };
-    }
 
     return (
       <div
@@ -297,18 +291,13 @@ class EpubViewer extends React.PureComponent {
               ref={this.$theme}
               style={{ position: "absolute", bottom: "20px" }}
             >
-              <div>
-                <Card
-                  size="small"
-                  title="Small size card"
-                  extra={<a href="#">More</a>}
-                  style={{ width: 200 }}
-                >
-                  <p>container: {sizes.container}</p>
-                  <p>toc: {sizes.toc}</p>
-                  <p>viewer: {sizes.viewer}</p>
-                </Card>
-              </div>
+              <Cards
+                elems={{
+                  container: this.$container,
+                  toc: this.$toc,
+                  viewer: this.$viewer,
+                }}
+              />
               <Select
                 labelInValue
                 style={{ width: "100%" }}

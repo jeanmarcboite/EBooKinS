@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Alert, Select} from "antd";
+import { Alert, Select } from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
@@ -12,18 +12,15 @@ import Epub from "./Epub";
 
 import Cards from "components/Cards";
 
-import {
-  UserOutlined,
-  RightOutlined,
-  LeftOutlined,
-  FullscreenOutlined,
-  FullscreenExitOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 
 import style from "./Ereader.module.css";
 import viewerStyle from "./EpubViewer.module.css";
 import "./EpubViewer.css";
 import SplitPane from "react-split-pane";
+
+import EpubContents from "./EpubContents";
+
 const handleClick = (e) => console.log(e);
 
 class EpubViewer extends React.PureComponent {
@@ -128,78 +125,10 @@ class EpubViewer extends React.PureComponent {
   next = (e) => {
     this.epub.next();
   };
-
-  exitFullscreen = () => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-  };
-  setFullscreen = () => {
-    document.fullscreenEnabled =
-      document.fullscreenEnabled ||
-      document.mozFullScreenEnabled ||
-      document.documentElement.webkitRequestFullScreen;
-
-    let requestFullscreen = (element) => {
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-      }
-    };
-
-    if (document.fullscreenEnabled) {
-      requestFullscreen(document.documentElement);
-    }
-  };
-
   renderError = () => {
     if (!this.state.error) return null;
     return <Alert message={this.state.error.toString()} type="error" />;
   };
-
-  renderArrows = () => {
-    return (
-      <>
-        <button className={style.fullscreen}>
-          {this.state.fullscreen ? (
-            <FullscreenExitOutlined onClick={this.exitFullscreen} />
-          ) : (
-            <FullscreenOutlined onClick={this.setFullscreen} />
-          )}
-        </button>
-        <button
-          ref={this.$leftArrow}
-          className={style.leftArrow}
-          onClick={(e) => {
-            e.preventDefault();
-            this.prev();
-          }}
-        >
-          <LeftOutlined />
-        </button>
-        <button
-          ref={this.$rightArrow}
-          className={style.rightArrow}
-          onClick={(e) => {
-            e.preventDefault();
-            this.next();
-          }}
-        >
-          <RightOutlined />
-        </button>
-      </>
-    );
-  };
-
   _logSizes = (data) => {
     console.groupCollapsed("Resize panels");
     console.log(data);
@@ -213,7 +142,7 @@ class EpubViewer extends React.PureComponent {
     console.log("toc width: ", getComputedStyle(this.$toc.current).width);
     console.groupEnd();
   };
-  
+
   updateView = () => {
     let sizes = {
       container: getComputedStyle(this.$container.current).width,
@@ -242,12 +171,6 @@ class EpubViewer extends React.PureComponent {
     console.log("onKeyDown", e);
   };
   render() {
-    const viewer_style = {
-      backgroundColor: this.context.theme.background,
-      color: "purple",
-      height: "100vh",
-    };
-
     return (
       <div
         ref={this.$container}
@@ -300,33 +223,12 @@ class EpubViewer extends React.PureComponent {
               </Select>
             </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              background: "papayawhip",
-              height: "100vh",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              className={viewerStyle.epub_viewer}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <div
-                ref={this.$viewer}
-                id="viewer"
-                className={viewerStyle.viewer}
-                style={viewer_style}
-              >
-                {this.state.error ? (
-                  <Alert message={this.state.error.toString()} type="error" />
-                ) : null}
-              </div>
-              {this.renderArrows()}
-            </div>
-          </div>
+          <EpubContents
+            ref={this.$viewer}
+            error={this.state.error}
+            next={this.next}
+            prev={this.prev}
+          />
         </SplitPane>
       </div>
     );

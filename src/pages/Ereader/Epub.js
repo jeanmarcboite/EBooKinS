@@ -126,6 +126,9 @@ class Epub {
       themes: this.props.themes,
     });
 
+    this.book.rendition.themes.select(this.theme);
+    this.book.rendition.themes.fontSize("140%");
+
     this.book.rendition.on("keyup", this.keyListener);
     document.addEventListener("keyup", this.keyListener, false);
 
@@ -138,7 +141,6 @@ class Epub {
         this.props.onContextMenu
       );
 
-      this.book.rendition.themes.select(this.theme);
       return false;
     });
   };

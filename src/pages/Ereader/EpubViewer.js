@@ -30,7 +30,6 @@ class EpubViewer extends React.PureComponent {
     this.$viewer = React.createRef();
     this.$container = React.createRef();
     this.$leftPane = React.createRef();
-    this.$theme = React.createRef();
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
@@ -190,8 +189,7 @@ class EpubViewer extends React.PureComponent {
               selectChapter={this.selectChapter}
             />
             <div
-              ref={this.$theme}
-              style={{ position: "absolute", bottom: "20px" }}
+              style={{ position: "absolute", bottom: "20px", width: "100%" }}
             >
               <ComputedStyles
                 elems={{

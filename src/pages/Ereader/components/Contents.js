@@ -11,16 +11,9 @@ import {
   FullscreenExitOutlined,
 } from "@ant-design/icons";
 
-import { setSetting } from "pages/Settings/store";
-
-import { ThemeContext, themes } from "ThemeProvider";
-
-import style from "./Ereader.module.css";
-import viewerStyle from "./EpubViewer.module.css";
-import "./EpubViewer.css";
-class EpubContents extends React.PureComponent {
+import style from "./Contents.module.css";
+class Contents extends React.PureComponent {
   static whyDidYouRender = true;
-  static contextType = ThemeContext;
 
   constructor(props) {
     super(props);
@@ -97,12 +90,6 @@ class EpubContents extends React.PureComponent {
   };
 
   render = () => {
-    const viewer_style = {
-      backgroundColor: this.context.theme.background,
-      color: "purple",
-      height: "100vh",
-    };
-
     return (
       <div
         style={{
@@ -115,14 +102,17 @@ class EpubContents extends React.PureComponent {
         }}
       >
         <div
-          className={viewerStyle.epub_viewer}
+          className={style.epub_viewer}
           style={{ height: "100%", width: "100%" }}
         >
           <div
             ref={this.props.viewerRef}
             id="viewer"
-            className={viewerStyle.viewer}
-            style={viewer_style}
+            className={style.viewer}
+            style={{
+              backgroundColor: this.props.backgroundColor,
+              height: "100vh",
+            }}
           >
             {this.props.error ? (
               <Alert message={this.props.error.toString()} type="error" />
@@ -135,8 +125,9 @@ class EpubContents extends React.PureComponent {
   };
 }
 
-EpubContents.propTypes = {
+Contents.propTypes = {
   error: PropTypes.string,
+  backgroundColor: PropTypes.string,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
 };
@@ -147,8 +138,8 @@ function mapStateToProps(state) {
   };
 }
 
-const ConnectedEpubContents = connect(mapStateToProps)(EpubContents);
+const ConnectedContents = connect(mapStateToProps)(Contents);
 
 export default React.forwardRef((props, ref) => (
-  <ConnectedEpubContents viewerRef={ref} {...props} />
+  <ConnectedContents viewerRef={ref} {...props} />
 ));

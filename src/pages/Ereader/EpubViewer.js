@@ -6,7 +6,7 @@ import { setSetting } from "pages/Settings/store";
 
 import { ThemeContext, themes } from "ThemeProvider";
 
-import Toc from "./Toc";
+import Toc from "./components/Toc";
 
 import Epub from "./Epub";
 
@@ -14,12 +14,10 @@ import Cards from "components/Cards";
 
 import { UserOutlined } from "@ant-design/icons";
 
-import style from "./Ereader.module.css";
-import viewerStyle from "./EpubViewer.module.css";
-import "./EpubViewer.css";
+import style from "./EpubViewer.module.css";
 import SplitPane from "react-split-pane";
 
-import EpubContents from "./EpubContents";
+import EpubContents from "./components/Contents";
 
 const handleClick = (e) => console.log(e);
 
@@ -182,7 +180,7 @@ class EpubViewer extends React.PureComponent {
         <SplitPane
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}
-          resizerClassName={viewerStyle.Resizer}
+          resizerClassName={style.Resizer}
           onDragStarted={this.onResizerDragStarted}
           onDrag={this.onResizerDrag}
           onDragFinished={this.onResizerDragFinished}

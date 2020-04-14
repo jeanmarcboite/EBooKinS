@@ -34,7 +34,6 @@ class Contents extends React.PureComponent {
           )}
         </button>
         <button
-          ref={this.$leftArrow}
           className={style.leftArrow}
           onClick={(e) => {
             e.preventDefault();
@@ -44,7 +43,6 @@ class Contents extends React.PureComponent {
           <LeftOutlined />
         </button>
         <button
-          ref={this.$rightArrow}
           className={style.rightArrow}
           onClick={(e) => {
             e.preventDefault();

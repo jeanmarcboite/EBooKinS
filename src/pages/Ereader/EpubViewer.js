@@ -29,8 +29,6 @@ class EpubViewer extends React.PureComponent {
     super(props);
     this.$viewer = React.createRef();
     this.$container = React.createRef();
-    this.$leftArrow = React.createRef();
-    this.$rightArrow = React.createRef();
     this.$leftPane = React.createRef();
     this.$theme = React.createRef();
 

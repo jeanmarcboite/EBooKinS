@@ -3,7 +3,10 @@ import EpubJS from "epubjs";
 const render = ({ viewer, book, settings, themes }) => {
   console.assert(viewer);
   if (viewer) {
-    console.groupCollapsed("render book");
+    console.groupCollapsed(
+      "%c render book ",
+      "background: red; color: white; font-style: italic;"
+    );
     console.log(settings);
     console.log("viewer width: ", getComputedStyle(viewer).width);
     console.trace();
@@ -16,14 +19,14 @@ const render = ({ viewer, book, settings, themes }) => {
     }
 
     rendition.on("relocated", (location) => {
-      console.log("%c relocated", "background: lightGray", location);
+      console.log("%c relocated ", "background: lightGray", location);
     });
     rendition.on("locationChanged", (location) => {
-      console.log("%c locationChanged", "background: lightGray", location);
+      console.log("%c locationChanged ", "background: lightGray", location);
     });
 
     rendition.on("resized", function (size) {
-      console.log("%c Resized to:", "color: red", size);
+      console.log("%c Resized to: ", "color: red", size);
     });
     console.groupEnd();
   }
@@ -102,9 +105,8 @@ class Epub {
     this.book.rendition.on("keyup", this.keyListener);
     document.addEventListener("keyup", this.keyListener, false);
 
-    this.book.rendition.on("rendered", (section, iFrameView) => {
-      console.log("rendered", this.book.rendition);
-      this.removeEventListeners();
+    this.book.rendition.once("rendered", (section, iFrameView) => {
+      console.log(this.book.rendition);
       this.addEventListener(
         iFrameView.document.documentElement,
         "contextmenu",

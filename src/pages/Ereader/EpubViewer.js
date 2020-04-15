@@ -46,19 +46,23 @@ class EpubViewer extends React.PureComponent {
       error: null,
       fullscreen: false,
     };
+
     document.addEventListener("fullscreenchange", (event) => {
       this.setState({
         fullscreen: document.fullscreenElement !== null,
       });
     });
   }
+
   loadError = (error) => {
     this.setState({ error });
   };
+
   loadMetadata(metadata) {
     console.log("%c Book metadata: ", "color: blue", metadata);
     document.title = metadata.title;
   }
+
   loadTableOfContents({ toc }) {
     this.setState({
       tableOfContents: {
@@ -88,6 +92,7 @@ class EpubViewer extends React.PureComponent {
     this.epub.display(chapter.item.props.href);
     this.setState({ chapter });
   };
+
   componentDidMount() {
     this.loadBook();
   }
@@ -105,7 +110,7 @@ class EpubViewer extends React.PureComponent {
       this.epub.destroy();
     }
 
-    console.log("load book", this.$viewer);
+    console.log("%c load book", "color: green", this.props.url);
     this.epub = new Epub({
       url: this.props.url,
       $viewer: this.$viewer,
@@ -114,7 +119,6 @@ class EpubViewer extends React.PureComponent {
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
       themes,
-      debug: false,
     });
   }
 
@@ -128,27 +132,15 @@ class EpubViewer extends React.PureComponent {
     if (!this.state.error) return null;
     return <Alert message={this.state.error.toString()} type="error" />;
   };
-  _logSizes = (data) => {
-    console.groupCollapsed("Resize panels");
-    console.log(data);
-    console.log(this.$container.current);
-    console.log(
-      "container size: ",
-      getComputedStyle(this.$container.current).width,
-      getComputedStyle(this.$container.current).height
-    );
-    console.log("viewer width: ", getComputedStyle(this.$viewer.current).width);
-    console.log("toc width: ", getComputedStyle(this.$leftPane.current).width);
-    console.groupEnd();
-  };
 
   updateView = () => {
-    let sizes = {
-      container: getComputedStyle(this.$container.current).width,
-      leftPane: getComputedStyle(this.$leftPane.current).width,
-    };
+    console.log("updateView");
     let width =
-      (parseInt(sizes.container) - parseInt(sizes.leftPane)).toString() + "px";
+      (
+        parseInt(getComputedStyle(this.$container.current).width) -
+        parseInt(getComputedStyle(this.$leftPane.current).width)
+      ).toString() + "px";
+
     this.epub.renderBook(width);
     this.epub.setTheme(this.context.theme.name);
     this.epub.setFontSize(this.context.fontSize);

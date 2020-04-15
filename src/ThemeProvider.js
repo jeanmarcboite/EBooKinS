@@ -76,9 +76,18 @@ export const ThemeContextProvider = (props) => {
     setState({ ...state, theme: themes[name] });
   };
 
+  const setFontSize = (value) => {
+    let fontSize = 100;
+    if (typeof value == "number" && value > 30) fontSize = value;
+    localStorage.setItem("fontSize", fontSize);
+    setState({ ...state, fontSize });
+  };
+
   const initState = {
     theme: themes[localStorage.getItem("theme") || "default"],
+    fontSize: localStorage.getItem("fontSize") || 100,
     setTheme,
+    setFontSize,
   };
 
   const [state, setState] = useState(initState);

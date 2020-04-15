@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Select from "antd";
+import { Select } from "antd";
 import { ThemeContext, themes } from "ThemeProvider";
 export default function SelectTheme() {
   const context = useContext(ThemeContext);

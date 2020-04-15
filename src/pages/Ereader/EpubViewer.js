@@ -18,6 +18,8 @@ import style from "./EpubViewer.module.css";
 import SplitPane from "react-split-pane";
 
 import EpubContents from "./components/Contents";
+import SelectFontSize from "components/SelectFontSize";
+import SelectTheme from "components/SelectTheme";
 
 const handleClick = (e) => console.log(e);
 
@@ -146,7 +148,11 @@ class EpubViewer extends React.PureComponent {
     };
     let width =
       (parseInt(sizes.container) - parseInt(sizes.leftPane)).toString() + "px";
-    this.epub.updateRendition(this.context.theme.name, width);
+    this.epub.updateRendition(
+      this.context.theme.name,
+      width,
+      this.context.fontSize
+    );
   };
 
   onResizerDragStarted = () => {};
@@ -200,18 +206,8 @@ class EpubViewer extends React.PureComponent {
                 style_attribute="width"
                 title="Elements Width"
               />
-              <Select
-                labelInValue
-                style={{ width: "100%" }}
-                defaultValue={{ key: this.context.theme.name }}
-                onChange={({ value }) => this.context.setTheme(value)}
-              >
-                {Object.keys(themes).map((theme, key) => (
-                  <Select.Option key={key} value={themes[theme].name}>
-                    {themes[theme].name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <SelectFontSize />
+              <SelectTheme />
             </div>
           </div>
           <EpubContents

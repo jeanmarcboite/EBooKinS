@@ -116,8 +116,9 @@ class Epub {
     }
   };
 
-  updateRendition = (theme, width) => {
+  updateRendition = (theme, width, fontSize) => {
     this.theme = theme;
+    this.fontSize = this.fontSize;
     this.settings.width = width;
     render({
       viewer: this.$viewer.current,
@@ -127,7 +128,7 @@ class Epub {
     });
 
     this.book.rendition.themes.select(this.theme);
-    this.book.rendition.themes.fontSize("140%");
+    this.book.rendition.themes.fontSize(this.fontSize + "%");
 
     this.book.rendition.on("keyup", this.keyListener);
     document.addEventListener("keyup", this.keyListener, false);

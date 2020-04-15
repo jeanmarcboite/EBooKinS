@@ -45,6 +45,8 @@ class EpubViewer extends React.PureComponent {
       chapter: null,
       error: null,
       fullscreen: false,
+      leftArrowVisibility: "visible",
+      rightArrowVisibility: "visible",
     };
 
     document.addEventListener("fullscreenchange", (event) => {
@@ -126,6 +128,22 @@ class EpubViewer extends React.PureComponent {
       onError: this.loadError,
       themes,
       width,
+    });
+
+    this.epub.book.rendition.on("relocated", (location) => {
+      console.log(location);
+
+      if (location.atEnd) {
+        this.setState({ rightArrowVisibility: "hidden" });
+      } else {
+        this.setState({ rightArrowVisibility: "visible" });
+      }
+
+      if (location.atStart) {
+        this.setState({ leftArrowVisibility: "hidden" });
+      } else {
+        this.setState({ leftArrowVisibility: "visible" });
+      }
     });
   }
 
@@ -218,6 +236,8 @@ class EpubViewer extends React.PureComponent {
             error={this.state.error}
             next={this.next}
             prev={this.prev}
+            leftArrowVisibility={this.state.leftArrowVisibility}
+            rightArrowVisibility={this.state.rightArrowVisibility}
           />
         </SplitPane>
       </div>

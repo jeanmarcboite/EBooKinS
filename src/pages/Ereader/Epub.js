@@ -92,6 +92,8 @@ class Epub {
     }
   };
 
+  rendition = () => {return this.book.rendition}
+
   renderBook = (width) => {
     render({
       viewer: this.$viewer.current,

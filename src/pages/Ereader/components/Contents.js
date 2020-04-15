@@ -33,6 +33,7 @@ class Contents extends React.PureComponent {
         </button>
         <button
           className={style.leftArrow}
+          style={{ visibility: this.props.leftArrowVisibility }}
           onClick={(e) => {
             e.preventDefault();
             this.props.prev();
@@ -42,6 +43,7 @@ class Contents extends React.PureComponent {
         </button>
         <button
           className={style.rightArrow}
+          style={{ visibility: this.props.rightArrowVisibility }}
           onClick={(e) => {
             e.preventDefault();
             this.props.next();
@@ -126,6 +128,8 @@ Contents.propTypes = {
   backgroundColor: PropTypes.string,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
+  leftArrowVisibility: PropTypes.string,
+  rightArrowVisibility: PropTypes.string
 };
 
 function mapStateToProps(state) {

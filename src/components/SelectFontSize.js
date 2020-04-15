@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Select } from "antd";
-import { ThemeContext, themes } from "ThemeProvider";
+import { ThemeContext } from "ThemeProvider";
 export default function SelectFontSize() {
   const context = useContext(ThemeContext);
 
@@ -17,7 +17,7 @@ export default function SelectFontSize() {
     <Select
       labelInValue
       style={{ width: "100%" }}
-      defaultValue={{ key: context.fontSize }}
+      defaultValue={{ key: context.fontSize + "%" }}
       onChange={({ value }) => context.setFontSize(value)}
     >
       {options}

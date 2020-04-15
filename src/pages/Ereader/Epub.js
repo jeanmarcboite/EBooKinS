@@ -40,7 +40,6 @@ class Epub {
       onError,
       $viewer,
       themes,
-      debug,
     } = props;
     this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
@@ -116,7 +115,9 @@ class Epub {
     });
   };
 
-  display = () => {this.book.rendition.display()}
+  display = () => {
+    this.book.rendition.display();
+  };
 
   setTheme = (theme) => {
     this.book.rendition.themes.select(theme);

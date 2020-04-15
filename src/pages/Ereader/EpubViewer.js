@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Alert, Select } from "antd";
+import { Alert } from "antd";
 import { connect } from "react-redux";
 import { setSetting } from "pages/Settings/store";
 
@@ -56,11 +56,10 @@ class EpubViewer extends React.PureComponent {
     this.setState({ error });
   };
   loadMetadata(metadata) {
-    console.log("Book metadata: ", metadata);
+    console.log("%c Book metadata: ", "color: blue", metadata);
     document.title = metadata.title;
   }
   loadTableOfContents({ toc }) {
-    console.log("load toc", toc);
     this.setState({
       tableOfContents: {
         onClick: handleClick,

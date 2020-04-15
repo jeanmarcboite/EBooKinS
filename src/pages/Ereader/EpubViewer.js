@@ -24,7 +24,10 @@ import SelectTheme from "components/SelectTheme";
 const handleClick = (e) => console.log(e);
 
 class EpubViewer extends React.PureComponent {
-  static whyDidYouRender = true;
+  static whyDidYouRender = {
+    logOnDifferentValues: true,
+    customName: "EpubViewer",
+  };
   static contextType = ThemeContext;
 
   constructor(props) {

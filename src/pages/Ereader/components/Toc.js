@@ -7,6 +7,10 @@ import style from "./Toc.module.css";
 import "./Toc.css";
 
 class Toc extends React.PureComponent {
+  static whyDidYouRender = {
+    logOnDifferentValues: true,
+    customName: "Toc",
+  };
   static contextType = ThemeContext;
   render() {
     return (

@@ -118,7 +118,7 @@ class Epub {
 
   updateRendition = (theme, width, fontSize) => {
     this.theme = theme;
-    this.fontSize = this.fontSize;
+    this.fontSize = fontSize;
     this.settings.width = width;
     render({
       viewer: this.$viewer.current,

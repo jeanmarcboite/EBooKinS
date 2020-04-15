@@ -54,6 +54,7 @@ class Epub {
       $viewer,
       themes,
       currentSectionIndex,
+      width,
     } = props;
     this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
@@ -65,7 +66,7 @@ class Epub {
         console.log("%c book open ", "color: green", this.props.url);
       })
       .catch(onError);
-    this.renderBook();
+    this.renderBook(width);
     let displayed = this.display(currentSectionIndex);
 
     displayed.then(function (section) {
@@ -97,7 +98,7 @@ class Epub {
       book: this.book,
       themes: this.props.themes,
       settings: {
-        width: "100%",
+        width,
         height: "100%",
         spread: "always",
         restore: false,

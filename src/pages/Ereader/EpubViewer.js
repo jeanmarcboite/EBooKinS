@@ -111,6 +111,12 @@ class EpubViewer extends React.PureComponent {
     }
 
     console.log("%c load book", "color: green", this.props.url);
+    let width =
+      (
+        parseInt(getComputedStyle(this.$container.current).width) -
+        parseInt(getComputedStyle(this.$leftPane.current).width) -
+        15
+      ).toString() + "px";
     this.epub = new Epub({
       url: this.props.url,
       $viewer: this.$viewer,
@@ -119,6 +125,7 @@ class EpubViewer extends React.PureComponent {
       onContextMenu: this.props.onContextMenu,
       onError: this.loadError,
       themes,
+      width,
     });
   }
 
@@ -135,11 +142,6 @@ class EpubViewer extends React.PureComponent {
 
   updateView = () => {
     console.log("updateView");
-    let width =
-      (
-        parseInt(getComputedStyle(this.$container.current).width) -
-        parseInt(getComputedStyle(this.$leftPane.current).width)
-      ).toString() + "px";
 
     this.epub.setTheme(this.context.theme.name);
     this.epub.book.rendition.on("rendered", () => {

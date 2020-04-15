@@ -30,7 +30,8 @@ const render = ({ viewer, book, settings, themes }) => {
       let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
       rendition.on(eventType, (event) => {
         let c = `%c on ${eventType} `;
-        console.log(c, "background: blue; color: yellow", event);
+        if (event) console.log(c, "background: blue; color: yellow", event);
+        else console.log(c, "background: blue; color: white");
       });
     }
 

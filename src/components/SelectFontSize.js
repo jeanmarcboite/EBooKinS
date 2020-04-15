@@ -1,9 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Select } from "antd";
-import { ThemeContext } from "ThemeProvider";
-export default function SelectFontSize() {
-  const context = useContext(ThemeContext);
-
+export default function SelectFontSize(props) {
   let options = [];
   //Inner loop to create children
   for (let size = 50; size <= 150; size += 10) {
@@ -17,8 +14,8 @@ export default function SelectFontSize() {
     <Select
       labelInValue
       style={{ width: "100%" }}
-      defaultValue={{ key: context.fontSize + "%" }}
-      onChange={({ value }) => context.setFontSize(value)}
+      defaultValue={{ key: props.value + "%" }}
+      onChange={props.onChange}
     >
       {options}
     </Select>

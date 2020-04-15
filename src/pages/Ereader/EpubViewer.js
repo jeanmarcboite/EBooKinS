@@ -99,7 +99,7 @@ class EpubViewer extends React.PureComponent {
 
   componentDidUpdate() {
     if (this.state.url !== this.props.url) {
-      this.setState({ url: this.props.url, error: null });
+      //this.setState({ url: this.props.url, error: null });
       this.loadBook();
     }
     this.updateView();
@@ -141,10 +141,16 @@ class EpubViewer extends React.PureComponent {
         parseInt(getComputedStyle(this.$leftPane.current).width)
       ).toString() + "px";
 
-    this.epub.renderBook(width);
     this.epub.setTheme(this.context.theme.name);
-    this.epub.setFontSize(this.context.fontSize);
-    this.epub.display();
+    this.epub.book.rendition.on("rendered", () => {
+      this.epub.setFontSize(this.context.fontSize);
+    });
+  };
+
+  setFontSize = ({ value }) => {
+    console.log("SetFontSize", value);
+    this.context.setFontSize(value);
+    this.epub.setFontSize(value);
   };
 
   onResizerDragStarted = () => {};
@@ -198,7 +204,10 @@ class EpubViewer extends React.PureComponent {
                 style_attribute="width"
                 title="Elements Width"
               />
-              <SelectFontSize />
+              <SelectFontSize
+                value={this.context.fontSize}
+                onChange={this.setFontSize}
+              />
               <SelectTheme />
             </div>
           </div>

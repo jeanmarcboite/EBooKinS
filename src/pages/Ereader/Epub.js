@@ -1,5 +1,7 @@
 import EpubJS from "epubjs";
 
+import * as EPUBJS_CONSTANTS from "./constants";
+
 const render = ({ viewer, book, settings, themes }) => {
   console.assert(viewer);
   if (viewer) {
@@ -18,12 +20,19 @@ const render = ({ viewer, book, settings, themes }) => {
       });
     }
 
-    rendition.on("relocated", (location) => {
-      console.log("%c relocated ", "background: lightGray", location);
+    EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
+      rendition.on(eventType, (event) => {
+        console.log(`%c $eventType `, "background: blue; color: white", event);
+      });
     });
-    rendition.on("locationChanged", (location) => {
-      console.log("%c locationChanged ", "background: lightGray", location);
-    });
+
+    for (let k in EPUBJS_CONSTANTS.EVENTS.RENDITION) {
+      let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
+      rendition.on(eventType, (event) => {
+        let c = `%c on ${eventType} `;
+        console.log(c, "background: blue; color: yellow", event);
+      });
+    }
 
     rendition.on("resized", function (size) {
       console.log("%c Resized to: ", "color: red", size);
@@ -43,6 +52,7 @@ class Epub {
       onError,
       $viewer,
       themes,
+      currentSectionIndex,
     } = props;
     this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
@@ -54,6 +64,13 @@ class Epub {
         console.log("%c book open ", "color: green", this.props.url);
       })
       .catch(onError);
+    this.renderBook();
+    let displayed = this.display(currentSectionIndex);
+
+    displayed.then(function (section) {
+      // -- do stuff
+      console.log("%c renderer: ", "background: red", section.idref);
+    });
     this.book.loaded.navigation.then(loadTableOfContents);
     this.book.loaded.metadata.then(loadMetadata);
   }
@@ -73,20 +90,13 @@ class Epub {
     }
   };
 
-  display = (href) => {
-    console.assert(this.book.rendition);
-    if (this.book.rendition) {
-      this.book.rendition.display(href);
-    }
-  };
-
   renderBook = (width) => {
     render({
       viewer: this.$viewer.current,
       book: this.book,
       themes: this.props.themes,
       settings: {
-        width,
+        width: "100%",
         height: "100%",
         spread: "always",
         restore: false,
@@ -112,19 +122,21 @@ class Epub {
         "contextmenu",
         this.props.onContextMenu
       );
-
       return false;
     });
   };
 
-  display = () => {
-    this.book.rendition.display();
+  display = (location) => {
+    console.log("display", location);
+    return this.book.rendition.display();
   };
 
   setTheme = (theme) => {
     this.book.rendition.themes.select(theme);
   };
   setFontSize = (fontSize) => {
+    console.log("setFontSize", fontSize);
+
     this.book.rendition.themes.fontSize(fontSize + "%");
   };
 

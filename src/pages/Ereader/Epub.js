@@ -1,6 +1,7 @@
 import EpubJS from "epubjs";
 
 const render = ({ viewer, book, settings, themes }) => {
+  console.assert(viewer);
   if (viewer) {
     console.groupCollapsed("render book");
     console.log(settings);
@@ -15,18 +16,15 @@ const render = ({ viewer, book, settings, themes }) => {
     }
 
     rendition.on("relocated", (location) => {
-      console.log("relocated", location);
-      //console.trace();
+      console.log("%c relocated", "background: lightGray", location);
     });
     rendition.on("locationChanged", (location) => {
-      console.log("locationChanged", location);
-      //console.trace();
+      console.log("%c locationChanged", "background: lightGray", location);
     });
 
     rendition.on("resized", function (size) {
-      console.log("Resized to:", size);
+      console.log("%c Resized to:", "color: red", size);
     });
-    rendition.display();
     console.groupEnd();
   }
 };
@@ -46,48 +44,12 @@ class Epub {
     } = props;
     this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
-    this.settings = {
-      width: "600px",
-      height: "100%",
-      spread: "always",
-      restore: false,
-      reload: false,
-      bookmarks: undefined,
-      annotations: undefined,
-      contained: undefined,
-      bookKey: undefined,
-      styles: undefined,
-      sidebarReflow: false,
-      generatePagination: false,
-      history: true,
-    };
     this.$viewer = $viewer;
     this.book = EpubJS();
     this.book
       .open(this.props.url)
       .then(() => {
-        if (!$viewer.current) {
-          console.log(`Book ${this.props.url} open, no viewer`);
-        } else {
-          console.log(`Book ${this.props.url} open, render`);
-          if (debug) {
-            this.book.ready.then((book) => {
-              console.log(book);
-            });
-            this.book.loaded.manifest.then((manifest) => {
-              console.log(manifest);
-            });
-            this.book.loaded.spine.then((spine) => {
-              console.log(spine);
-            });
-            this.book.loaded.cover.then((cover) => {
-              console.log(cover);
-            });
-            this.book.loaded.resources.then((resources) => {
-              console.log(resources);
-            });
-          }
-        }
+        console.log("%c book open ", "color: green", this.props.url);
       })
       .catch(onError);
     this.book.loaded.navigation.then(loadTableOfContents);
@@ -116,19 +78,27 @@ class Epub {
     }
   };
 
-  updateRendition = (theme, width, fontSize) => {
-    this.theme = theme;
-    this.fontSize = fontSize;
-    this.settings.width = width;
+  renderBook = (width) => {
     render({
       viewer: this.$viewer.current,
       book: this.book,
-      settings: this.settings,
       themes: this.props.themes,
+      settings: {
+        width,
+        height: "100%",
+        spread: "always",
+        restore: false,
+        reload: false,
+        bookmarks: undefined,
+        annotations: undefined,
+        contained: undefined,
+        bookKey: undefined,
+        styles: undefined,
+        sidebarReflow: false,
+        generatePagination: false,
+        history: true,
+      },
     });
-
-    this.book.rendition.themes.select(this.theme);
-    this.book.rendition.themes.fontSize(this.fontSize + "%");
 
     this.book.rendition.on("keyup", this.keyListener);
     document.addEventListener("keyup", this.keyListener, false);
@@ -144,6 +114,15 @@ class Epub {
 
       return false;
     });
+  };
+
+  display = () => {this.book.rendition.display()}
+
+  setTheme = (theme) => {
+    this.book.rendition.themes.select(theme);
+  };
+  setFontSize = (fontSize) => {
+    this.book.rendition.themes.fontSize(fontSize + "%");
   };
 
   addEventListener = (target, type, callback, useCapture) => {

@@ -147,15 +147,13 @@ class EpubViewer extends React.PureComponent {
     let sizes = {
       container: getComputedStyle(this.$container.current).width,
       leftPane: getComputedStyle(this.$leftPane.current).width,
-      viewer: getComputedStyle(this.$viewer.current).width,
     };
     let width =
       (parseInt(sizes.container) - parseInt(sizes.leftPane)).toString() + "px";
-    this.epub.updateRendition(
-      this.context.theme.name,
-      width,
-      this.context.fontSize
-    );
+    this.epub.renderBook(width);
+    this.epub.setTheme(this.context.theme.name);
+    this.epub.setFontSize(this.context.fontSize);
+    this.epub.display();
   };
 
   onResizerDragStarted = () => {};

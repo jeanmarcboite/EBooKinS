@@ -13,8 +13,6 @@ import {
 
 import style from "./Contents.module.css";
 class Contents extends React.PureComponent {
-  static whyDidYouRender = true;
-
   constructor(props) {
     super(props);
 
@@ -137,6 +135,10 @@ function mapStateToProps(state) {
 }
 
 const ConnectedContents = connect(mapStateToProps)(Contents);
+ConnectedContents.whyDidYouRender = {
+  logOnDifferentValues: true,
+  customName: "EPUB Contents",
+};
 
 export default React.forwardRef((props, ref) => (
   <ConnectedContents viewerRef={ref} {...props} />

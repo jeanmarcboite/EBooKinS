@@ -111,7 +111,6 @@ class EpubViewer extends React.PureComponent {
     this.epub.renderBook(this.width);
 
     this.epub.book.rendition.on("rendered", ({ href }) => {
-      console.log("rendered", href);
       this.setState({ href });
     });
     this.epub.book.rendition.on("relocated", (location) => {
@@ -148,7 +147,7 @@ class EpubViewer extends React.PureComponent {
     });
 
     this.renderBook();
-    let cfi = localStorage.getItem("location");
+    let cfi = localStorage.getItem("cfi");
 
     if (cfi) this.epub.display(cfi);
   }

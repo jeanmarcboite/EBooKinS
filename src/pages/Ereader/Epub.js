@@ -2,6 +2,8 @@ import EpubJS from "epubjs";
 
 import * as EPUBJS_CONSTANTS from "./constants";
 
+const debug = false;
+
 const render = ({ viewer, book, settings, themes }) => {
   console.assert(viewer);
   if (viewer) {
@@ -20,28 +22,31 @@ const render = ({ viewer, book, settings, themes }) => {
       });
     }
 
-    EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
-      rendition.on(eventType, (event) => {
-        console.log(
-          `%c ${eventType} `,
-          "background: blue; color: white",
-          event
-        );
+    if (debug) {
+      EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
+        rendition.on(eventType, (event) => {
+          console.log(
+            `%c ${eventType} `,
+            "background: blue; color: white",
+            event
+          );
+        });
       });
-    });
 
-    for (let k in EPUBJS_CONSTANTS.EVENTS.RENDITION) {
-      let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
-      rendition.on(eventType, (event) => {
-        let c = `%c on ${eventType} `;
-        if (event) console.log(c, "background: blue; color: yellow", event);
-        else console.log(c, "background: blue; color: white");
+      for (let k in EPUBJS_CONSTANTS.EVENTS.RENDITION) {
+        let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
+        rendition.on(eventType, (event) => {
+          let c = `%c on ${eventType} `;
+          if (event) console.log(c, "background: blue; color: yellow", event);
+          else console.log(c, "background: blue; color: white");
+        });
+      }
+
+      rendition.on("resized", function (size) {
+        console.log("%c Resized to: ", "color: red", size);
       });
     }
 
-    rendition.on("resized", function (size) {
-      console.log("%c Resized to: ", "color: red", size);
-    });
     console.groupEnd();
   }
 };

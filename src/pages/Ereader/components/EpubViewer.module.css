@@ -1,6 +1,5 @@
-
 .gif_viewer {
-    background: white url("ajax-loader.gif") center center no-repeat;
+    background: white url("./ajax-loader.gif") center center no-repeat;
 }
 
 .Resizer {

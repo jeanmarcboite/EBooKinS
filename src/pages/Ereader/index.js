@@ -15,7 +15,7 @@ import {
 } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
 
-import EpubViewer from "./EpubViewer";
+import EpubViewer from "./components/EpubViewer";
 
 const menuID = "EreaderMenuID";
 class Ereader extends React.Component {

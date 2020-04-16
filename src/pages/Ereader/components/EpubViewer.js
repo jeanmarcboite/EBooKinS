@@ -6,9 +6,9 @@ import { setSetting } from "pages/Settings/store";
 
 import { ThemeContext, themes } from "ThemeProvider";
 
-import Toc from "./components/Toc";
+import Toc from "./Toc";
 
-import Epub from "./Epub";
+import Epub from "../Epub";
 
 import ComputedStyles from "components/ComputedStyles";
 
@@ -17,7 +17,7 @@ import { UserOutlined } from "@ant-design/icons";
 import style from "./EpubViewer.module.css";
 import SplitPane from "react-split-pane";
 
-import EpubContents from "./components/Contents";
+import EpubContents from "./Contents";
 import SelectFontSize from "components/SelectFontSize";
 import SelectTheme from "components/SelectTheme";
 

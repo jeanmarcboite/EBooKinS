@@ -134,7 +134,6 @@ class Epub {
   };
 
   display = (location) => {
-    console.log("display", location);
     return this.book.rendition.display(location);
   };
 

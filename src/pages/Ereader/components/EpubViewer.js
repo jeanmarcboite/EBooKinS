@@ -121,7 +121,8 @@ class EpubViewer extends React.PureComponent {
       this.setState({ href });
     });
     this.epub.book.rendition.on("relocated", (location) => {
-      localStorage.setItem("location", JSON.stringify(location));
+      localStorage.setItem("cfi", location.start.cfi);
+
       if (location.atEnd) {
         this.setState({ rightArrowVisibility: "hidden" });
       } else {
@@ -153,9 +154,9 @@ class EpubViewer extends React.PureComponent {
     });
 
     this.renderBook();
-    let location = localStorage.getItem("location");
+    let cfi = localStorage.getItem("location");
 
-    if (location) this.epub.display(JSON.parse(location).start.cfi);
+    if (cfi) this.epub.display(cfi);
   }
 
   prev = (e) => {

@@ -13,6 +13,7 @@ export const slice = createSlice({
       state.filename = action.payload.name;
       state.data = action.payload.data;
       state.location = undefined;
+      localStorage.removeItem("cfi");
     },
     setLocation: (state, action) => {
       if (state.location !== action.payload) state.location = action.payload;

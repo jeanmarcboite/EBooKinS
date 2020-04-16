@@ -45,16 +45,9 @@ class EpubViewer extends React.PureComponent {
       tableOfContents: null,
       chapter: null,
       error: null,
-      fullscreen: false,
       leftArrowVisibility: "visible",
       rightArrowVisibility: "visible",
     };
-
-    document.addEventListener("fullscreenchange", (event) => {
-      this.setState({
-        fullscreen: document.fullscreenElement !== null,
-      });
-    });
   }
 
   loadError = (error) => {

@@ -3,13 +3,8 @@ import PropTypes from "prop-types";
 
 import { Alert } from "antd";
 import { connect } from "react-redux";
-
-import {
-  RightOutlined,
-  LeftOutlined,
-  FullscreenOutlined,
-  FullscreenExitOutlined,
-} from "@ant-design/icons";
+import Fullscreen from "./Fullscreen";
+import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
 import style from "./Contents.module.css";
 class Contents extends React.PureComponent {
@@ -19,18 +14,17 @@ class Contents extends React.PureComponent {
     this.state = {
       fullscreen: false,
     };
+
+    document.addEventListener("fullscreenchange", (event) => {
+      this.setState({
+        fullscreen: document.fullscreenElement !== null,
+      });
+    });
   }
 
   renderArrows = () => {
     return (
       <>
-        <button className={style.fullscreen}>
-          {this.state.fullscreen ? (
-            <FullscreenExitOutlined onClick={this.exitFullscreen} />
-          ) : (
-            <FullscreenOutlined onClick={this.setFullscreen} />
-          )}
-        </button>
         <button
           className={style.leftArrow}
           style={{ visibility: this.props.leftArrowVisibility }}
@@ -53,38 +47,6 @@ class Contents extends React.PureComponent {
         </button>
       </>
     );
-  };
-
-  exitFullscreen = () => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-  };
-  setFullscreen = () => {
-    document.fullscreenEnabled =
-      document.fullscreenEnabled ||
-      document.mozFullScreenEnabled ||
-      document.documentElement.webkitRequestFullScreen;
-
-    let requestFullscreen = (element) => {
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullScreen) {
-        element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-      }
-    };
-
-    if (document.fullscreenEnabled) {
-      requestFullscreen(document.documentElement);
-    }
   };
 
   render = () => {
@@ -117,6 +79,7 @@ class Contents extends React.PureComponent {
             ) : null}
           </div>
           {this.renderArrows()}
+          <Fullscreen />
         </div>
       </div>
     );

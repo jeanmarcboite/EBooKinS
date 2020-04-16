@@ -90,17 +90,11 @@ class EpubViewer extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (
-      this.state.url !== this.props.url ||
-      this.leftPanelSize !== this.props.settings.leftPanelSize
-    ) {
+    if (this.state.url !== this.props.url) {
       this.setState({ url: this.props.url, error: null });
       this.loadBook();
-    } else if (
-      false &&
-      this.leftPanelSize !== this.props.settings.leftPanelSize
-    ) {
-      this.renderBook();
+    } else if (this.leftPanelSize !== this.props.settings.leftPanelSize) {
+      this.loadBook();
     }
     this.updateView();
   }

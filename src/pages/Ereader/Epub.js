@@ -57,8 +57,6 @@ class Epub {
       onError,
       $viewer,
       themes,
-      currentSectionIndex,
-      width,
     } = props;
     this.props = { url, onKeyPress, onContextMenu, themes };
     this.eventListeners = [];
@@ -70,13 +68,6 @@ class Epub {
         console.log("%c book open ", "color: green", this.props.url);
       })
       .catch(onError);
-    this.renderBook(width);
-    let displayed = this.display(currentSectionIndex);
-
-    displayed.then(function (section) {
-      // -- do stuff
-      console.log("%c renderer: ", "background: red", section.idref);
-    });
     this.book.loaded.navigation.then(loadTableOfContents);
     this.book.loaded.metadata.then(loadMetadata);
   }
@@ -133,6 +124,12 @@ class Epub {
         this.props.onContextMenu
       );
       return false;
+    });
+    let displayed = this.display();
+
+    displayed.then(function (section) {
+      // -- do stuff
+      console.log("%c renderer: ", "background: red", section.idref);
     });
   };
 

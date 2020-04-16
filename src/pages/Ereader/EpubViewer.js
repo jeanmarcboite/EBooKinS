@@ -38,6 +38,7 @@ class EpubViewer extends React.PureComponent {
 
     this.loadTableOfContents = this.loadTableOfContents.bind(this);
     this.eventListeners = [];
+    this.width = 0;
     this.state = {
       // if state.url != props.url, we need to load the book
       url: this.props.url,
@@ -103,33 +104,25 @@ class EpubViewer extends React.PureComponent {
     if (this.state.url !== this.props.url) {
       //this.setState({ url: this.props.url, error: null });
       this.loadBook();
+    } else if (
+      false &&
+      this.leftPanelSize !== this.props.settings.leftPanelSize
+    ) {
+      this.renderBook();
     }
     this.updateView();
   }
 
-  loadBook() {
-    if (this.epub) {
-      this.epub.destroy();
-    }
-
-    console.log("%c load book", "color: green", this.props.url);
-    let width =
+  renderBook = () => {
+    this.width =
       (
         parseInt(getComputedStyle(this.$container.current).width) -
         parseInt(getComputedStyle(this.$leftPane.current).width) -
         15
       ).toString() + "px";
-    this.epub = new Epub({
-      url: this.props.url,
-      $viewer: this.$viewer,
-      loadTableOfContents: this.loadTableOfContents,
-      loadMetadata: this.loadMetadata,
-      onContextMenu: this.props.onContextMenu,
-      onError: this.loadError,
-      themes,
-      width,
-    });
+    this.leftPanelSize = this.props.settings.leftPanelSize;
 
+    this.epub.renderBook(this.width);
     this.epub.book.rendition.on("relocated", (location) => {
       console.log(location);
 
@@ -145,6 +138,25 @@ class EpubViewer extends React.PureComponent {
         this.setState({ leftArrowVisibility: "visible" });
       }
     });
+  };
+
+  loadBook() {
+    if (this.epub) {
+      this.epub.destroy();
+    }
+
+    console.log("%c load book", "color: green", this.props.url);
+    this.epub = new Epub({
+      url: this.props.url,
+      $viewer: this.$viewer,
+      loadTableOfContents: this.loadTableOfContents,
+      loadMetadata: this.loadMetadata,
+      onContextMenu: this.props.onContextMenu,
+      onError: this.loadError,
+      themes,
+    });
+
+    this.renderBook();
   }
 
   prev = (e) => {

@@ -129,7 +129,7 @@ Contents.propTypes = {
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,
   leftArrowVisibility: PropTypes.string,
-  rightArrowVisibility: PropTypes.string
+  rightArrowVisibility: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -139,7 +139,8 @@ function mapStateToProps(state) {
 }
 
 const ConnectedContents = connect(mapStateToProps)(Contents);
-ConnectedContents.whyDidYouRender = {
+
+Contents.whyDidYouRender = {
   logOnDifferentValues: true,
   customName: "EPUB Contents",
 };

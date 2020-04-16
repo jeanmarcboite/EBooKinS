@@ -7,10 +7,6 @@ import style from "./Toc.module.css";
 import "./Toc.css";
 
 class Toc extends React.PureComponent {
-  static whyDidYouRender = {
-    logOnDifferentValues: true,
-    customName: "Toc",
-  };
   static contextType = ThemeContext;
   render() {
     return (
@@ -56,3 +52,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Toc);
+
+Toc.whyDidYouRender = {
+  logOnDifferentValues: false,
+  customName: "Toc",
+};

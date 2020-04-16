@@ -85,6 +85,7 @@ class Ereader extends React.Component {
 
         <EpubViewer
           url={this.props.ereader.data}
+          location={this.props.ereader.location}
           onContextMenu={this.openContextMenu}
         />
       </>

@@ -21,6 +21,8 @@ import EpubContents from "./components/Contents";
 import SelectFontSize from "components/SelectFontSize";
 import SelectTheme from "components/SelectTheme";
 
+import { setLocation } from "./store";
+
 const handleClick = (e) => console.log(e);
 
 class EpubViewer extends React.PureComponent {
@@ -123,9 +125,11 @@ class EpubViewer extends React.PureComponent {
     this.leftPanelSize = this.props.settings.leftPanelSize;
 
     this.epub.renderBook(this.width);
+
     this.epub.book.rendition.on("relocated", (location) => {
       console.log(location);
-
+      console.log(this.epub.book.rendition.currentLocation());
+      localStorage.setItem("location", JSON.stringify(location));
       if (location.atEnd) {
         this.setState({ rightArrowVisibility: "hidden" });
       } else {
@@ -157,6 +161,9 @@ class EpubViewer extends React.PureComponent {
     });
 
     this.renderBook();
+    let location = localStorage.getItem("location");
+
+    if (location) this.epub.display(JSON.parse(location).start.cfi);
   }
 
   prev = (e) => {

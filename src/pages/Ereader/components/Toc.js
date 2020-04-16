@@ -13,7 +13,7 @@ class Toc extends React.PureComponent {
       <Menu
         mode="inline"
         onClick={this.props.selectChapter}
-        defaultSelectedKeys={["1"]}
+        selectedKeys={[this.props.selectedKey]}
         defaultOpenKeys={["sub1"]}
         style={{ height: "80%" }}
         className={style.menu}
@@ -54,6 +54,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(Toc);
 
 Toc.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "Toc",
 };

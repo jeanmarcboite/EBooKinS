@@ -47,6 +47,7 @@ class EpubViewer extends React.PureComponent {
       error: null,
       leftArrowVisibility: "visible",
       rightArrowVisibility: "visible",
+      href: null,
     };
   }
 
@@ -86,7 +87,6 @@ class EpubViewer extends React.PureComponent {
 
   selectChapter = (chapter) => {
     this.epub.display(chapter.item.props.href);
-    //this.setState({ chapter });
   };
 
   componentDidMount() {
@@ -117,6 +117,10 @@ class EpubViewer extends React.PureComponent {
 
     this.epub.renderBook(this.width);
 
+    this.epub.book.rendition.on("rendered", ({ href }) => {
+      console.log("rendered", href);
+      this.setState({ href });
+    });
     this.epub.book.rendition.on("relocated", (location) => {
       localStorage.setItem("location", JSON.stringify(location));
       if (location.atEnd) {
@@ -217,6 +221,7 @@ class EpubViewer extends React.PureComponent {
               className={style.toc}
               toc={this.state.tableOfContents}
               selectChapter={this.selectChapter}
+              selectedKey={this.state.href}
             />
             <div
               style={{ position: "absolute", bottom: "20px", width: "100%" }}

@@ -93,7 +93,7 @@ class EpubViewer extends React.PureComponent {
 
   selectChapter = (chapter) => {
     this.epub.display(chapter.item.props.href);
-    this.setState({ chapter });
+    //this.setState({ chapter });
   };
 
   componentDidMount() {

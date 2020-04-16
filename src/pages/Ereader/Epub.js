@@ -22,7 +22,11 @@ const render = ({ viewer, book, settings, themes }) => {
 
     EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
       rendition.on(eventType, (event) => {
-        console.log(`%c $eventType `, "background: blue; color: white", event);
+        console.log(
+          `%c ${eventType} `,
+          "background: blue; color: white",
+          event
+        );
       });
     });
 
@@ -92,7 +96,9 @@ class Epub {
     }
   };
 
-  rendition = () => {return this.book.rendition}
+  rendition = () => {
+    return this.book.rendition;
+  };
 
   renderBook = (width) => {
     render({
@@ -138,9 +144,8 @@ class Epub {
   setTheme = (theme) => {
     this.book.rendition.themes.select(theme);
   };
-  setFontSize = (fontSize) => {
-    console.log("setFontSize", fontSize);
 
+  setFontSize = (fontSize) => {
     this.book.rendition.themes.fontSize(fontSize + "%");
   };
 

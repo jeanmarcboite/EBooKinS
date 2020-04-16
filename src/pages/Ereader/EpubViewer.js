@@ -159,8 +159,7 @@ class EpubViewer extends React.PureComponent {
   };
 
   updateView = () => {
-    console.log("updateView");
-
+    console.log("%cupdateView", "color: green");
     this.epub.setTheme(this.context.theme.name);
     this.epub.book.rendition.on("rendered", () => {
       this.epub.setFontSize(this.context.fontSize);
@@ -168,7 +167,6 @@ class EpubViewer extends React.PureComponent {
   };
 
   setFontSize = ({ value }) => {
-    console.log("SetFontSize", value);
     this.context.setFontSize(value);
     this.epub.setFontSize(value);
   };

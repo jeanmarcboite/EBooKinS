@@ -8,13 +8,34 @@ import "./Toc.css";
 
 class Toc extends React.PureComponent {
   static contextType = ThemeContext;
+
+  renderItem = (item) => {
+    if (!item.subitems || item.subitems.length === 0)
+      return (
+        <Menu.Item className="style.menuItem" key={item.id} href={item.href}>
+          <div className={style.menuItemLabel}>{item.label}</div>
+        </Menu.Item>
+      );
+
+    return (
+      <Menu.SubMenu
+        className={style.subMenu}
+        key={item.id}
+        href={item.href}
+        title={item.label}
+        style={this.context.theme.submenu}
+      >
+        {item.subitems.map(this.renderItem)}
+      </Menu.SubMenu>
+    );
+  };
   render() {
     return (
       <Menu
         mode="inline"
         onClick={this.props.selectChapter}
         selectedKeys={[this.props.selectedKey]}
-        defaultOpenKeys={["sub1"]}
+        defaultOpenKeys={["chapters"]}
         style={{ height: "80%" }}
         className={style.menu}
         theme={this.context.theme.name}
@@ -27,15 +48,7 @@ class Toc extends React.PureComponent {
                 title={item.title}
                 style={this.context.theme.submenu}
               >
-                {item.items.map((subitem, subkey) => (
-                  <Menu.Item
-                    className="style.menuItem"
-                    key={subitem.id}
-                    href={subitem.href}
-                  >
-                    <div className={style.menuItemLabel}>{subitem.label}</div>
-                  </Menu.Item>
-                ))}
+                {item.items.map(this.renderItem)}
               </Menu.SubMenu>
             ))
           : null}
@@ -54,6 +67,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(Toc);
 
 Toc.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Toc",
 };

@@ -62,7 +62,7 @@ class EpubViewer extends React.PureComponent {
         onClick: handleClick,
         subMenus: [
           {
-            id: "sub1",
+            id: "chapters",
             title: (
               <>
                 <UserOutlined />
@@ -71,7 +71,7 @@ class EpubViewer extends React.PureComponent {
             ),
             items: toc.map((chapter, key) => {
               if (chapter.subitems && chapter.subitems.length > 0) {
-                console.log(chapter);
+                //console.log(chapter);
               }
               return chapter;
             }),
@@ -164,7 +164,6 @@ class EpubViewer extends React.PureComponent {
   };
 
   updateView = () => {
-    console.log("%cupdateView", "color: green");
     this.epub.setTheme(this.context.theme.name);
     this.epub.book.rendition.on("rendered", () => {
       this.epub.setFontSize(this.context.fontSize);
@@ -191,6 +190,20 @@ class EpubViewer extends React.PureComponent {
 
   onKeyDown = (e) => {
     console.log("onKeyDown", e);
+  };
+  debugCards = () => {
+    if (true) return "";
+    return (
+      <ComputedStyles
+        elems={{
+          container: this.$container,
+          leftPane: this.$leftPane,
+          viewer: this.$viewer,
+        }}
+        style_attribute="width"
+        title="Elements Width"
+      />
+    );
   };
   render() {
     return (
@@ -219,15 +232,7 @@ class EpubViewer extends React.PureComponent {
             <div
               style={{ position: "absolute", bottom: "20px", width: "100%" }}
             >
-              <ComputedStyles
-                elems={{
-                  container: this.$container,
-                  leftPane: this.$leftPane,
-                  viewer: this.$viewer,
-                }}
-                style_attribute="width"
-                title="Elements Width"
-              />
+              {this.debugCards()}
               <SelectFontSize
                 value={this.context.fontSize}
                 onChange={this.setFontSize}

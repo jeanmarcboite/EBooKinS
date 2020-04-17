@@ -19,7 +19,6 @@ class Toc extends React.PureComponent {
 
     return (
       <Menu.SubMenu
-        mode="horizontal"
         className={style.subMenu}
         key={item.id}
         href={item.href}

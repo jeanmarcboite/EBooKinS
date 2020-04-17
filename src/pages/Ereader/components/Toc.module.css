@@ -1,15 +1,17 @@
 .menu {
+    display: "block";
     background: red;
     height: "100%";
     width: "100%";
-    display: "flex";
     justify-content: "center";
     align-items: "center";
+    overflow: "auto";
 }
 
 .subMenu {
     color: blue;
     background-color: brown;
+    overflow: "auto";
 }
 
 .menuItemLabel {

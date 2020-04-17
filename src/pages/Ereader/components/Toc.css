@@ -16,7 +16,3 @@
 .ant-menu.ant-menu-chocolate .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow::before {
     background: papayawhip;
 }
-
-.menu {
-    overflow-y: "scroll"
-}

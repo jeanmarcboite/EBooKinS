@@ -19,6 +19,7 @@ class Toc extends React.PureComponent {
 
     return (
       <Menu.SubMenu
+        mode="horizontal"
         className={style.subMenu}
         key={item.id}
         href={item.href}
@@ -43,6 +44,7 @@ class Toc extends React.PureComponent {
         {this.props.toc
           ? this.props.toc.subMenus.map((item, key) => (
               <Menu.SubMenu
+                mode="inline"
                 className={style.subMenu}
                 key={item.id}
                 title={item.title}

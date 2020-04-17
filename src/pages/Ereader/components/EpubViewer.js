@@ -69,12 +69,7 @@ class EpubViewer extends React.PureComponent {
                 chapters
               </>
             ),
-            items: toc.map((chapter, key) => {
-              if (chapter.subitems && chapter.subitems.length > 0) {
-                //console.log(chapter);
-              }
-              return chapter;
-            }),
+            items: toc,
           },
         ],
       },

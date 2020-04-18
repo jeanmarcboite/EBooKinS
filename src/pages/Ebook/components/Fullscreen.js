@@ -2,7 +2,7 @@ import React from "react";
 
 import { FullscreenOutlined, FullscreenExitOutlined } from "@ant-design/icons";
 
-import style from "./Button.module.css";
+import style from "./EpubView.module.css";
 
 export default class Fullscreen extends React.PureComponent {
   constructor(props) {

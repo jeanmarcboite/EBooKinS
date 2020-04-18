@@ -4,7 +4,7 @@ import { Alert } from "antd";
 import { connect } from "react-redux";
 import Fullscreen from "./Fullscreen";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
-import style from "./Button.module.css";
+import style from "./EpubView.module.css";
 
 class EpubView extends React.PureComponent {
   state = {
@@ -56,7 +56,9 @@ class EpubView extends React.PureComponent {
           </div>
           <button
             className={style.leftArrow}
-            style={{ visibility: this.props.leftArrowVisibility }}
+            style={{
+              visibility: this.props.leftArrowVisible ? "visible" : "hidden",
+            }}
             onClick={(e) => {
               e.preventDefault();
               this.props.prev();
@@ -66,7 +68,9 @@ class EpubView extends React.PureComponent {
           </button>
           <button
             className={style.rightArrow}
-            style={{ visibility: this.props.rightArrowVisibility }}
+            style={{
+              visibility: this.props.rightArrowVisible ? "visible" : "hidden",
+            }}
             onClick={(e) => {
               e.preventDefault();
               this.props.next();

@@ -44,7 +44,6 @@ class EReader extends React.Component {
       return (
         <EpubReader
           url={this.state.data}
-          location={this.props.location}
           onContextMenu={this.props.onContextMenu}
         />
       );

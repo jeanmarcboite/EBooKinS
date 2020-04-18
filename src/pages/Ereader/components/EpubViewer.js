@@ -94,7 +94,7 @@ class EpubViewer extends React.PureComponent {
     this.updateView();
   }
 
-  renderBook = () => {
+  renderBook = (location) => {
     this.width =
       (
         parseInt(getComputedStyle(this.$container.current).width) -
@@ -103,7 +103,7 @@ class EpubViewer extends React.PureComponent {
       ).toString() + "px";
     this.leftPanelSize = this.props.settings.leftPanelSize;
 
-    this.epub.renderBook(this.width);
+    this.epub.renderBook(location, this.width);
 
     this.epub.book.rendition.on("rendered", ({ href }) => {
       this.setState({ href });
@@ -141,10 +141,7 @@ class EpubViewer extends React.PureComponent {
       themes,
     });
 
-    this.renderBook();
-    let cfi = localStorage.getItem("cfi");
-
-    if (cfi) this.epub.display(cfi);
+    this.renderBook(localStorage.getItem("cfi"));
   }
 
   prev = (e) => {

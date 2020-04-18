@@ -33,8 +33,8 @@ class EpubReader extends React.Component {
       tableOfContents: null,
       chapter: null,
       error: null,
-      leftArrowVisibility: "visible",
-      rightArrowVisibility: "visible",
+      leftArrowVisible: true,
+      rightArrowVisible: true,
       href: null,
     };
   }
@@ -75,10 +75,7 @@ class EpubReader extends React.Component {
       themes,
     });
 
-    this.renderBook();
-    let cfi = localStorage.getItem("cfi");
-
-    if (cfi) this.epub.display(cfi);
+    this.renderBook(localStorage.getItem("cfi"));
   }
 
   loadMetadata(metadata) {
@@ -105,7 +102,11 @@ class EpubReader extends React.Component {
     });
   };
 
-  renderBook = () => {
+  set(what, state) {
+    if (this.state[what] !== state) this.setState({ [what]: state });
+  }
+
+  renderBook = (location) => {
     this.width =
       (
         parseInt(getComputedStyle(this.$container.current).width) -
@@ -114,7 +115,7 @@ class EpubReader extends React.Component {
       ).toString() + "px";
     this.leftPanelSize = this.props.settings.leftPanelSize;
 
-    this.epub.renderBook(this.width);
+    this.epub.renderBook(location, this.width);
 
     this.epub.book.rendition.on("rendered", ({ href }) => {
       this.setState({ href });
@@ -123,15 +124,15 @@ class EpubReader extends React.Component {
       localStorage.setItem("cfi", location.start.cfi);
 
       if (location.atEnd) {
-        this.setState({ rightArrowVisibility: "hidden" });
+        this.set("rightArrowVisible", false);
       } else {
-        this.setState({ rightArrowVisibility: "visible" });
+        this.set("rightArrowVisible", true);
       }
 
       if (location.atStart) {
-        this.setState({ leftArrowVisibility: "hidden" });
+        this.set("leftArrowVisible", false);
       } else {
-        this.setState({ leftArrowVisibility: "visible" });
+        this.set("leftArrowVisible", true);
       }
     });
   };
@@ -214,8 +215,8 @@ class EpubReader extends React.Component {
             error={this.state.error}
             next={this.next}
             prev={this.prev}
-            leftArrowVisibility={this.state.leftArrowVisibility}
-            rightArrowVisibility={this.state.rightArrowVisibility}
+            leftArrowVisible={this.state.leftArrowVisible}
+            rightArrowVisible={this.state.rightArrowVisible}
           />
         </SplitPane>
       </div>
@@ -233,5 +234,5 @@ export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
   logOnDifferentValues: true,
-  customName: "Epub Reader",
+  customName: "EpubReader",
 };

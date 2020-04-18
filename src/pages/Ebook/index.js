@@ -106,7 +106,6 @@ class EbookPage extends React.Component {
         {this.renderMenu()}
         <EReader
           url={this.props.ebook.url}
-          location={this.props.ebook.location}
           onContextMenu={this.openContextMenu}
         />
       </Hotkeys>

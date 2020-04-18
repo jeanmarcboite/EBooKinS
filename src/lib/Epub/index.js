@@ -1,5 +1,4 @@
 import JSZip from "jszip";
-import JSZipUtils from "jszip-utils";
 import { parseString } from "xml2js";
 
 export function parseEpub(epubContent) {

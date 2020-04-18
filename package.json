@@ -12,6 +12,8 @@
     "antd": "^4.1.1",
     "dexie": "^2.0.4",
     "epubjs": "^0.3.85",
+    "jszip": "^3.3.0",
+    "jszip-utils": "^0.1.0",
     "pouchdb": "^7.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -25,7 +27,8 @@
     "react-split-pane": "^0.1.91",
     "redux-persist": "^6.0.0",
     "resizable-panels-react": "^2.0.8",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "xml2js": "^0.4.23"
   },
   "scripts": {
     "start": "react-scripts start",

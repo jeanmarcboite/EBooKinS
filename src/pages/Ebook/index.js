@@ -15,79 +15,42 @@ import {
   contextMenu,
 } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
-
-import EpubViewer from "./components/EpubViewer";
 import { storeEpub } from "lib/Epub";
+import EReader from "./EReader";
 
-const menuID = "EreaderMenuID";
-class Ereader extends React.Component {
+const menuID = "EbookMenuID";
+
+class EbookPage extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
 
-    this.ref = React.createRef();
+    this.$input = React.createRef();
   }
 
-  fileInput = ({ target }) => {
-    if (target.files.length === 1) {
-      let file = target.files[0];
-      storeEpub(this.context.db, file);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        this.props.dispatch(loadFile({ name: file.name, data: reader.result }));
-        //setData(reader.result);
-      };
-      reader.readAsArrayBuffer(file);
-    }
+  loadInput = ({ target }) => {
+    if (target.files.length === 1)
+      this.props.dispatch(
+        loadFile,
+        storeEpub(this.context.db, target.files[0])
+      );
   };
-  openContextMenu = (e) => {
+
+  showContextMenu = (e) => {
     e.preventDefault();
     contextMenu.show({
       id: menuID,
       event: e,
     });
   };
+
   componentDidMount = () => {
-    document.addEventListener("contextmenu", this.openContextMenu);
+    document.addEventListener("contextmenu", this.showContextMenu);
   };
 
   componentWillUnmount = () => {
-    document.removeEventListener("contextmenu", this.openContextMenu);
+    document.removeEventListener("contextmenu", this.showContextMenu);
   };
-
-  menu = () => (
-    <>
-      <input
-        id="input_file"
-        ref={this.ref}
-        accept="application/pdf,.epub"
-        type="file"
-        onChange={this.fileInput}
-        style={{ display: "none" }}
-      />
-      <Menu
-        id={menuID}
-        theme={theme[this.context.theme.type]}
-        animation={animation.flip}
-      >
-        <Item>
-          <label onClick={() => this.ref.current.click()}>
-            <BookTwoTone twoToneColor="#52c41a" />
-            Read book
-          </label>
-        </Item>
-        <Separator />
-        <RoutesMenu />
-      </Menu>
-    </>
-  );
-
-  importEpub = () => {
-    this.ref.current.click();
-  };
-
-  readEpub = () => {};
-
   onKeyDown = (keyName, e, handle) => {
     // eslint-disable-next-line default-case
     switch (keyName) {
@@ -98,26 +61,64 @@ class Ereader extends React.Component {
     }
   };
 
-  render() {
+  importEpub = () => {
+    this.$input.current.click();
+  };
+
+  readEpub = () => {};
+
+  renderInput = () => {
+    return (
+      <input
+        id="input_file"
+        ref={this.$input}
+        accept="application/pdf,.epub"
+        type="file"
+        onChange={this.loadInput}
+        style={{ display: "none" }}
+      />
+    );
+  };
+
+  renderMenu = () => {
+    return (
+      <Menu
+        id={menuID}
+        theme={theme[this.context.theme.type]}
+        animation={animation.flip}
+      >
+        <Item>
+          <label onClick={() => this.$input.current.click()}>
+            <BookTwoTone twoToneColor="#52c41a" />
+            Read book
+          </label>
+        </Item>
+        <Separator />
+        <RoutesMenu />
+      </Menu>
+    );
+  };
+
+  render = () => {
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
-        {this.menu()}
-
-        <EpubViewer
-          url={this.props.ereader.data}
-          location={this.props.ereader.location}
+        {this.renderInput()}
+        {this.renderMenu()}
+        <EReader
+          url={this.props.ebook.url}
+          location={this.props.ebook.location}
           onContextMenu={this.openContextMenu}
         />
       </Hotkeys>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {
   return {
-    ereader: state.ereader,
+    ebook: state.ebook,
     settings: state.settings,
   };
 }
 
-export default connect(mapStateToProps)(Ereader);
+export default connect(mapStateToProps)(EbookPage);

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const slice = createSlice({
-  name: "ereader",
+  name: "ebook",
   initialState: {
     filename: undefined,
     url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
@@ -23,7 +23,6 @@ export const slice = createSlice({
 
 export const { loadFile, setLocation } = slice.actions;
 
-export const selectFile = (state) => state.ereader.data;
-export const selectEreader = (state) => state.ereader;
+export const selectEbook = (state) => state.ebook;
 
 export default slice.reducer;

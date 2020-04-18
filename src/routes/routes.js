@@ -5,7 +5,7 @@ import {
   SettingTwoTone,
 } from "@ant-design/icons";
 
-import Ereader from "pages/Ereader";
+import Ebook from "pages/Ebook";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
 
@@ -15,7 +15,7 @@ const routes = [
     exact: true,
     label: "Home",
     icon: <HomeTwoTone twoToneColor="#52c41a" />,
-    component: Ereader,
+    component: Ebook,
   },
   {
     to: "/about",

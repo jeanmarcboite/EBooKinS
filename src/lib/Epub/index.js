@@ -72,4 +72,6 @@ export function storeEpub(db, epub) {
     reader.onload = () => onload(db, epub, reader.result);
     reader.readAsArrayBuffer(epub);
   }
+
+  return epub.name;
 }

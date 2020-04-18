@@ -1,0 +1,48 @@
+.button {
+    position: absolute;
+    top: 50%;
+    margin-top: -32px;
+    font-size: 48px;
+    font-family: arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    text-decoration: none;
+    color: lightgray;
+    z-index: 49;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+button:focus {
+    border: none;
+}
+
+.button:active {
+    color: rgb(211, 28, 28);
+}
+
+.button:hover {
+    color: rgb(117, 15, 233);
+}
+
+.leftArrow {
+    composes: button;
+    top: 50%;
+    left: 20px;
+}
+
+.rightArrow {
+    composes: button;
+    top: 50%;
+    right: 20px;
+}
+
+.fullscreen {
+    composes: button;
+    top: 20px;
+    right: 20px;
+}

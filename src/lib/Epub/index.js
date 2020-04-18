@@ -25,50 +25,51 @@ export function parseEpub(epubContent) {
   });
 }
 
-export function storeEpub(db, epub) {
-  if (db) {
-    let jszip = new JSZip();
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      console.log("onload: ", e);
+function onload(db, epub, epubContent) {
+  let jszip = new JSZip();
+  jszip.loadAsync(epubContent).then((zip) => {
+    //console.warn(zip.files);
+    zip
+      .file("content.opf")
+      .async("string")
+      .then((text) => {
+        parseString(text, function (err, result) {
+          console.log("content.opf", result);
+          console.log(result.package.metadata[0]);
+          let cover = result.package.manifest[0].item[0].$;
 
-      jszip.loadAsync(reader.result).then((zip) => {
-        //console.warn(zip.files);
-        zip
-          .file("content.opf")
-          .async("string")
-          .then((text) => {
-            parseString(text, function (err, result) {
-              console.log("content.opf", result);
-              console.log(result.package.metadata[0]);
-              let cover = result.package.manifest[0].item[0].$;
-
-              zip
-                .file(cover.href)
-                .async("array")
-                .then((array) => {
-                  db.put({
-                    _id: epub.name,
-                    metadata: result.package.metadata[0],
-                    _attachments: {
-                      epub: {
-                        name: epub.name,
-                        type: epub.type,
-                        data: epub,
-                      },
-                    },
-                  })
-                    .then(function (response) {
-                      console.log("db.put: ", response);
-                    })
-                    .catch(function (err) {
-                      console.error(err);
-                    });
+          zip
+            .file(cover.href)
+            .async("array")
+            .then((array) => {
+              db.put({
+                _id: epub.name,
+                metadata: result.package.metadata[0],
+                _attachments: {
+                  epub: {
+                    name: epub.name,
+                    type: epub.type,
+                    data: epub,
+                  },
+                  cover: array,
+                },
+              })
+                .then(function (response) {
+                  console.log("db.put: ", response);
+                })
+                .catch(function (err) {
+                  console.error(err);
                 });
             });
-          });
+        });
       });
-    };
+  });
+}
+
+export function storeEpub(db, epub) {
+  if (db) {
+    let reader = new FileReader();
+    reader.onload = () => onload(db, epub, reader.result);
     reader.readAsArrayBuffer(epub);
   }
 }

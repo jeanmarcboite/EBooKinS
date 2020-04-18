@@ -47,7 +47,7 @@ class EpubView extends React.PureComponent {
             className={style.viewer}
             style={{
               backgroundColor: this.props.backgroundColor,
-              height: "100vh",
+              height: "99vh",
             }}
           >
             {this.props.error ? (

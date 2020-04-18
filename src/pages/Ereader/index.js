@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
 import { loadFile } from "./store";
 import { ThemeContext } from "ThemeProvider";
+import EpubJS from "epubjs";
 
 import RoutesMenu from "routes/Menu";
 import {
@@ -33,6 +34,32 @@ class Ereader extends React.Component {
       reader.onload = (e) => {
         this.props.dispatch(loadFile({ name: file.name, data: reader.result }));
         //setData(reader.result);
+        if (this.context.db) {
+          let book = EpubJS();
+          book.open(reader.result).then(() => {
+            console.log("%c book open ", "color: blue", file.name);
+          });
+          book.loaded.metadata.then((metadata) => {
+            this.context.db
+              .put({
+                _id: file.name,
+                metadata,
+                _attachments: {
+                  filename: {
+                    name: file.name,
+                    type: file.type,
+                    data: file,
+                  },
+                },
+              })
+              .then(function (response) {
+                // handle response
+              })
+              .catch(function (err) {
+                console.error(err);
+              });
+          });
+        }
       };
       reader.readAsArrayBuffer(file);
     }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PouchDB from "pouchdb";
 // https://github.com/mateenkiani/react-tutorials.git
 export const ThemeContext = React.createContext({
   theme: {
@@ -86,6 +87,7 @@ export const ThemeContextProvider = (props) => {
   const initState = {
     theme: themes[localStorage.getItem("theme") || "default"],
     fontSize: localStorage.getItem("fontSize") || 100,
+    db: new PouchDB("http://localhost:5984/ebookins"),
     setTheme,
     setFontSize,
   };

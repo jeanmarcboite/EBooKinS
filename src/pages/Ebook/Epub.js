@@ -96,7 +96,7 @@ class Epub {
     return this.book.rendition;
   };
 
-  renderBook = (width) => {
+  renderBook = (location, width) => {
     render({
       viewer: this.$viewer.current,
       book: this.book,
@@ -130,7 +130,7 @@ class Epub {
       );
       return false;
     });
-    let displayed = this.display();
+    let displayed = this.display(location);
 
     displayed.then(function (section) {
       // -- do stuff

@@ -4,6 +4,7 @@ import RoutesMenu from "routes/Menu";
 import { Menu, theme, animation, contextMenu } from "react-contexify";
 
 import SplitPanels from "./lab";
+import PouchDB from "pouchdb";
 
 const menuID = "menu_id";
 class Lab extends React.Component {
@@ -11,6 +12,20 @@ class Lab extends React.Component {
     super(props);
 
     this.ref = React.createRef();
+    console.log("pouchdb");
+    this.db = new PouchDB("http://localhost:5984/dbname");
+
+    this.db
+      .put({
+        _id: "mydoc",
+        title: "Heroes",
+      })
+      .then(function (response) {
+        // handle response
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
   openContextMenu = (e) => {
     e.preventDefault();

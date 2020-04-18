@@ -12,6 +12,7 @@
     "antd": "^4.1.1",
     "dexie": "^2.0.4",
     "epubjs": "^0.3.85",
+    "pouchdb": "^7.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-contexify": "^4.1.1",

@@ -161,6 +161,10 @@ class EpubReader extends React.Component {
     }
   };
 
+  selectChapter = (chapter) => {
+    if (this.epub) this.epub.display(chapter.item.props.href);
+  };
+
   setFontSize = ({ value }) => {
     this.context.setFontSize(value);
     if (this.epub) this.epub.setFontSize(value);

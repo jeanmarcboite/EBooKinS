@@ -23,8 +23,8 @@ export function parseEpub(epubContent) {
       });
   });
 }
-
-function onload(db, epub, epubContent) {
+// TODO return promise
+function onload(db, epub, epubContent, dispatch) {
   let jszip = new JSZip();
   jszip.loadAsync(epubContent).then((zip) => {
     //console.warn(zip.files);
@@ -57,18 +57,19 @@ function onload(db, epub, epubContent) {
                   console.log("db.put: ", response);
                 })
                 .catch(function (err) {
-                  console.error(err);
-                });
+                  console.error("Could not store in database:", err);
+                })
+                .then(dispatch(epub.name));
             });
         });
       });
   });
 }
 
-export function storeEpub(db, epub) {
+export function storeEpub(db, epub, dispatch) {
   if (db) {
     let reader = new FileReader();
-    reader.onload = () => onload(db, epub, reader.result);
+    reader.onload = () => onload(db, epub, reader.result, dispatch);
     reader.readAsArrayBuffer(epub);
   }
 

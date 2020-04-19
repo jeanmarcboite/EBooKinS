@@ -29,11 +29,12 @@ class EbookPage extends React.Component {
   }
 
   loadInput = ({ target }) => {
-    if (target.files.length === 1)
-      this.props.dispatch(
-        loadFile,
-        storeEpub(this.context.db, target.files[0])
-      );
+    if (target.files.length === 1) {
+      storeEpub(this.context.db, target.files[0], (filename) => {
+        console.log(filename);
+        this.props.dispatch(loadFile, filename);
+      });
+    }
   };
 
   showContextMenu = (e) => {
@@ -98,16 +99,16 @@ class EbookPage extends React.Component {
       </Menu>
     );
   };
-
+  componentDidUpdate() {
+    console.log("compDidUPd", this.props.url);
+  }
   render = () => {
+    console.log("render Ebook", this.props.url);
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}
         {this.renderMenu()}
-        <EReader
-          url={this.props.ebook.url}
-          onContextMenu={this.openContextMenu}
-        />
+        <EReader url={this.props.url} onContextMenu={this.openContextMenu} />
       </Hotkeys>
     );
   };
@@ -115,8 +116,7 @@ class EbookPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    ebook: state.ebook,
-    settings: state.settings,
+    url: state.ebook.url,
   };
 }
 

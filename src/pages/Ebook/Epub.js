@@ -9,7 +9,7 @@ const render = ({ viewer, book, settings, themes }) => {
   if (viewer) {
     console.groupCollapsed(
       "%c render book ",
-      "background: red; color: white; font-style: italic;"
+      "color: green; font-style: italic;"
     );
     console.log(settings);
     console.log("viewer width: ", getComputedStyle(viewer).width);
@@ -134,7 +134,7 @@ class Epub {
 
     displayed.then(function (section) {
       // -- do stuff
-      console.log("%c renderer: ", "background: red", section.idref);
+      console.log("%c renderer: ", "color: blue", section.idref);
     });
   };
 

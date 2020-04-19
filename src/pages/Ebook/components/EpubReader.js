@@ -79,7 +79,6 @@ class EpubReader extends React.Component {
   }
 
   loadMetadata(metadata) {
-    console.log("%c Reading epub: ", "color: blue", metadata);
     document.title = metadata.title;
   }
 

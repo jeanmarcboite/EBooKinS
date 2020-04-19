@@ -10,6 +10,7 @@ class EReader extends React.Component {
   static getDerivedStateFromProps(props, state) {
     // Store prevId in state so we can compare when props change.
     // Clear out previously-loaded data (so we don't render stale stuff).
+    console.log("getDerivedStatefromProps", props.url, state.url);
     if (props.url !== state.url) {
       return {
         data: null,
@@ -26,6 +27,7 @@ class EReader extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log("componentDidUpdate");
     if (this.state.data === null) {
       this._loadAsyncData(this.props.url);
     }
@@ -51,6 +53,7 @@ class EReader extends React.Component {
   }
   _loadAsyncData(url) {
     if (url.startsWith("http://") || url.startsWith("https://")) {
+      console.log("Direct url : ", url);
       this._asyncRequest = null;
       this.setState({ data: url });
     } else {

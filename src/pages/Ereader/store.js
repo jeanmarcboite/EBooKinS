@@ -11,6 +11,7 @@ export const slice = createSlice({
   },
   reducers: {
     loadFile: (state, action) => {
+      console.log("load file ", action.payload);
       state.url = action.payload;
       state.location = undefined;
       localStorage.removeItem("cfi");

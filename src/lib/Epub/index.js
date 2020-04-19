@@ -26,40 +26,54 @@ export function parseEpub(epubContent) {
 // TODO return promise
 function onload(db, epub, epubContent, dispatch) {
   let jszip = new JSZip();
+  console.log(epub);
+  let _id = epub.lastModified + " " + epub.name;
   jszip.loadAsync(epubContent).then((zip) => {
-    //console.warn(zip.files);
+    console.warn(zip.files);
     zip
-      .file("content.opf")
+      .file("META-INF/container.xml")
       .async("string")
       .then((text) => {
         parseString(text, function (err, result) {
-          console.log("content.opf", result);
-          console.log(result.package.metadata[0]);
-          let cover = result.package.manifest[0].item[0].$;
-
+          let rootfile =
+            result.container.rootfiles[0].rootfile[0].$["full-path"];
           zip
-            .file(cover.href)
-            .async("array")
-            .then((array) => {
-              db.put({
-                _id: epub.name,
-                metadata: result.package.metadata[0],
-                _attachments: {
-                  epub: {
-                    name: epub.name,
-                    type: epub.type,
-                    data: epub,
-                  },
-                  cover: array,
-                },
-              })
-                .then(function (response) {
-                  console.log("db.put: ", response);
-                })
-                .catch(function (err) {
-                  console.error("Could not store in database:", err);
-                })
-                .then(dispatch(epub.name));
+            .file(rootfile)
+            .async("string")
+            .then((text) => {
+              parseString(text, function (err, result) {
+                console.log(rootfile, result);
+                console.log(result.package.metadata[0]);
+                let cover = result.package.manifest[0].item[0].$;
+
+                zip
+                  .file(cover.href)
+                  .async("array")
+                  .then((array) => {
+                    let metadata = result.package.metadata[0];
+                    db.put({
+                      _id,
+                      title: metadata["dc:title"][0],
+                      identifier: metadata["dc:identifier"][0]._,
+                      metadata,
+                      _attachments: {
+                        epub: {
+                          name: epub.name,
+                          type: epub.type,
+                          data: epub,
+                        },
+                        cover: array,
+                      },
+                    })
+                      .then(function (response) {
+                        console.log("db.put: ", response);
+                      })
+                      .catch(function (err) {
+                        console.error("Could not store in database:", err);
+                      })
+                      .then(dispatch(epub.name));
+                  });
+              });
             });
         });
       });

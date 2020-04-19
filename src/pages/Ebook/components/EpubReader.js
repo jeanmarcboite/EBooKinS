@@ -111,6 +111,7 @@ class EpubReader extends React.Component {
   }
 
   renderNoBook = () => {
+    this.setState({ tableOfContents: null });
     this.set("rightArrowVisible", false);
     this.set("leftArrowVisible", false);
   };

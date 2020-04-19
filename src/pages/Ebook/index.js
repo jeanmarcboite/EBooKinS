@@ -17,6 +17,7 @@ import {
 import "react-contexify/dist/ReactContexify.min.css";
 import { storeEpub } from "lib/Epub";
 import EReader from "./EReader";
+import DocMenu from "./components/DocMenu";
 
 const menuID = "EbookMenuID";
 
@@ -90,9 +91,11 @@ class EbookPage extends React.Component {
         <Item>
           <label onClick={() => this.$input.current.click()}>
             <BookTwoTone twoToneColor="#52c41a" />
-            Read book
+            Import Ebook
           </label>
         </Item>
+        <Separator />
+        <DocMenu db={this.context.db} />
         <Separator />
         <RoutesMenu />
       </Menu>

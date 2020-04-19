@@ -1,7 +1,9 @@
 import React from "react";
+import { ThemeContext } from "ThemeProvider";
 
 import EpubReader from "./components/EpubReader";
 class EReader extends React.Component {
+  static contextType = ThemeContext;
   state = {
     url: null,
     data: null,
@@ -41,7 +43,7 @@ class EReader extends React.Component {
 
   render() {
     if (this.state.data === null) {
-      return <div>Loading...</div>;
+      return <EpubReader loading onContextMenu={this.props.onContextMenu} />;
     } else {
       return (
         <EpubReader

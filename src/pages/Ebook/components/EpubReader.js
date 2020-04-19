@@ -60,22 +60,27 @@ class EpubReader extends React.Component {
   loadBook() {
     if (this.epub) {
       this.epub.destroy();
+      delete this.epub;
     }
 
-    console.log("%c load book", "color: green", this.props.url);
-    this.epub = new Epub({
-      url: this.props.url,
-      $viewer: this.$viewer,
-      loadMetadata: this.loadMetadata,
-      loadTableOfContents: this.loadTableOfContents,
-      onContextMenu: this.props.onContextMenu,
-      onError: (error) => {
-        this.setState({ error });
-      },
-      themes,
-    });
+    if (!this.props.url) {
+      this.renderNoBook();
+    } else {
+      console.log("%c load book", "color: green", this.props.url);
+      this.epub = new Epub({
+        url: this.props.url,
+        $viewer: this.$viewer,
+        loadMetadata: this.loadMetadata,
+        loadTableOfContents: this.loadTableOfContents,
+        onContextMenu: this.props.onContextMenu,
+        onError: (error) => {
+          this.setState({ error });
+        },
+        themes,
+      });
 
-    this.renderBook(localStorage.getItem("cfi"));
+      this.renderBook(localStorage.getItem("cfi"));
+    }
   }
 
   loadMetadata(metadata) {
@@ -105,6 +110,10 @@ class EpubReader extends React.Component {
     if (this.state[what] !== state) this.setState({ [what]: state });
   }
 
+  renderNoBook = () => {
+    this.set("rightArrowVisible", false);
+    this.set("leftArrowVisible", false);
+  };
   renderBook = (location) => {
     this.width =
       (
@@ -143,15 +152,17 @@ class EpubReader extends React.Component {
   };
 
   updateView = () => {
-    this.epub.setTheme(this.context.theme.name);
-    this.epub.book.rendition.on("rendered", () => {
-      this.epub.setFontSize(this.context.fontSize);
-    });
+    if (this.epub) {
+      this.epub.setTheme(this.context.theme.name);
+      this.epub.book.rendition.on("rendered", () => {
+        this.epub.setFontSize(this.context.fontSize);
+      });
+    }
   };
 
   setFontSize = ({ value }) => {
     this.context.setFontSize(value);
-    this.epub.setFontSize(value);
+    if (this.epub) this.epub.setFontSize(value);
   };
 
   onResizerDragStarted = () => {};

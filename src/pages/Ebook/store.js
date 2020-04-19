@@ -4,14 +4,13 @@ export const slice = createSlice({
   name: "ebook",
   initialState: {
     filename: undefined,
-    url: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
+    url: "https://s3.amazonaws.com/epubjs/books/alice.epub",
     data: "https://s3.amazonaws.com/epubjs/books/alice.epub",
     mobydick: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
     location: undefined,
   },
   reducers: {
     loadFile: (state, action) => {
-      console.log("loadFile", action.payload);
       state.url = action.payload;
       state.location = undefined;
       localStorage.removeItem("cfi");

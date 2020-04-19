@@ -139,6 +139,8 @@ class Epub {
   };
 
   display = (location) => {
+    // TODO check location error
+    console.warn(location);
     return this.book.rendition.display(location);
   };
 

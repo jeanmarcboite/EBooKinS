@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import PouchDB from "pouchdb";
+import { storeEpub } from "lib/Epub";
+
+export const db = new PouchDB("http://localhost:5984/ebookins");
 
 export const slice = createSlice({
   name: "ebook",
@@ -8,6 +12,7 @@ export const slice = createSlice({
     data: "https://s3.amazonaws.com/epubjs/books/alice.epub",
     mobydick: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
     location: undefined,
+    toImport: null,
   },
   reducers: {
     loadFile: (state, action) => {
@@ -15,13 +20,16 @@ export const slice = createSlice({
       state.location = undefined;
       localStorage.removeItem("cfi");
     },
+    importFile: (state, action) => {
+      storeEpub(db, action.payload);
+    },
     setLocation: (state, action) => {
       if (state.location !== action.payload) state.location = action.payload;
     },
   },
 });
 
-export const { loadFile, setLocation } = slice.actions;
+export const { loadFile, importFile, setLocation } = slice.actions;
 
 export const selectEbook = (state) => state.ebook;
 

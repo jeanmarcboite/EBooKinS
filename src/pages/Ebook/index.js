@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
-import { loadFile } from "./store";
+import { importFile } from "./store";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
 
@@ -18,6 +18,7 @@ import "react-contexify/dist/ReactContexify.min.css";
 import { storeEpub } from "lib/Epub";
 import EReader from "./EReader";
 import DocMenu from "./components/DocMenu";
+import db from "./store";
 
 const menuID = "EbookMenuID";
 
@@ -31,9 +32,7 @@ class EbookPage extends React.Component {
 
   loadInput = ({ target }) => {
     if (target.files.length === 1) {
-      storeEpub(this.context.db, target.files[0], (filename) => {
-        this.props.dispatch(loadFile(filename));
-      });
+      this.props.dispatch(importFile(target.files[0]));
     }
   };
 
@@ -43,6 +42,13 @@ class EbookPage extends React.Component {
       id: menuID,
       event: e,
     });
+  };
+
+  componentDidUpdate = () => {
+    if (this.props.toImport) {
+      storeEpub(db, this.props.toImport);
+      this.setState({ toImport: null });
+    }
   };
 
   componentDidMount = () => {
@@ -95,7 +101,7 @@ class EbookPage extends React.Component {
           </label>
         </Item>
         <Separator />
-        <DocMenu db={this.context.db} />
+        <DocMenu />
         <Separator />
         <RoutesMenu />
       </Menu>
@@ -115,6 +121,7 @@ class EbookPage extends React.Component {
 function mapStateToProps(state) {
   return {
     url: state.ebook.url,
+    toImport: state.ebook.toImport,
   };
 }
 

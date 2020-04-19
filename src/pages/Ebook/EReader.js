@@ -1,5 +1,6 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
+import { db } from "./store"
 
 import EpubReader from "./components/EpubReader";
 class EReader extends React.Component {
@@ -57,7 +58,7 @@ class EReader extends React.Component {
       this._asyncRequest = null;
       this.setState({ data: url });
     } else {
-      this._asyncRequest = this.context.db
+      this._asyncRequest = db
         .getAttachment(url, "epub")
         .then((epub) => {
           this.setState({ data: epub, done: true });

@@ -98,9 +98,6 @@ class EbookPage extends React.Component {
       </Menu>
     );
   };
-  componentDidUpdate() {
-    console.log("compDidUPd", this.props.url);
-  }
   render = () => {
     console.log("render Ebook", this.props.url);
     return (

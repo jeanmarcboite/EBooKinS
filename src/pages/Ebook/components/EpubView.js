@@ -86,7 +86,7 @@ class EpubView extends React.PureComponent {
 }
 
 EpubView.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.object,
   backgroundColor: PropTypes.string,
   next: PropTypes.func.isRequired,
   prev: PropTypes.func.isRequired,

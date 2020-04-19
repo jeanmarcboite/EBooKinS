@@ -7,13 +7,15 @@ class EReader extends React.Component {
   state = {
     url: null,
     data: null,
+    done: false,
   };
 
   static getDerivedStateFromProps(props, state) {
     // Store prevId in state so we can compare when props change.
     // Clear out previously-loaded data (so we don't render stale stuff).
     console.log("getDerivedStatefromProps", props.url, state.url);
-    if (props.url !== state.url) {
+
+    if (!state.done && props.url !== state.url) {
       return {
         data: null,
         url: props.url,
@@ -62,11 +64,11 @@ class EReader extends React.Component {
       console.log("Try to get in database: ", url);
       this._asyncRequest = this.context.db
         .getAttachment(url, "epub")
-        .then(function (epub) {
+        .then((epub) => {
           console.log("typeof: ", typeof epub);
-          url = URL.createObjectURL(epub);
           console.log(url);
-          this.setState({ url });
+          console.log(this.state);
+          this.setState({ data: epub, done: true });
           if (false) {
             let reader = new FileReader();
             reader.onload = () => {

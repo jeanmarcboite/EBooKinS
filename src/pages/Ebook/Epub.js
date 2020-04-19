@@ -67,6 +67,7 @@ class Epub {
     this.eventListeners = [];
     this.$viewer = $viewer;
     this.book = EpubJS();
+    console.log("reading ", this.props.url);
     this.book
       .open(this.props.url)
       .then(() => {
@@ -140,7 +141,7 @@ class Epub {
 
   display = (location) => {
     // TODO check location error
-    console.warn(location);
+    //console.warn(location);
 
     return this.book.rendition.display(undefined);
   };

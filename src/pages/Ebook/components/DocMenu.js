@@ -1,6 +1,5 @@
 import React from "react";
 import { Submenu, Item } from "react-contexify";
-import { db } from "../store";
 class DocMenu extends React.Component {
   state = {
     rows: undefined,
@@ -8,11 +7,12 @@ class DocMenu extends React.Component {
 
   constructor(props) {
     super(props);
-
+    /*
     db.allDocs().then((docs) => {
       console.log(docs.rows);
       this.setState({ rows: docs.rows });
     });
+    */
   }
   stripID = (ID) => {
     return ID.slice(14).replace(".epub", "");

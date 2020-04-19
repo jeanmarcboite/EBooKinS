@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import PouchDB from "pouchdb";
 import { storeEpub } from "lib/Epub";
-
-export const db = new PouchDB("http://localhost:5984/ebookins");
 
 export const slice = createSlice({
   name: "ebook",
@@ -21,7 +18,7 @@ export const slice = createSlice({
       localStorage.removeItem("cfi");
     },
     importFile: (state, action) => {
-      storeEpub(db, action.payload);
+      state.toImport = action.payload;
     },
     setLocation: (state, action) => {
       if (state.location !== action.payload) state.location = action.payload;

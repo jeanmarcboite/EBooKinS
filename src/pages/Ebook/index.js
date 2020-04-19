@@ -44,13 +44,6 @@ class EbookPage extends React.Component {
     });
   };
 
-  componentDidUpdate = () => {
-    if (this.props.toImport) {
-      storeEpub(db, this.props.toImport);
-      this.setState({ toImport: null });
-    }
-  };
-
   componentDidMount = () => {
     document.addEventListener("contextmenu", this.showContextMenu);
   };
@@ -121,7 +114,6 @@ class EbookPage extends React.Component {
 function mapStateToProps(state) {
   return {
     url: state.ebook.url,
-    toImport: state.ebook.toImport,
   };
 }
 

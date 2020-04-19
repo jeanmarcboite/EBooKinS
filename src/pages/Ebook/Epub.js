@@ -5,15 +5,19 @@ import * as EPUBJS_CONSTANTS from "./constants";
 const debug = false;
 
 const render = ({ viewer, book, settings, themes }) => {
+  let consoleGroup = false;
   console.assert(viewer);
   if (viewer) {
-    console.groupCollapsed(
-      "%c render book ",
-      "color: green; font-style: italic;"
-    );
-    console.log(settings);
-    console.log("viewer width: ", getComputedStyle(viewer).width);
-    console.trace();
+    if (debug) {
+      consoleGroup = true;
+      console.groupCollapsed(
+        "%c render book ",
+        "color: green; font-style: italic;"
+      );
+      console.log(settings);
+      console.log("viewer width: ", getComputedStyle(viewer).width);
+      console.trace();
+    }
 
     let rendition = book.renderTo(viewer, settings);
     for (let theme in themes) {
@@ -46,8 +50,7 @@ const render = ({ viewer, book, settings, themes }) => {
         console.log("%c Resized to: ", "color: red", size);
       });
     }
-
-    console.groupEnd();
+    if (consoleGroup) console.groupEnd();
   }
 };
 
@@ -67,11 +70,10 @@ class Epub {
     this.eventListeners = [];
     this.$viewer = $viewer;
     this.book = EpubJS();
-    console.log("reading ", this.props.url);
     this.book
       .open(this.props.url)
       .then(() => {
-        console.log("%c book open ", "color: green", this.props.url);
+        // console.log("%c book open ", "color: green", this.props.url);
       })
       .catch(onError);
     this.book.loaded.navigation.then(loadTableOfContents);
@@ -123,7 +125,7 @@ class Epub {
     document.addEventListener("keyup", this.keyListener, false);
 
     this.book.rendition.once("rendered", (section, iFrameView) => {
-      console.log(this.book.rendition);
+      if (debug) console.log(this.book.rendition);
       this.addEventListener(
         iFrameView.document.documentElement,
         "contextmenu",
@@ -134,16 +136,15 @@ class Epub {
     let displayed = this.display(location);
 
     displayed.then(function (section) {
-      // -- do stuff
-      console.log("%c renderer: ", "color: blue", section.idref);
+      if (debug) console.log("%c renderer: ", "color: blue", section.idref);
     });
   };
 
   display = (location) => {
     // TODO check location error
-    //console.warn(location);
+    console.log("location", location);
 
-    return this.book.rendition.display(undefined);
+    return this.book.rendition.display(location);
   };
 
   setTheme = (theme) => {

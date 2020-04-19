@@ -99,7 +99,6 @@ class EbookPage extends React.Component {
     );
   };
   render = () => {
-    console.log("render Ebook", this.props.url);
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}

@@ -66,7 +66,7 @@ class EpubReader extends React.Component {
     if (!this.props.url) {
       this.renderNoBook();
     } else {
-      console.log("%c load book", "color: green", this.props.url);
+      // console.log("%c load book", "color: green", this.props.url);
       this.epub = new Epub({
         url: this.props.url,
         $viewer: this.$viewer,
@@ -244,6 +244,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "EpubReader",
 };

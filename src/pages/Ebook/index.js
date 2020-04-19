@@ -31,8 +31,7 @@ class EbookPage extends React.Component {
   loadInput = ({ target }) => {
     if (target.files.length === 1) {
       storeEpub(this.context.db, target.files[0], (filename) => {
-        console.log(filename);
-        this.props.dispatch(loadFile, filename);
+        this.props.dispatch(loadFile(filename));
       });
     }
   };

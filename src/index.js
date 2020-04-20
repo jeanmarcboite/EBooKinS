@@ -13,10 +13,8 @@ const App = () => {
   return (
     <PersistGate loading={null} persistor={persistor}>
       <ThemeContextProvider>
-        <DatabaseContextProvider>
-          <Database />
-          <Routes />
-        </DatabaseContextProvider>
+        <Database />
+        <Routes />
       </ThemeContextProvider>
     </PersistGate>
   );

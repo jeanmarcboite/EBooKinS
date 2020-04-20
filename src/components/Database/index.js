@@ -69,7 +69,7 @@ class Database extends React.Component {
         .file(cover.href)
         .async("array")
         .then((coverData) => {
-          this.context.db
+          this.context.ebooks
             .put({
               _id,
               title,

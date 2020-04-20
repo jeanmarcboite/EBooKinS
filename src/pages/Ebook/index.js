@@ -62,14 +62,14 @@ class EbookPage extends React.Component {
   };
 
   loadFile(docId) {
-    this.context.db
+    this.context.ebooks
       .getAttachment(docId, "epub")
       .then((epub) => this.props.dispatch(loadFile(epub)));
   }
 
   showContextMenu = (e) => {
     e.preventDefault();
-    this.context.db.allDocs().then((docs) => {
+    this.context.ebooks.allDocs().then((docs) => {
       let items = docs.rows.map((item) => (
         <Item key={item.id} onClick={() => this.loadFile(item.id)}>
           {item.id.slice(14).replace(".epub", "")}

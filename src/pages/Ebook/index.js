@@ -17,7 +17,7 @@ import {
   contextMenu,
 } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
-import EReader from "./EReader";
+import EpubReader from "./components/EpubReader";
 import DocMenu from "./components/DocMenu";
 
 const menuID = "EbookMenuID";
@@ -61,14 +61,17 @@ class EbookPage extends React.Component {
     }
   };
 
+  loadFile(docId) {
+    this.context.db
+      .getAttachment(docId, "epub")
+      .then((epub) => this.props.dispatch(loadFile(epub)));
+  }
+
   showContextMenu = (e) => {
     e.preventDefault();
     this.context.db.allDocs().then((docs) => {
       let items = docs.rows.map((item) => (
-        <Item
-          key={item.id}
-          onClick={() => this.props.dispatch(loadFile(item.id))}
-        >
+        <Item key={item.id} onClick={() => this.loadFile(item.id)}>
           {item.id.slice(14).replace(".epub", "")}
         </Item>
       ));
@@ -121,7 +124,7 @@ class EbookPage extends React.Component {
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}
         <ContextMenu onImport={this.importEpub} />
-        <EReader url={this.props.url} onContextMenu={this.openContextMenu} />
+        <EpubReader url={this.props.url} onContextMenu={this.openContextMenu} />
       </Hotkeys>
     );
   };

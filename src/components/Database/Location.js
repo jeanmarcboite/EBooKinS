@@ -36,6 +36,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(LocationDatabase);
 
 LocationDatabase.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Location",
 };

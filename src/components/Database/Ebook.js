@@ -100,6 +100,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EbookDatabase);
 
 EbookDatabase.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Ebooks Database",
 };

@@ -62,9 +62,14 @@ class EbookPage extends React.Component {
   };
 
   loadFile(docId) {
-    this.context.ebooks
-      .getAttachment(docId, "epub")
-      .then((url) => this.props.dispatch(loadFile({ docId, url })));
+    this.context.ebooks.getAttachment(docId, "epub").then((url) =>
+      this.context.locations
+        .get(docId)
+        .then((doc) => {
+          this.props.dispatch(loadFile({ docId, url, location: doc.location }));
+        })
+        .catch(() => this.props.dispatch(loadFile({ docId, url })))
+    );
   }
 
   showContextMenu = (e) => {

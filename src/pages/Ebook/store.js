@@ -12,7 +12,8 @@ export const slice = createSlice({
   reducers: {
     loadFile: (state, action) => {
       state.docId = action.payload.docId;
-      state.url = action.payload.url
+      state.url = action.payload.url;
+      state.location = action.payload.location;
     },
     toImport: (state, action) => {
       state.toImport = action.payload;

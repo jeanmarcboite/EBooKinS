@@ -103,7 +103,7 @@ function mapStateToProps(state) {
 const ConnectedEpubView = connect(mapStateToProps)(EpubView);
 
 EpubView.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Epub View",
 };
 

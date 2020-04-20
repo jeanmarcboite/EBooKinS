@@ -5,7 +5,7 @@ import { parseString as parseXml } from "xml2js";
 import { toImport } from "pages/Ebook/store";
 import { DatabaseContext } from "DatabaseProvider";
 
-class Database extends React.Component {
+class EbookDatabase extends React.Component {
   static contextType = DatabaseContext;
 
   render = () => null;
@@ -97,9 +97,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Database);
+export default connect(mapStateToProps)(EbookDatabase);
 
-Database.whyDidYouRender = {
+EbookDatabase.whyDidYouRender = {
   logOnDifferentValues: true,
-  customName: "Database",
+  customName: "Ebooks Database",
 };

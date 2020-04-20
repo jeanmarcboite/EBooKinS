@@ -64,7 +64,7 @@ class EbookPage extends React.Component {
   loadFile(docId) {
     this.context.ebooks
       .getAttachment(docId, "epub")
-      .then((epub) => this.props.dispatch(loadFile(epub)));
+      .then((url) => this.props.dispatch(loadFile({ docId, url })));
   }
 
   showContextMenu = (e) => {
@@ -124,7 +124,12 @@ class EbookPage extends React.Component {
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}
         <ContextMenu onImport={this.importEpub} />
-        <EpubReader url={this.props.url} onContextMenu={this.openContextMenu} />
+        <EpubReader
+          docId={this.props.ebook.docId}
+          url={this.props.ebook.url}
+          location={this.props.ebook.location}
+          onContextMenu={this.openContextMenu}
+        />
       </Hotkeys>
     );
   };
@@ -132,7 +137,7 @@ class EbookPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    url: state.ebook.url,
+    ebook: state.ebook,
   };
 }
 

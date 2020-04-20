@@ -13,6 +13,7 @@ import Toc from "./Toc";
 import Epub from "../Epub";
 
 import EpubView from "./EpubView";
+import Location from "components/Database/Location"
 import SelectFontSize from "components/SelectFontSize";
 import SelectTheme from "components/SelectTheme";
 
@@ -28,8 +29,7 @@ class EpubReader extends React.Component {
     this.$leftPane = React.createRef();
 
     this.state = {
-      // if state.url != props.url, we need to load the book
-      url: this.props.url,
+      docId: this.props.docId,
       tableOfContents: null,
       chapter: null,
       error: null,
@@ -44,12 +44,12 @@ class EpubReader extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.url !== this.props.url) {
-      this.setState({ url: this.props.url, error: null });
+    if (this.state.docId !== this.props.docId) {
+      this.setState({ docId: this.props.docId, error: null });
     }
 
     if (
-      this.state.url !== this.props.url ||
+      this.state.docId !== this.props.docId ||
       this.leftPanelSize !== this.props.settings.leftPanelSize
     ) {
       this.loadBook();
@@ -79,7 +79,7 @@ class EpubReader extends React.Component {
         themes,
       });
 
-      this.renderBook(localStorage.getItem("cfi"));
+      this.renderBook(this.props.location);
     }
   }
 
@@ -199,6 +199,7 @@ class EpubReader extends React.Component {
   render = () => {
     return (
       <div ref={this.$container} className={style.reader}>
+        <Location/>
         <SplitPane
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}

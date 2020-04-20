@@ -135,16 +135,20 @@ class Epub {
     });
     let displayed = this.display(location);
 
-    displayed.then(function (section) {
-      if (debug) console.log("%c renderer: ", "color: blue", section.idref);
-    });
+    displayed
+      .then(function (section) {
+        if (debug) console.log("%c renderer: ", "color: blue", section.idref);
+      })
+      .catch((err) => {
+        console.warn("display location", location);
+        console.warn(err);
+        this.display();
+      });
   };
 
   display = (location) => {
-    // TODO check location error
-    console.log("location", location);
-
-    return this.book.rendition.display(location);
+    if (location) return this.book.rendition.display(location);
+    return this.book.rendition.display();
   };
 
   setTheme = (theme) => {

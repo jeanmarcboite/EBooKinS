@@ -3,6 +3,20 @@ import { connect } from "react-redux";
 
 import { DatabaseContext } from "DatabaseProvider";
 
+const put = (db, args) => {
+  db.put(args).catch((err) => console.error(err));
+};
+const update = (db, _id, location) => {
+  db.get(_id)
+    .then((doc) => {
+      // console.log("must remove", doc);
+      db.remove(doc).then(() => put(db, { _id, location }));
+    })
+    .catch(() => {
+      console.log("the above error is totally normal");
+      put(db, { _id, location });
+    });
+};
 class LocationDatabase extends React.Component {
   static contextType = DatabaseContext;
 
@@ -10,10 +24,7 @@ class LocationDatabase extends React.Component {
 
   componentDidUpdate() {
     // store location in database
-    this.context.locations.put({
-      _id: this.props.docId,
-      location: this.props.location,
-    });
+    update(this.context.locations, this.props.docId, this.props.location);
   }
 }
 function mapStateToProps(state) {

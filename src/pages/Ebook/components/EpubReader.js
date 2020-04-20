@@ -13,7 +13,7 @@ import Toc from "./Toc";
 import Epub from "../Epub";
 
 import EpubView from "./EpubView";
-import Location from "components/Database/Location"
+import Location from "components/Database/Location";
 import SelectFontSize from "components/SelectFontSize";
 import SelectTheme from "components/SelectTheme";
 
@@ -36,6 +36,7 @@ class EpubReader extends React.Component {
       leftArrowVisible: true,
       rightArrowVisible: true,
       href: null,
+      location: this.props.location,
     };
   }
 
@@ -130,7 +131,7 @@ class EpubReader extends React.Component {
       this.setState({ href });
     });
     this.epub.book.rendition.on("relocated", (location) => {
-      localStorage.setItem("cfi", location.start.cfi);
+      this.setState({ location: location.start.cfi });
 
       if (location.atEnd) {
         this.set("rightArrowVisible", false);
@@ -199,7 +200,7 @@ class EpubReader extends React.Component {
   render = () => {
     return (
       <div ref={this.$container} className={style.reader}>
-        <Location/>
+        <Location docId={this.props.docId} location={this.state.location} />
         <SplitPane
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}
@@ -249,6 +250,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "EpubReader",
 };

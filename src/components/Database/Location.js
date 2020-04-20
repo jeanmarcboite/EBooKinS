@@ -4,10 +4,17 @@ import { connect } from "react-redux";
 import { DatabaseContext } from "DatabaseProvider";
 
 class LocationDatabase extends React.Component {
-    static contextType = DatabaseContext;
+  static contextType = DatabaseContext;
 
-    render = () => null;
+  render = () => null;
 
+  componentDidUpdate() {
+    // store location in database
+    this.context.locations.put({
+      _id: this.props.docId,
+      location: this.props.location,
+    });
+  }
 }
 function mapStateToProps(state) {
   return {
@@ -16,3 +23,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(LocationDatabase);
+
+LocationDatabase.whyDidYouRender = {
+  logOnDifferentValues: true,
+  customName: "Location",
+};

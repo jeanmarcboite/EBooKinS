@@ -1,6 +1,5 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
-import { db } from "./store";
 
 import EpubReader from "./components/EpubReader";
 class EReader extends React.Component {

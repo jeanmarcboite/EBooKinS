@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
-import { importFile } from "./store";
+import { toImport } from "./store";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
 
@@ -15,10 +15,8 @@ import {
   contextMenu,
 } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
-import { storeEpub } from "lib/Epub";
 import EReader from "./EReader";
 import DocMenu from "./components/DocMenu";
-import db from "./store";
 
 const menuID = "EbookMenuID";
 
@@ -32,7 +30,7 @@ class EbookPage extends React.Component {
 
   loadInput = ({ target }) => {
     if (target.files.length === 1) {
-      this.props.dispatch(importFile(target.files[0]));
+      this.props.dispatch(toImport(target.files[0]));
     }
   };
 

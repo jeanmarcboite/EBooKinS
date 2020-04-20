@@ -1,27 +1,36 @@
 import React from "react";
 import { Submenu, Item } from "react-contexify";
+import { DatabaseContext } from "DatabaseProvider";
+
+const areEqual = (a, b) => {
+  if (a === undefined) return b === undefined;
+  if (b === undefined) return false;
+  if (a.length !== b.length) return false;
+  const sa = a.sort();
+  const sb = b.sort();
+
+  return sa.every((v, k) => {
+    return v.id === sb[k].id;
+  });
+};
 class DocMenu extends React.Component {
+  static contextType = DatabaseContext;
+
   state = {
-    rows: undefined,
+    rows: [],
   };
 
-  constructor(props) {
-    super(props);
-    /*
-    db.allDocs().then((docs) => {
-      console.log(docs.rows);
-      this.setState({ rows: docs.rows });
+  componentDidUpdate(previousProps, previousState) {
+    // DocMenu updates because the mouseEvent is in the props
+    this.context.db.allDocs().then((docs) => {
+      if (!areEqual(docs.rows, this.state.rows))
+        this.setState({ rows: docs.rows });
     });
-    */
   }
-  stripID = (ID) => {
-    return ID.slice(14).replace(".epub", "");
-  };
-  items = () => {
-    let rows = this.state.rows ? this.state.rows : [];
 
-    return rows.map((item) => (
-      <Item key={item.id}>{this.stripID(item.id)}</Item>
+  items = () => {
+    return this.state.rows.map((item) => (
+      <Item key={item.id}>{item.id.slice(14).replace(".epub", "")}</Item>
     ));
   };
   render = () => {
@@ -29,4 +38,8 @@ class DocMenu extends React.Component {
   };
 }
 
+DocMenu.whyDidYouRender = {
+  logOnDifferentValues: false,
+  customName: "DocMenu",
+};
 export default DocMenu;

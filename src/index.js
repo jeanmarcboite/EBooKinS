@@ -7,7 +7,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
 import Routes from "./routes";
 import { ThemeContextProvider } from "ThemeProvider";
-import Database, { DatabaseContextProvider } from "Database";
+import { DatabaseContextProvider } from "DatabaseProvider";
+import Database from "components/Database";
 const App = () => {
   return (
     <PersistGate loading={null} persistor={persistor}>

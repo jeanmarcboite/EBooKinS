@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { storeEpub } from "lib/Epub";
 
 export const slice = createSlice({
   name: "ebook",
@@ -17,7 +16,7 @@ export const slice = createSlice({
       state.location = undefined;
       localStorage.removeItem("cfi");
     },
-    importFile: (state, action) => {
+    toImport: (state, action) => {
       state.toImport = action.payload;
     },
     setLocation: (state, action) => {
@@ -26,7 +25,7 @@ export const slice = createSlice({
   },
 });
 
-export const { loadFile, importFile, setLocation } = slice.actions;
+export const { loadFile, toImport, setLocation } = slice.actions;
 
 export const selectEbook = (state) => state.ebook;
 

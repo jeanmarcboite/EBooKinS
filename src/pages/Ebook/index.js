@@ -2,8 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
 import { toImport } from "./store";
+import { DatabaseContext } from "DatabaseProvider";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
+import { loadFile } from "./store";
 
 import RoutesMenu from "routes/Menu";
 import {
@@ -20,8 +22,33 @@ import DocMenu from "./components/DocMenu";
 
 const menuID = "EbookMenuID";
 
-class EbookPage extends React.Component {
+class ContextMenu extends React.Component {
   static contextType = ThemeContext;
+
+  render() {
+    return (
+      <Menu
+        id={menuID}
+        theme={theme[this.context.theme.type]}
+        animation={animation.flip}
+      >
+        <Item>
+          <label onClick={this.props.onImport}>
+            <BookTwoTone twoToneColor="#52c41a" />
+            Import Ebook
+          </label>
+        </Item>
+        <Separator />
+        <DocMenu />
+        <Separator />
+        <RoutesMenu />
+      </Menu>
+    );
+  }
+}
+
+class EbookPage extends React.Component {
+  static contextType = DatabaseContext;
   constructor(props) {
     super(props);
 
@@ -36,9 +63,17 @@ class EbookPage extends React.Component {
 
   showContextMenu = (e) => {
     e.preventDefault();
-    contextMenu.show({
-      id: menuID,
-      event: e,
+    this.context.db.allDocs().then((docs) => {
+      let items = docs.rows.map((item) => (
+        <Item key={item.id} onClick={() => this.dispatch(loadFile(item.id))}>
+          {item.id.slice(14).replace(".epub", "")}
+        </Item>
+      ));
+      contextMenu.show({
+        id: menuID,
+        event: e,
+        props: { items },
+      });
     });
   };
 
@@ -78,31 +113,11 @@ class EbookPage extends React.Component {
     );
   };
 
-  renderMenu = () => {
-    return (
-      <Menu
-        id={menuID}
-        theme={theme[this.context.theme.type]}
-        animation={animation.flip}
-      >
-        <Item>
-          <label onClick={() => this.$input.current.click()}>
-            <BookTwoTone twoToneColor="#52c41a" />
-            Import Ebook
-          </label>
-        </Item>
-        <Separator />
-        <DocMenu />
-        <Separator />
-        <RoutesMenu />
-      </Menu>
-    );
-  };
   render = () => {
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}
-        {this.renderMenu()}
+        <ContextMenu onImport={this.importEpub} />
         <EReader url={this.props.url} onContextMenu={this.openContextMenu} />
       </Hotkeys>
     );

@@ -1,8 +1,7 @@
 import React from "react";
-import { Submenu, Item } from "react-contexify";
-import { DatabaseContext } from "DatabaseProvider";
+import { Submenu } from "react-contexify";
 
-const areEqual = (a, b) => {
+export const areEqual = (a, b) => {
   if (a === undefined) return b === undefined;
   if (b === undefined) return false;
   if (a.length !== b.length) return false;
@@ -13,33 +12,19 @@ const areEqual = (a, b) => {
     return v.id === sb[k].id;
   });
 };
-class DocMenu extends React.Component {
-  static contextType = DatabaseContext;
-
-  state = {
-    rows: [],
-  };
-
-  componentDidUpdate(previousProps, previousState) {
-    // DocMenu updates because the mouseEvent is in the props
-    this.context.db.allDocs().then((docs) => {
-      if (!areEqual(docs.rows, this.state.rows))
-        this.setState({ rows: docs.rows });
-    });
-  }
-
-  items = () => {
-    return this.state.rows.map((item) => (
-      <Item key={item.id}>{item.id.slice(14).replace(".epub", "")}</Item>
-    ));
-  };
+class DocMenu extends React.PureComponent {
   render = () => {
-    return <Submenu label="Load from database">{this.items()}</Submenu>;
+    return (
+      <Submenu label="Load from database">
+        {this.props.propsFromTrigger.items}
+      </Submenu>
+    );
   };
 }
 
+//export default connect(mapStateToProps)(DocMenu);
+export default DocMenu;
 DocMenu.whyDidYouRender = {
   logOnDifferentValues: false,
-  customName: "DocMenu",
+  customName: "udpate doc items",
 };
-export default DocMenu;

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import JSZip from "jszip";
 import { parseString as parseXml } from "xml2js";
-import { toImport } from "pages/Ebook/store";
+import { toImport, loadFile } from "pages/Ebook/store";
 import { DatabaseContext } from "DatabaseProvider";
 
 class EbookDatabase extends React.Component {
@@ -12,12 +12,14 @@ class EbookDatabase extends React.Component {
 
   componentDidUpdate = () => {
     if (this.props.toImport) {
+      let file = this.props.toImport;
       this.put(this.props.toImport)
         .catch((err) => {
           console.error(err);
         })
         .then((e) => {
           this.props.dispatch(toImport(null));
+          this.props.dispatch(loadFile({ docId: file.name }));
         });
     }
   };

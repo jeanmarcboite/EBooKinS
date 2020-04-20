@@ -116,6 +116,9 @@ class EpubReader extends React.Component {
     if (this.state.tableOfContents) this.setState({ tableOfContents: null });
     this.set("rightArrowVisible", false);
     this.set("leftArrowVisible", false);
+    console.log("renderNoBook", this.props);
+    if (this.props.docId) document.title = this.props.docId + " [no book]";
+    else document.title = "EbooKinS";
   };
   renderBook = (location) => {
     this.width =

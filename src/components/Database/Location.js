@@ -33,9 +33,10 @@ class LocationDatabase extends React.Component {
   render = () => null;
 
   componentDidUpdate() {
-    // store location in database
-    updateDocId(this.context.locations, this.props.docId);
-    update(this.context.locations, this.props.docId, this.props.location);
+    if (this.props.docId) {
+      updateDocId(this.context.locations, this.props.docId);
+      update(this.context.locations, this.props.docId, this.props.location);
+    }
   }
 }
 function mapStateToProps(state) {

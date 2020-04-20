@@ -70,6 +70,11 @@ class EbookPage extends React.Component {
     }
   };
 
+  componentDidUpdate = () => {
+    if (this.props.ebook.docId && !this.props.ebook.url)
+      this.loadFile(this.props.ebook.docId);
+  };
+
   componentWillUnmount = () => {
     document.removeEventListener("contextmenu", this.showContextMenu);
   };

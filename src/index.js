@@ -7,7 +7,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
 import Routes from "./routes";
 import { ThemeContextProvider } from "ThemeProvider";
-import { DatabaseContextProvider } from "DatabaseProvider";
 import Database from "components/Database/Ebook";
 const App = () => {
   return (

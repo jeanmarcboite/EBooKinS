@@ -3,9 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const slice = createSlice({
   name: "ebook",
   initialState: {
-    docId: "https://s3.amazonaws.com/epubjs/books/alice.epub",
-    url: "https://s3.amazonaws.com/epubjs/books/alice.epub",
+    docId: undefined,
+    url: undefined,
     location: undefined,
+    alice: "https://s3.amazonaws.com/epubjs/books/alice.epub",
     mobydick: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",
     toImport: null,
   },

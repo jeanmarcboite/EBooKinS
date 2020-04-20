@@ -75,6 +75,7 @@ class EpubReader extends React.Component {
         loadTableOfContents: this.loadTableOfContents,
         onContextMenu: this.props.onContextMenu,
         onError: (error) => {
+          console.error(error);
           this.setState({ error });
         },
         themes,
@@ -112,7 +113,7 @@ class EpubReader extends React.Component {
   }
 
   renderNoBook = () => {
-    this.setState({ tableOfContents: null });
+    if (this.state.tableOfContents) this.setState({ tableOfContents: null });
     this.set("rightArrowVisible", false);
     this.set("leftArrowVisible", false);
   };

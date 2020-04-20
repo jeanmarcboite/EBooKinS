@@ -55,6 +55,25 @@ class EbookPage extends React.Component {
     this.$input = React.createRef();
   }
 
+  componentDidMount = () => {
+    document.addEventListener("contextmenu", this.showContextMenu);
+
+    if (!this.props.ebook.docId) {
+      this.context.locations
+        .get("@current")
+        .then((doc) => {
+          this.loadFile(doc.docId);
+        })
+        .catch(() => {
+          console.log("The above error is totally normal");
+        });
+    }
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener("contextmenu", this.showContextMenu);
+  };
+
   loadInput = ({ target }) => {
     if (target.files.length === 1) {
       this.props.dispatch(toImport(target.files[0]));
@@ -86,14 +105,6 @@ class EbookPage extends React.Component {
         props: { items },
       });
     });
-  };
-
-  componentDidMount = () => {
-    document.addEventListener("contextmenu", this.showContextMenu);
-  };
-
-  componentWillUnmount = () => {
-    document.removeEventListener("contextmenu", this.showContextMenu);
   };
   onKeyDown = (keyName, e, handle) => {
     // eslint-disable-next-line default-case

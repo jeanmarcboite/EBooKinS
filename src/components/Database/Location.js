@@ -17,6 +17,16 @@ const update = (db, _id, location) => {
       put(db, { _id, location });
     });
 };
+
+const updateDocId = (db, docId) => {
+  db.get("@current")
+    .then((current) => {
+      if (current.docId !== docId) {
+        db.remove(current).then(() => db.put({ _id: "@current", docId }));
+      }
+    })
+    .catch((err) => db.put({ _id: "@current", docId }));
+};
 class LocationDatabase extends React.Component {
   static contextType = DatabaseContext;
 
@@ -24,6 +34,7 @@ class LocationDatabase extends React.Component {
 
   componentDidUpdate() {
     // store location in database
+    updateDocId(this.context.locations, this.props.docId);
     update(this.context.locations, this.props.docId, this.props.location);
   }
 }

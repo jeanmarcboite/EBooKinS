@@ -18,6 +18,7 @@ import {
 import "react-contexify/dist/ReactContexify.min.css";
 import EpubReader from "./components/EpubReader";
 import DocMenu from "./components/DocMenu";
+import DB from "lib/Database";
 
 const menuID = "EbookMenuID";
 
@@ -73,17 +74,21 @@ class EbookPage extends React.Component {
 
   showContextMenu = (e) => {
     e.preventDefault();
-    let docs = { rows: [] };
-    let items = docs.rows.map((item) => (
-      <Item key={item.id} onClick={() => this.loadFile(item.id)}>
-        {item.id.slice(14).replace(".epub", "")}
-      </Item>
-    ));
-    contextMenu.show({
-      id: menuID,
-      event: e,
-      props: { items },
-    });
+    DB.ebooks.db
+      .allDocs()
+      .then((docs) => {
+        let items = docs.rows.map((item) => (
+          <Item key={item.id} onClick={() => this.loadFile(item.id)}>
+            {item.id.slice(14).replace(".epub", "")}
+          </Item>
+        ));
+        contextMenu.show({
+          id: menuID,
+          event: e,
+          props: { items },
+        });
+      })
+      .catch(console.error);
   };
   onKeyDown = (keyName, e, handle) => {
     // eslint-disable-next-line default-case

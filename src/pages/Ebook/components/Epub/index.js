@@ -52,10 +52,7 @@ const render = ({ view, book, settings, themes }) => {
 };
 
 class Epub {
-  constructor(props) {
-    const { onContextMenu, themes } = props;
-    this.props = { onContextMenu, themes };
-
+  constructor() {
     this.eventListeners = [];
     this.book = EpubJS();
   }
@@ -82,7 +79,7 @@ class Epub {
 
   renderBook = (view, width, themes, location, onContextMenu) => {
     render({
-      view: this,
+      view,
       book: this.book,
       themes,
       settings: {

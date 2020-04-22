@@ -18,7 +18,6 @@ import SelectTheme from "components/SelectTheme";
 
 import ComputedStyles from "components/ComputedStyles";
 import DB from "lib/Database";
-import { ThemeProvider } from "styled-components";
 
 class EpubReader extends React.Component {
   static contextType = ThemeContext;
@@ -31,7 +30,7 @@ class EpubReader extends React.Component {
     this.$leftPane = React.createRef();
 
     this.state = {
-      url: props.url,
+      url: undefined,
       tableOfContents: null,
       chapter: null,
       error: null,
@@ -43,6 +42,7 @@ class EpubReader extends React.Component {
 
   componentDidMount() {
     // TODO getCurrent
+    this.setState({ url: this.props.url });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,8 +65,8 @@ class EpubReader extends React.Component {
     this.epub = new Epub();
     this.epub.book
       .open(this.state.url)
-      .then((result) => {
-        console.log("%c book open ", "color: green", result);
+      .then(() => {
+        console.log("%c book open ", "color: green", this.state.url);
         this.epub.book.loaded.navigation.then(this.loadTableOfContents);
         this.epub.book.loaded.metadata.then(this.loadMetadata);
       })

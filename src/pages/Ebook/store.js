@@ -10,7 +10,7 @@ const links = {
 export const slice = createSlice({
   name: "ebook",
   initialState: {
-    url: undefined,
+    url: links.alice,
     error: "",
   },
   reducers: {

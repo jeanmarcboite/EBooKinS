@@ -15,7 +15,7 @@ export const slice = createSlice({
   },
   reducers: {
     loadFile: (state, action) => {
-      state.ebook = { _id: action.payload };
+      state.url = action.payload;
     },
     importFile: (state, action) => {
       DB.ebooks

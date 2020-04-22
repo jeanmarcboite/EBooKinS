@@ -30,7 +30,7 @@ class EpubReader extends React.Component {
     this.$leftPane = React.createRef();
 
     this.state = {
-      url: undefined,
+      leftPanelSize: 0,
       tableOfContents: null,
       chapter: null,
       error: null,
@@ -42,13 +42,15 @@ class EpubReader extends React.Component {
 
   componentDidMount() {
     // TODO getCurrent
-    this.setState({ url: this.props.url });
+    // TODO better setState to run componentDidUpdate
+    this.setState({ leftPanelSize: this.props.leftPanelSize });
   }
 
   componentDidUpdate(prevProps, prevState) {
+    //console.log(this.state, this.props, prevProps, prevState);
     if (
-      this.state.url !== prevState.url ||
-      this.leftPanelSize !== this.props.settings.leftPanelSize
+      prevProps.url !== this.props.url ||
+      prevState.leftPanelSize !== this.props.leftPanelSize
     ) {
       this.openEpub();
     }
@@ -62,11 +64,27 @@ class EpubReader extends React.Component {
       delete this.epub;
     }
 
+    let url = this.props.url;
+    if (url.match("^https?://")) {
+      this.open(this.props.url);
+    } else {
+      DB.ebooks
+        .get(this.props.url)
+        .then((data) => this.open(data))
+        .catch((error) => this.setState({ error }));
+    }
+  };
+
+  open = (url) => {
+    if (this.epub) {
+      this.epub.destroy();
+      delete this.epub;
+    }
     this.epub = new Epub();
     this.epub.book
-      .open(this.state.url)
+      .open(url)
       .then(() => {
-        console.log("%c book open ", "color: green", this.state.url);
+        console.log("%c book open ", "color: green", this.props.url);
         this.epub.book.loaded.navigation.then(this.loadTableOfContents);
         this.epub.book.loaded.metadata.then(this.loadMetadata);
       })
@@ -149,7 +167,6 @@ class EpubReader extends React.Component {
         parseInt(getComputedStyle(this.$leftPane.current).width) -
         15
       ).toString() + "px";
-    this.leftPanelSize = this.props.settings.leftPanelSize;
 
     this.epub.renderBook(
       this.$view.current,
@@ -234,7 +251,7 @@ class EpubReader extends React.Component {
       <div ref={this.$container} className={style.reader}>
         <SplitPane
           split="vertical"
-          defaultSize={this.props.settings.leftPanelSize}
+          defaultSize={this.props.leftPanelSize}
           resizerClassName={style.Resizer}
           onDragStarted={this.onResizerDragStarted}
           onDrag={this.onResizerDrag}
@@ -274,13 +291,13 @@ class EpubReader extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    settings: state.settings,
+    leftPanelSize: state.settings.leftPanelSize,
   };
 }
 
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "EpubReader",
 };

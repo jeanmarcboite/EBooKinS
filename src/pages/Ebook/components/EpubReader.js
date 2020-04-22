@@ -92,37 +92,11 @@ class EpubReader extends React.Component {
         this.setState({ error });
       });
 
-    this.renderBook();
+    DB.locations
+      .getItem(this.props.url)
+      .then(this.renderBook)
+      .catch(() => this.renderBook());
   };
-
-  loadBook() {
-    if (this.epub) {
-      this.epub.destroy();
-      delete this.epub;
-    }
-
-    DB.ebooks
-      .get(this.state.epub._id)
-      .then((url) => {
-        this.epub = new Epub({
-          url,
-          $viewer: this.$viewer,
-          loadMetadata: this.loadMetadata,
-          loadTableOfContents: this.loadTableOfContents,
-          onContextMenu: this.props.onContextMenu,
-          onError: (error) => {
-            console.error(error);
-            this.setState({ error });
-          },
-          themes,
-        });
-
-        this.renderBook();
-
-        // TODO this.renderBook(this.props.ebook.location);
-      })
-      .catch(this.renderNoBook);
-  }
 
   loadMetadata(metadata) {
     document.title = metadata.title;
@@ -180,6 +154,9 @@ class EpubReader extends React.Component {
     });
     this.epub.book.rendition.on("relocated", (location) => {
       this.setState({ location: location.start.cfi });
+      DB.locations
+        .setItem(this.props.url, location.start.cfi)
+        .catch(console.error);
 
       if (location.atEnd) {
         this.set("rightArrowVisible", false);

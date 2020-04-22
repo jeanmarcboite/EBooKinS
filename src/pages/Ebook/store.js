@@ -11,7 +11,6 @@ export const slice = createSlice({
   name: "ebook",
   initialState: {
     url: links.alice,
-    error: "",
   },
   reducers: {
     loadFile: (state, action) => {

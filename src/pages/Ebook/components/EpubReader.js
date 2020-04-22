@@ -64,8 +64,7 @@ class EpubReader extends React.Component {
       delete this.epub;
     }
 
-    let url = this.props.url;
-    if (url.match("^https?://")) {
+    if (this.props.url.match("^https?://")) {
       this.open(this.props.url);
     } else {
       DB.ebooks

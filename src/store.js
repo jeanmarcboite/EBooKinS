@@ -5,14 +5,9 @@ import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
-const persistConfig = {
-  key: "bookins",
-  storage,
-};
-
 let reducer = {
-  ebook: EbookReducer,
-  settings: persistReducer(persistConfig, SettingsReducer),
+  ebook: persistReducer({ key: "ebook", storage }, EbookReducer),
+  settings: persistReducer({ key: "settings", storage }, SettingsReducer),
 };
 
 export const store = configureStore({

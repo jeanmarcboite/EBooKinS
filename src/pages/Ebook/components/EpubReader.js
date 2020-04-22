@@ -50,7 +50,8 @@ class EpubReader extends React.Component {
     //console.log(this.state, this.props, prevProps, prevState);
     if (
       prevProps.url !== this.props.url ||
-      prevState.leftPanelSize !== this.props.leftPanelSize
+      prevProps.leftPanelSize !== this.props.leftPanelSize ||
+      !this.epub
     ) {
       console.log("openEpub");
       this.openEpub();

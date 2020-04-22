@@ -73,17 +73,16 @@ class EbookPage extends React.Component {
 
   showContextMenu = (e) => {
     e.preventDefault();
-    this.context.ebooks.allDocs().then((docs) => {
-      let items = docs.rows.map((item) => (
-        <Item key={item.id} onClick={() => this.loadFile(item.id)}>
-          {item.id.slice(14).replace(".epub", "")}
-        </Item>
-      ));
-      contextMenu.show({
-        id: menuID,
-        event: e,
-        props: { items },
-      });
+    let docs = { rows: [] };
+    let items = docs.rows.map((item) => (
+      <Item key={item.id} onClick={() => this.loadFile(item.id)}>
+        {item.id.slice(14).replace(".epub", "")}
+      </Item>
+    ));
+    contextMenu.show({
+      id: menuID,
+      event: e,
+      props: { items },
     });
   };
   onKeyDown = (keyName, e, handle) => {
@@ -120,10 +119,7 @@ class EbookPage extends React.Component {
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         {this.renderInput()}
         <ContextMenu onImport={this.importEpub} />
-        <EpubReader
-          url={this.props.url}
-          onContextMenu={this.openContextMenu}
-        />
+        <EpubReader url={this.props.url} onContextMenu={this.openContextMenu} />
       </Hotkeys>
     );
   };

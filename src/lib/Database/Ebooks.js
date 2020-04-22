@@ -49,6 +49,7 @@ export default class Ebooks extends Database {
   };
 
   parseContentOPF = (epub, content_opf, zip, resolve, reject) => {
+    console.log(epub);
     parseXml(content_opf, (err, result) => {
       if (err) reject(err);
       let _id = epub.lastModified + " " + epub.name;
@@ -61,6 +62,7 @@ export default class Ebooks extends Database {
         .file(cover.href)
         .async("array")
         .then((coverData) => {
+          console.log(epub);
           this.db
             .put({
               _id,
@@ -69,11 +71,9 @@ export default class Ebooks extends Database {
               metadata,
               _attachments: {
                 epub: {
-                  name: epub.name,
-                  type: epub.type,
+                  content_type: epub.type,
                   data: epub,
                 },
-                cover: coverData,
               },
             })
             .then(resolve)

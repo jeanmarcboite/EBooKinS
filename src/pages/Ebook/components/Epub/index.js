@@ -4,81 +4,62 @@ import * as EPUBJS_CONSTANTS from "./constants";
 
 const debug = false;
 
-const render = ({ viewer, book, settings, themes }) => {
+const render = ({ view, book, settings, themes }) => {
   let consoleGroup = false;
-  console.assert(viewer);
-  if (viewer) {
-    if (debug) {
-      consoleGroup = true;
-      console.groupCollapsed(
-        "%c render book ",
-        "color: green; font-style: italic;"
-      );
-      console.log(settings);
-      console.log("viewer width: ", getComputedStyle(viewer).width);
-      console.trace();
-    }
-
-    let rendition = book.renderTo(viewer, settings);
-    for (let theme in themes) {
-      rendition.themes.register(theme, {
-        body: themes[theme].ebook_iframe_body,
-      });
-    }
-
-    if (debug) {
-      EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
-        rendition.on(eventType, (event) => {
-          console.log(
-            `%c ${eventType} `,
-            "background: blue; color: white",
-            event
-          );
-        });
-      });
-
-      for (let k in EPUBJS_CONSTANTS.EVENTS.RENDITION) {
-        let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
-        rendition.on(eventType, (event) => {
-          let c = `%c on ${eventType} `;
-          if (event) console.log(c, "background: blue; color: yellow", event);
-          else console.log(c, "background: blue; color: white");
-        });
-      }
-
-      rendition.on("resized", function (size) {
-        console.log("%c Resized to: ", "color: red", size);
-      });
-    }
-    if (consoleGroup) console.groupEnd();
+  if (debug) {
+    consoleGroup = true;
+    console.groupCollapsed(
+      "%c render book ",
+      "color: green; font-style: italic;"
+    );
+    console.log(settings);
+    console.log("view width: ", getComputedStyle(view).width);
+    console.trace();
   }
+
+  let rendition = book.renderTo(view, settings);
+  for (let theme in themes) {
+    rendition.themes.register(theme, {
+      body: themes[theme].ebook_iframe_body,
+    });
+  }
+
+  if (debug) {
+    EPUBJS_CONSTANTS.DOM_EVENTS.forEach((eventType) => {
+      rendition.on(eventType, (event) => {
+        console.log(
+          `%c ${eventType} `,
+          "background: blue; color: white",
+          event
+        );
+      });
+    });
+
+    for (let k in EPUBJS_CONSTANTS.EVENTS.RENDITION) {
+      let eventType = EPUBJS_CONSTANTS.EVENTS.RENDITION[k];
+      rendition.on(eventType, (event) => {
+        let c = `%c on ${eventType} `;
+        if (event) console.log(c, "background: blue; color: yellow", event);
+        else console.log(c, "background: blue; color: white");
+      });
+    }
+
+    rendition.on("resized", function (size) {
+      console.log("%c Resized to: ", "color: red", size);
+    });
+  }
+  if (consoleGroup) console.groupEnd();
 };
 
 class Epub {
   constructor(props) {
-    const {
-      url,
-      loadTableOfContents,
-      loadMetadata,
-      onKeyPress,
-      onContextMenu,
-      onError,
-      $viewer,
-      themes,
-    } = props;
-    this.props = { url, onKeyPress, onContextMenu, themes };
+    const { onContextMenu, themes } = props;
+    this.props = { onContextMenu, themes };
+
     this.eventListeners = [];
-    this.$viewer = $viewer;
     this.book = EpubJS();
-    this.book
-      .open(this.props.url)
-      .then(() => {
-        // console.log("%c book open ", "color: green", this.props.url);
-      })
-      .catch(onError);
-    this.book.loaded.navigation.then(loadTableOfContents);
-    this.book.loaded.metadata.then(loadMetadata);
   }
+
   keyListener = (e) => {
     //e.preventDefault();
     if (e.key) {
@@ -99,11 +80,11 @@ class Epub {
     return this.book.rendition;
   };
 
-  renderBook = (location, width) => {
+  renderBook = (view, width, themes, location, onContextMenu) => {
     render({
-      viewer: this.$viewer.current,
+      view: this,
       book: this.book,
-      themes: this.props.themes,
+      themes,
       settings: {
         width,
         height: "100%",
@@ -129,7 +110,7 @@ class Epub {
       this.addEventListener(
         iFrameView.document.documentElement,
         "contextmenu",
-        this.props.onContextMenu
+        onContextMenu
       );
       return false;
     });

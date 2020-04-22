@@ -10,79 +10,101 @@ import style from "./EpubReader.module.css";
 
 import Toc from "./Toc";
 
-import Epub from "../Epub";
+import Epub from "./Epub";
 
 import EpubView from "./EpubView";
-import Location from "components/Database/Location";
 import SelectFontSize from "components/SelectFontSize";
 import SelectTheme from "components/SelectTheme";
 
 import ComputedStyles from "components/ComputedStyles";
+import DB from "lib/Database";
+import { ThemeProvider } from "styled-components";
 
 class EpubReader extends React.Component {
   static contextType = ThemeContext;
 
   constructor(props) {
     super(props);
-    this.$viewer = React.createRef();
+
+    this.$view = React.createRef();
     this.$container = React.createRef();
     this.$leftPane = React.createRef();
 
     this.state = {
-      docId: this.props.docId,
+      url: props.url,
       tableOfContents: null,
       chapter: null,
       error: null,
       leftArrowVisible: true,
       rightArrowVisible: true,
       href: null,
-      location: this.props.location,
     };
   }
 
   componentDidMount() {
-    this.loadBook();
+    // TODO getCurrent
   }
 
-  componentDidUpdate() {
-    if (this.state.docId !== this.props.docId) {
-      this.setState({ docId: this.props.docId, error: null });
-    }
-
+  componentDidUpdate(prevProps, prevState) {
     if (
-      this.state.docId !== this.props.docId ||
+      this.state.url !== prevState.url ||
       this.leftPanelSize !== this.props.settings.leftPanelSize
     ) {
-      this.loadBook();
+      this.openEpub();
     }
 
     this.updateView();
   }
+
+  openEpub = () => {
+    if (this.epub) {
+      this.epub.destroy();
+      delete this.epub;
+    }
+
+    this.epub = new Epub();
+    this.epub.book
+      .open(this.state.url)
+      .then((result) => {
+        console.log("%c book open ", "color: green", result);
+        this.epub.book.loaded.navigation.then(this.loadTableOfContents);
+        this.epub.book.loaded.metadata.then(this.loadMetadata);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({ error });
+      });
+
+    this.renderBook();
+  };
+
   loadBook() {
     if (this.epub) {
       this.epub.destroy();
       delete this.epub;
     }
 
-    if (!this.props.url) {
-      this.renderNoBook();
-    } else {
-      // console.log("%c load book", "color: green", this.props.url);
-      this.epub = new Epub({
-        url: this.props.url,
-        $viewer: this.$viewer,
-        loadMetadata: this.loadMetadata,
-        loadTableOfContents: this.loadTableOfContents,
-        onContextMenu: this.props.onContextMenu,
-        onError: (error) => {
-          console.error(error);
-          this.setState({ error });
-        },
-        themes,
-      });
+    DB.ebooks
+      .get(this.state.epub._id)
+      .then((url) => {
+        this.epub = new Epub({
+          url,
+          $viewer: this.$viewer,
+          loadMetadata: this.loadMetadata,
+          loadTableOfContents: this.loadTableOfContents,
+          onContextMenu: this.props.onContextMenu,
+          onError: (error) => {
+            console.error(error);
+            this.setState({ error });
+          },
+          themes,
+        });
 
-      this.renderBook(this.props.location);
-    }
+        this.renderBook();
+
+        // TODO this.renderBook(this.props.ebook.location);
+      })
+      .catch(this.renderNoBook);
   }
 
   loadMetadata(metadata) {
@@ -129,7 +151,13 @@ class EpubReader extends React.Component {
       ).toString() + "px";
     this.leftPanelSize = this.props.settings.leftPanelSize;
 
-    this.epub.renderBook(location, this.width);
+    this.epub.renderBook(
+      this.$view.current,
+      this.width,
+      themes,
+      location,
+      this.onContextMenu
+    );
 
     this.epub.book.rendition.on("rendered", ({ href }) => {
       this.setState({ href });
@@ -194,7 +222,7 @@ class EpubReader extends React.Component {
         elems={{
           container: this.$container,
           leftPane: this.$leftPane,
-          viewer: this.$viewer,
+          view: this.$view,
         }}
         style_attribute="width"
         title="Elements Width"
@@ -204,7 +232,6 @@ class EpubReader extends React.Component {
   render = () => {
     return (
       <div ref={this.$container} className={style.reader}>
-        <Location docId={this.props.docId} location={this.state.location} />
         <SplitPane
           split="vertical"
           defaultSize={this.props.settings.leftPanelSize}
@@ -232,7 +259,7 @@ class EpubReader extends React.Component {
             </div>
           </div>
           <EpubView
-            ref={this.$viewer}
+            ref={this.$view}
             error={this.state.error}
             next={this.next}
             prev={this.prev}

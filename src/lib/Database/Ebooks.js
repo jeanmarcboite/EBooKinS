@@ -1,29 +1,20 @@
-import React from "react";
-import { connect } from "react-redux";
 import JSZip from "jszip";
 import { parseString as parseXml } from "xml2js";
-import { toImport, loadFile } from "pages/Ebook/store";
-import { DatabaseContext } from "DatabaseProvider";
 
-class EbookDatabase extends React.Component {
-  static contextType = DatabaseContext;
-
-  render = () => null;
-
-  componentDidUpdate = () => {
-    if (this.props.toImport) {
-      let file = this.props.toImport;
-      this.put(this.props.toImport)
-        .catch((err) => {
-          console.error(err);
-        })
-        .then((e) => {
-          this.props.dispatch(toImport(null));
-          this.props.dispatch(loadFile({ docId: file.name }));
-        });
-    }
+import Database from "./Database";
+export default class Ebooks extends Database {
+  get = (_id) => {
+    return new Promise((resolve, reject) => {
+      this.db
+        .getAttachment(_id, "epub")
+        .then(resolve)
+        /*   .then((url) => {
+          DB.locations.get(_id).then(resolve).catch(resolve);
+        })*/
+        .catch(reject);
+    });
   };
-
+  // put in a db, returning a promise
   put = (epub) => {
     let reader = new FileReader();
     return new Promise((resolve, reject) => {
@@ -36,7 +27,7 @@ class EbookDatabase extends React.Component {
             .file("META-INF/container.xml")
             .async("string")
             .then((container) => {
-              this.parseContainer(container, zip, resolve, reject);
+              this.parseContainer(epub, container, zip, resolve, reject);
             });
         });
       };
@@ -44,7 +35,7 @@ class EbookDatabase extends React.Component {
     });
   };
 
-  parseContainer = (container, zip, resolve, reject) => {
+  parseContainer = (epub, container, zip, resolve, reject) => {
     parseXml(container, (err, result) => {
       if (err) reject(err);
       let rootfile = result.container.rootfiles[0].rootfile[0].$["full-path"];
@@ -52,15 +43,14 @@ class EbookDatabase extends React.Component {
         .file(rootfile)
         .async("string")
         .then((content_opf) =>
-          this.parseContentOPF(content_opf, zip, resolve, reject)
+          this.parseContentOPF(epub, content_opf, zip, resolve, reject)
         );
     });
   };
 
-  parseContentOPF = (content_opf, zip, resolve, reject) => {
+  parseContentOPF = (epub, content_opf, zip, resolve, reject) => {
     parseXml(content_opf, (err, result) => {
       if (err) reject(err);
-      let epub = this.props.toImport;
       let _id = epub.lastModified + " " + epub.name;
       let cover = result.package.manifest[0].item[0].$;
       let metadata = result.package.metadata[0];
@@ -71,7 +61,7 @@ class EbookDatabase extends React.Component {
         .file(cover.href)
         .async("array")
         .then((coverData) => {
-          this.context.ebooks
+          this.db
             .put({
               _id,
               title,
@@ -92,16 +82,3 @@ class EbookDatabase extends React.Component {
     });
   };
 }
-
-function mapStateToProps(state) {
-  return {
-    toImport: state.ebook.toImport,
-  };
-}
-
-export default connect(mapStateToProps)(EbookDatabase);
-
-EbookDatabase.whyDidYouRender = {
-  logOnDifferentValues: false,
-  customName: "Ebooks Database",
-};

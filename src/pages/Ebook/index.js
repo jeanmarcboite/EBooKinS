@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
-import { toImport } from "./store";
-import { DatabaseContext } from "DatabaseProvider";
+import { importFile } from "./store";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
 import { loadFile } from "./store";
@@ -48,7 +47,6 @@ class ContextMenu extends React.Component {
 }
 
 class EbookPage extends React.Component {
-  static contextType = DatabaseContext;
   constructor(props) {
     super(props);
 
@@ -57,43 +55,20 @@ class EbookPage extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener("contextmenu", this.showContextMenu);
-
-    if (!this.props.ebook.docId) {
-      this.context.locations
-        .get("@current")
-        .then((doc) => {
-          this.loadFile(doc.docId);
-        })
-        .catch(() => {
-          console.log("The above error is totally normal");
-        });
-    }
-  };
-
-  componentDidUpdate = () => {
-    if (this.props.ebook.docId && !this.props.ebook.url)
-      this.loadFile(this.props.ebook.docId);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener("contextmenu", this.showContextMenu);
   };
 
-  loadInput = ({ target }) => {
+  importFile = ({ target }) => {
     if (target.files.length === 1) {
-      this.props.dispatch(toImport(target.files[0]));
+      this.props.dispatch(importFile(target.files[0]));
     }
   };
 
   loadFile(docId) {
-    this.context.ebooks.getAttachment(docId, "epub").then((url) =>
-      this.context.locations
-        .get(docId)
-        .then((doc) => {
-          this.props.dispatch(loadFile({ docId, url, location: doc.location }));
-        })
-        .catch(() => this.props.dispatch(loadFile({ docId, url })))
-    );
+    this.props.dispatch(loadFile(docId));
   }
 
   showContextMenu = (e) => {
@@ -134,7 +109,7 @@ class EbookPage extends React.Component {
         ref={this.$input}
         accept="application/pdf,.epub"
         type="file"
-        onChange={this.loadInput}
+        onChange={this.importFile}
         style={{ display: "none" }}
       />
     );
@@ -146,9 +121,7 @@ class EbookPage extends React.Component {
         {this.renderInput()}
         <ContextMenu onImport={this.importEpub} />
         <EpubReader
-          docId={this.props.ebook.docId}
-          url={this.props.ebook.url}
-          location={this.props.ebook.location}
+          url={this.props.url}
           onContextMenu={this.openContextMenu}
         />
       </Hotkeys>
@@ -158,7 +131,7 @@ class EbookPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    ebook: state.ebook,
+    url: state.ebook.url,
   };
 }
 

@@ -20,7 +20,15 @@ export const slice = createSlice({
       DB.ebooks
         .put(action.payload)
         .then(() => console.log("import OK"))
-        .catch((err) => console.error(err));
+        .catch((err) =>
+          console.error(err)
+        ); /*       return function (dispatch) {
+         return fetch("https://jsonplaceholder.typicode.com/posts")
+           .then((response) => response.json())
+           .then((json) => {
+             dispatch({ type: "DATA_LOADED", payload: json });
+           });
+       };*/
       // state is not modified
       //state.toImport = action.payload;
     },

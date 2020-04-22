@@ -52,10 +52,9 @@ class EpubReader extends React.Component {
       prevProps.url !== this.props.url ||
       prevState.leftPanelSize !== this.props.leftPanelSize
     ) {
+      console.log("openEpub");
       this.openEpub();
     }
-
-    this.updateView();
   }
 
   openEpub = () => {
@@ -79,6 +78,7 @@ class EpubReader extends React.Component {
       this.epub.destroy();
       delete this.epub;
     }
+    console.log("open", url);
     this.epub = new Epub();
     this.epub.book
       .open(url)
@@ -170,6 +170,7 @@ class EpubReader extends React.Component {
         this.set("leftArrowVisible", true);
       }
     });
+    this.updateView();
   };
   prev = (e) => {
     this.epub.prev();

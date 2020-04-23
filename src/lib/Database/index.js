@@ -1,5 +1,3 @@
-import PouchDB from "pouchdb";
-
 import Ebooks from "./Ebooks";
 import localforage from "localforage";
 

@@ -68,8 +68,7 @@ class EbookPage extends React.Component {
       DB.ebooks
         .put(epub)
         .then((result) => {
-          console.log("put ", result);
-          this.props.dispatch(loadFile(epub.lastModified + " " + epub.name));
+          this.props.dispatch(loadFile(result.id));
         })
         .catch((err) => console.error(err));
     }

@@ -32,7 +32,7 @@ const light = {
     background: "papayawhip",
   },
   ebook_iframe_body: {
-    ...defaultTheme.ebook_viewer,
+    ...defaultTheme.ebook_iframe_body,
     background: "papayawhip",
   },
 };

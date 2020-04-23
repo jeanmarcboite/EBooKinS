@@ -57,26 +57,30 @@ export default class Ebooks extends Database {
       let title = metadata["dc:title"][0];
       let identifier = metadata["dc:identifier"][0]._;
 
-      zip
-        .file(cover.href)
-        .async("array")
-        .then((coverData) => {
-          this.db
-            .put({
-              _id,
-              title,
-              identifier,
-              metadata,
-              _attachments: {
-                epub: {
-                  content_type: epub.type,
-                  data: epub,
-                },
-              },
-            })
-            .then(resolve)
-            .catch(reject);
+      let data = {
+        _id,
+        title,
+        identifier,
+        metadata,
+        _attachments: {
+          epub: {
+            content_type: epub.type,
+            data: epub,
+          },
+        },
+      };
+
+      let zipCover = zip.file(cover.href);
+      if (!zipCover) this.db.put(data).then(resolve).catch(reject);
+      else {
+        zipCover.async("array").then((coverData) => {
+          data._attachments.cover = {
+            content_type: "image/jpeg",
+            data: new Blob(coverData),
+          };
+          this.db.put(data).then(resolve).catch(reject);
         });
+      }
     });
   };
 }

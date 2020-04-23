@@ -4,7 +4,7 @@ import { setSetting } from "pages/Settings/store";
 import SplitPane from "react-split-pane";
 import { ThemeContext, themes } from "ThemeProvider";
 
-import { UserOutlined } from "@ant-design/icons";
+import { BarsOutlined } from "@ant-design/icons";
 
 import style from "./EpubReader.module.css";
 
@@ -37,6 +37,7 @@ class EpubReader extends React.Component {
       leftArrowVisible: true,
       rightArrowVisible: true,
       href: null,
+      title: "chapters",
     };
   }
 
@@ -99,9 +100,10 @@ class EpubReader extends React.Component {
       .catch(() => this.renderBook());
   };
 
-  loadMetadata(metadata) {
+  loadMetadata = (metadata) => {
+    this.setState({ title: metadata.title });
     document.title = metadata.title;
-  }
+  };
 
   loadTableOfContents = ({ toc }) => {
     this.setState({
@@ -111,8 +113,8 @@ class EpubReader extends React.Component {
             id: "chapters",
             title: (
               <>
-                <UserOutlined />
-                chapters
+                <BarsOutlined />
+                {this.state.title}
               </>
             ),
             items: toc,

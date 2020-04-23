@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { BookTwoTone } from "@ant-design/icons";
-import { importFile } from "./store";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
 import { loadFile } from "./store";

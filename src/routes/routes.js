@@ -1,11 +1,14 @@
 import React from "react";
 import {
   HomeTwoTone,
+  ReadOutlined,
+  FileSearchOutlined,
   ExperimentTwoTone,
   SettingTwoTone,
 } from "@ant-design/icons";
 
 import Ebook from "pages/Ebook";
+import Library from "pages/Library";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
 
@@ -13,9 +16,15 @@ const routes = [
   {
     to: "/",
     exact: true,
-    label: "Home",
-    icon: <HomeTwoTone twoToneColor="#52c41a" />,
+    label: "Read",
+    icon: <ReadOutlined twoToneColor="#52c41a" />,
     component: Ebook,
+  },
+  {
+    to: "/library",
+    label: "Library",
+    icon: <FileSearchOutlined />,
+    component: Library,
   },
   {
     to: "/about",

@@ -64,7 +64,14 @@ class EbookPage extends React.Component {
 
   importFile = ({ target }) => {
     if (target.files.length === 1) {
-      this.props.dispatch(importFile(target.files[0]));
+      let epub = target.files[0];
+      DB.ebooks
+        .put(epub)
+        .then((result) => {
+          console.log("put ", result);
+          this.props.dispatch(loadFile(epub.lastModified + " " + epub.name));
+        })
+        .catch((err) => console.error(err));
     }
   };
 

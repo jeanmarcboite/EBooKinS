@@ -13,6 +13,9 @@ export const slice = createSlice({
     url: links.alice,
   },
   reducers: {
+    action1: (state, action) => {
+      console.log("action1");
+    },
     loadFile: (state, action) => {
       state.url = action.payload;
     },
@@ -20,15 +23,7 @@ export const slice = createSlice({
       DB.ebooks
         .put(action.payload)
         .then(() => console.log("import OK"))
-        .catch((err) =>
-          console.error(err)
-        ); /*       return function (dispatch) {
-         return fetch("https://jsonplaceholder.typicode.com/posts")
-           .then((response) => response.json())
-           .then((json) => {
-             dispatch({ type: "DATA_LOADED", payload: json });
-           });
-       };*/
+        .catch((err) => console.error(err));
       // state is not modified
       //state.toImport = action.payload;
     },
@@ -38,3 +33,10 @@ export const slice = createSlice({
 export const { loadFile, importFile } = slice.actions;
 
 export default slice.reducer;
+/*
+export default enableBatching(slice.reducer);
+
+export const importThenLoadFile = (action) => (dispatch) => {
+  DB.ebooks.put(action.payload).then(dispatch(loadFile(action)));
+};
+*/

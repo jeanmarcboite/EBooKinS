@@ -47,13 +47,14 @@ class EpubReader extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //console.log(this.state, this.props, prevProps, prevState);
-    if (
+    if (this.state.error) {
+      if (prevProps.url === this.props.url) this.renderNoBook();
+      else this.setState({ error: null });
+    } else if (
       prevProps.url !== this.props.url ||
       prevProps.leftPanelSize !== this.props.leftPanelSize ||
       !this.epub
     ) {
-      console.log("openEpub");
       this.openEpub();
     }
   }
@@ -79,7 +80,6 @@ class EpubReader extends React.Component {
       this.epub.destroy();
       delete this.epub;
     }
-    console.log("open", url);
     this.epub = new Epub();
     this.epub.book
       .open(url)

@@ -57,6 +57,8 @@ class EpubReader extends React.Component {
       !this.epub
     ) {
       this.openEpub();
+    } else {
+      this.updateView();
     }
   }
 
@@ -278,6 +280,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "EpubReader",
 };

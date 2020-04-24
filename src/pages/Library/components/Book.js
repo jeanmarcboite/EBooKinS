@@ -23,7 +23,6 @@ export default class Book extends React.Component {
       img: "http://placehold.it/200x240",
       metadata: { description: "" },
     };
-    this.$cover = createRef();
   }
   componentDidMount() {
     DB.ebooks.db
@@ -32,18 +31,9 @@ export default class Book extends React.Component {
       .catch(console.error);
     DB.ebooks.db
       .getAttachment(this.props.id, "cover")
-      .then(this.addimg)
+      .then((blob) => this.setState({ img: URL.createObjectURL(blob) }))
       .catch(console.error);
   }
-  addimg = (blob) => {
-    console.log("blob", blob.size);
-    var url = URL.createObjectURL(blob);
-    this.$cover.current.src = url;
-    return;
-    var img = document.createElement("img");
-    img.src = url;
-    document.body.appendChild(img);
-  };
 
   readEpub = (epub) => {
     let book = EpubJS();
@@ -65,12 +55,7 @@ export default class Book extends React.Component {
           <EllipsisOutlined key="ellipsis" />,
         ]}
       >
-        <img
-          className={style.cover}
-          ref={this.$cover}
-          src={this.state.img}
-          alt="cover"
-        />
+        <img className={style.cover} src={this.state.img} alt="cover" />
         <div className={style.description}>
           <div className={style.scrolled}>
             <img

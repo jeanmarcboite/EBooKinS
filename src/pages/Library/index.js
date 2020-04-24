@@ -9,11 +9,52 @@ import {
   EditOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
+import DB from "lib/Database";
+import Book from "./components/Book";
+import style from "./Library.module.css";
 
 class Library extends React.Component {
   static contextType = ThemeContext;
+  constructor(props) {
+    super(props);
 
-  render() {
+    this.state = { items: [] };
+  }
+  componentDidMount() {
+    this.getItems();
+  }
+  getItems = () => {
+    DB.ebooks.db.allDocs().then((docs) => {
+      this.setState({
+        items: docs.rows.map((item) => {
+          let id = item.id.slice(14).replace(".epub", "");
+          let f = {
+            img: "https://www.goodreads.com/en/book/show/6382055",
+            author:
+              "https://www.goodreads.com/author/show/346732.George_R_R_Martin",
+            book: "https://www.goodreads.com/book/show/6382055",
+            cover: (isbn, size) =>
+              "http://covers.openlibrary.org/b/isbn/" +
+              isbn +
+              "-" +
+              size +
+              ".jpg",
+          };
+          return <Book id={item.id} key={item.id} />;
+        }),
+      });
+    });
+  };
+
+  render = () => {
+    return (
+      <Page menu={<RoutesMenu />}>
+        <div className={style.library}>{this.state.items}</div>
+      </Page>
+    );
+  };
+
+  renderExample() {
     const gridStyle = {
       width: "25%",
       textAlign: "center",

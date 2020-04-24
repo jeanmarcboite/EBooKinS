@@ -1,0 +1,40 @@
+.obook {
+    flex: 0 1 calc(25% - 1em);
+    border: 1px solid #222;
+    height: 300px;
+    margin: 20px;
+    overflow: auto;
+}
+
+.book {
+    border: 3px solid #222;
+    width: 200px;
+    height: 450px;
+    margin: auto;
+    overflow: "auto";
+}
+
+.cover {
+    height: 240px;
+    width: 200px;
+}
+
+.description {
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 200px;
+    color: purple;
+}
+
+.scrolled {
+    position: relative;
+    max-height: 200px;
+    width: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.author_img {
+    float: right;
+}

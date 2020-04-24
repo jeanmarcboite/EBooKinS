@@ -104,10 +104,10 @@ export default class Ebooks {
       let zipCover = zip.file(cover.href);
       if (!zipCover) this.db.put(data).then(resolve).catch(reject);
       else {
-        zipCover.async("array").then((coverData) => {
+        zipCover.async("blob").then((coverData) => {
           data._attachments.cover = {
             content_type: "image/jpeg",
-            data: new Blob(coverData),
+            data: coverData,
           };
           this.db.put(data).then(resolve).catch(reject);
         });

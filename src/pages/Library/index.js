@@ -3,28 +3,13 @@ import { connect } from "react-redux";
 import Page from "pages/Page";
 import RoutesMenu from "routes/Menu";
 import { ThemeContext } from "ThemeProvider";
-import { Card, Avatar } from "antd";
-import {
-  SettingOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-} from "@ant-design/icons";
 import DB from "lib/Database";
 import Book from "./components/Book";
 import style from "./Library.module.css";
-import {
-  Separator,
-  Item,
-  Menu,
-  theme,
-  animation,
-  contextMenu,
-} from "react-contexify";
+import { Separator, Item } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
 import { BookTwoTone } from "@ant-design/icons";
 import ImportFile from "components/ImportFile";
-
-const menuID = "EbookMenuID";
 
 class ContextMenu extends React.Component {
   static contextType = ThemeContext;
@@ -59,6 +44,7 @@ class Library extends React.Component {
   };
   componentDidMount() {
     this.getItems();
+   // DB.ebooks.on("update", () => this.getItems());
   }
   getItems = () => {
     DB.ebooks.db.allDocs().then((docs) => {

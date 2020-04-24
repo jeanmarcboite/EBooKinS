@@ -3,22 +3,27 @@ import { parseString as parseXml } from "xml2js";
 
 import PouchDB from "pouchdb";
 
+import EventEmitter from "event-emitter";
+
 const logChanges = false;
+
 export default class Ebooks {
   constructor(name, server, port) {
+    this.name = name;
     this.db = new PouchDB(name);
+    this.sync(server, port);
+  }
 
+  sync = (server, port) => {
     if (server) {
       let p = port ? port : 5984;
-      this.remote = new PouchDB(`${server}:${p}/${name}`);
+      this.remote = new PouchDB(`${server}:${p}/${this.name}`);
       this.db
         .sync(this.remote, {
           live: true,
           retry: true,
         })
-        .on("change", function (change) {
-          if (logChanges) console.log("change on db", change);
-        })
+        .on("change", (change) => this.emit("update"))
         .on("paused", function (info) {
           // replication was paused, usually because of a lost connection
           if (logChanges) console.log("replication paused", info);
@@ -32,7 +37,8 @@ export default class Ebooks {
           console.error("replication error", err);
         });
     }
-  }
+    return 0;
+  };
 
   get = (_id) => {
     return new Promise((resolve, reject) => {
@@ -115,3 +121,5 @@ export default class Ebooks {
     });
   };
 }
+
+EventEmitter(Ebooks.prototype);

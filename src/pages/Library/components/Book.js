@@ -1,9 +1,5 @@
-import React, { createRef } from "react";
-import { connect } from "react-redux";
-import Page from "pages/Page";
-import RoutesMenu from "routes/Menu";
+import React from "react";
 import { ThemeContext } from "ThemeProvider";
-import { Card, Avatar } from "antd";
 import {
   SettingOutlined,
   EditOutlined,

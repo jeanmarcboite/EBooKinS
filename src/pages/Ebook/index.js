@@ -18,6 +18,7 @@ import "react-contexify/dist/ReactContexify.min.css";
 import EpubReader from "./components/EpubReader";
 import DocMenu from "./components/DocMenu";
 import DB from "lib/Database";
+import ImportFile from "components/ImportFile";
 
 const menuID = "EbookMenuID";
 
@@ -73,9 +74,9 @@ class EbookPage extends React.Component {
     }
   };
 
-  loadFile(docId) {
+  loadFile = (docId) => {
     this.props.dispatch(loadFile(docId));
-  }
+  };
 
   showContextMenu = (e) => {
     e.preventDefault();
@@ -127,7 +128,7 @@ class EbookPage extends React.Component {
   render = () => {
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
-        {this.renderInput()}
+        <ImportFile ref={this.$input} loadFile={this.loadFile} />
         <ContextMenu onImport={this.importEpub} />
         <EpubReader url={this.props.url} onContextMenu={this.openContextMenu} />
       </Hotkeys>

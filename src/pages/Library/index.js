@@ -44,7 +44,7 @@ class Library extends React.Component {
   };
   componentDidMount() {
     this.getItems();
-   // DB.ebooks.on("update", () => this.getItems());
+    DB.ebooks.on("update", () => this.getItems());
   }
   getItems = () => {
     DB.ebooks.db.allDocs().then((docs) => {

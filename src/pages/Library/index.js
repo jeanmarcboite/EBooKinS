@@ -12,14 +12,51 @@ import {
 import DB from "lib/Database";
 import Book from "./components/Book";
 import style from "./Library.module.css";
+import {
+  Separator,
+  Item,
+  Menu,
+  theme,
+  animation,
+  contextMenu,
+} from "react-contexify";
+import "react-contexify/dist/ReactContexify.min.css";
+import { BookTwoTone } from "@ant-design/icons";
+import ImportFile from "components/ImportFile";
+
+const menuID = "EbookMenuID";
+
+class ContextMenu extends React.Component {
+  static contextType = ThemeContext;
+
+  render() {
+    return (
+      <>
+        <Item>
+          <label onClick={this.props.onImport}>
+            <BookTwoTone twoToneColor="#52c41a" />
+            Import Ebook
+          </label>
+        </Item>
+        <Separator />
+        <RoutesMenu />
+      </>
+    );
+  }
+}
 
 class Library extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
+    this.$input = React.createRef();
 
     this.state = { items: [] };
   }
+
+  importEpub = () => {
+    this.$input.current.click();
+  };
   componentDidMount() {
     this.getItems();
   }
@@ -48,51 +85,15 @@ class Library extends React.Component {
 
   render = () => {
     return (
-      <Page menu={<RoutesMenu />}>
-        <div className={style.library}>{this.state.items}</div>
-      </Page>
+      <>
+        <ImportFile ref={this.$input} />
+        <Page menu={<ContextMenu onImport={this.importEpub} />}>
+          <ImportFile ref={this.$input} />
+          <div className={style.library}>{this.state.items}</div>
+        </Page>
+      </>
     );
   };
-
-  renderExample() {
-    const gridStyle = {
-      width: "25%",
-      textAlign: "center",
-    };
-    return (
-      <Page menu={<RoutesMenu />}>
-        <Card
-          style={{ width: 300 }}
-          cover={
-            <img
-              alt="example"
-              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-            />
-          }
-          actions={[
-            <SettingOutlined key="setting" />,
-            <EditOutlined key="edit" />,
-            <EllipsisOutlined key="ellipsis" />,
-          ]}
-        >
-          <Card.Meta
-            avatar={
-              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-            }
-            title="With avatar"
-            description="This is the description"
-          />
-        </Card>
-        <Card title="Card Title">
-          <Card.Grid style={gridStyle}>Default</Card.Grid>
-          <Card.Grid hoverable={false} style={gridStyle}>
-            not hoverable
-          </Card.Grid>
-        </Card>
-        ,
-      </Page>
-    );
-  }
 }
 
 function mapStateToProps(state) {
@@ -103,3 +104,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(Library);
+
+Library.whyDidYouRender = {
+  logOnDifferentValues: true,
+};

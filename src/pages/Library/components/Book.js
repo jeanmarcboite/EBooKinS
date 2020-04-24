@@ -68,6 +68,6 @@ export default class Book extends React.Component {
 }
 
 Book.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Library.Book",
 };

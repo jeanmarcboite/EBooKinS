@@ -1,6 +1,29 @@
 import { parseString } from "xml2js";
+
+import { urls } from "config";
+import online from "lib/online";
+
 class Author {
-  constructor(response) {
+  constructor(id) {
+    this.id = id;
+  }
+  get = () => {
+    let key = localStorage.getItem("GOODREADS_KEY");
+    return new Promise((resolve, reject) => {
+      online
+        .get(urls.goodreads.author(this.id, key))
+        .then((value) => {
+          parseString(value.data, (err, result) => {
+            if (err != null) {
+              reject(err);
+            }
+            resolve(result);
+          });
+        })
+        .catch(reject);
+    });
+  };
+  parseGoodreads(response) {
     var author = this;
     if (response.status != 200) {
       this.error = "goodreads author request: " + response.statusText;

@@ -6,6 +6,8 @@ import {
   EditOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
+
+import Author from "models/Author";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
 
@@ -35,16 +37,13 @@ export default class Book extends React.Component {
   getMetadata = ({ metadata }) => {
     console.log(metadata);
     let creator = metadata["dc:creator"][0];
-    let author = creator.$["opf:role"] === "aut" ? creator._ : "";
     let title = metadata["dc:title"][0];
     let description = metadata["dc:description"][0];
     let subject = metadata["dc:subject"];
     this.setState({ description, title, subject });
-    let key = localStorage.getItem("GOODREADS_KEY");
-    console.log(urls.goodreads.author(author, key));
-    online
-      .get(urls.goodreads.author(author, key))
-      .then((value) => console.log(value.data));
+
+    let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
+    author.get().then((response) => console.log(response));
   };
 
   getCover = (blob) => {

@@ -1,4 +1,4 @@
-let librarything = {
+const librarything = {
   show: (id) => "http://www.librarything.com/work/" + id,
   cover: (isbn, devkey, size) => {
     size = size ? size : "large";
@@ -23,7 +23,7 @@ let librarything = {
     devkey,
 };
 
-let goodreads = {
+const goodreads = {
   nocover: "http://www.goodreads.com/images/nocover60x80.jpg",
   show: (id) => "http://www.goodreads.com/book/show/" + id,
   id: (id, devkey) =>
@@ -53,7 +53,7 @@ title: "https://openlibrary.org/search.json?title=%v"
 titleauthor: "https://openlibrary.org/search.json?title=%v&author=%v"
 show: "https://openlibrary.org%v"
 */
-let openlibrary = {
+const openlibrary = {
   show: (id) => "https://openlibrary.org/" + id,
   isbn: (isbn) =>
     "https://openlibrary.org/api/books?bibkeys=ISBN:" +

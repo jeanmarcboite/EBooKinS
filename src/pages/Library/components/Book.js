@@ -17,29 +17,26 @@ export default class Book extends React.Component {
     super(props);
     this.state = {
       img: "http://placehold.it/200x240",
-      metadata: { description: "" },
+      description: "",
+      author: "",
     };
   }
   componentDidMount() {
-    DB.ebooks.db
-      .getAttachment(this.props.id, "epub")
-      .then(this.readEpub)
-      .catch(console.error);
+    DB.ebooks.db.get(this.props.id).then(this.getMetadata);
     DB.ebooks.db
       .getAttachment(this.props.id, "cover")
       .then((blob) => this.setState({ img: URL.createObjectURL(blob) }))
       .catch(console.error);
   }
 
-  readEpub = (epub) => {
-    let book = EpubJS();
-    book.open(epub).then(() => {
-      book.loaded.metadata.then((metadata) => {
-        console.log(metadata);
-        this.setState({ metadata });
-      });
-    });
+  getMetadata = ({ metadata }) => {
+    console.log(metadata);
+    let creator = metadata["dc:creator"][0];
+    let author = creator.$["opf:role"] === "aut" ? creator._ : "";
+    let description = metadata["dc:description"][0];
+    this.setState({ author, description });
   };
+
   render = () => {
     return (
       <div
@@ -59,7 +56,8 @@ export default class Book extends React.Component {
               src="http://placehold.it/70x70"
               alt=""
             />
-            <div>{renderHTML(this.state.metadata.description)}</div>
+            <div>Author: {this.state.author} </div>
+            <div>{renderHTML(this.state.description)}</div>
           </div>
         </div>
       </div>

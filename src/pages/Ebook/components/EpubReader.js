@@ -63,11 +63,6 @@ class EpubReader extends React.Component {
   }
 
   openEpub = () => {
-    if (this.epub) {
-      this.epub.destroy();
-      delete this.epub;
-    }
-
     if (this.props.url.match("^https?://")) {
       this.open(this.props.url);
     } else {
@@ -103,6 +98,7 @@ class EpubReader extends React.Component {
   };
 
   loadMetadata = (metadata) => {
+    console.log("%c metadata ", "color: green", metadata);
     this.setState({ title: metadata.title });
     document.title = metadata.title;
   };

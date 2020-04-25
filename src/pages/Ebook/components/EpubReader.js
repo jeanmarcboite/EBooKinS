@@ -10,7 +10,7 @@ import style from "./EpubReader.module.css";
 
 import Toc from "./Toc";
 
-import Epub from "./Epub";
+import Epub from "lib/Epub";
 
 import EpubView from "./EpubView";
 import SelectFontSize from "components/SelectFontSize";

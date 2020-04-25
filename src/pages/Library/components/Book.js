@@ -10,6 +10,8 @@ import renderHTML from "react-render-html";
 import DB from "lib/Database";
 
 import style from "./Book.module.css";
+import urls from "config/urls";
+import online from "lib/online";
 
 export default class Book extends React.Component {
   static contextType = ThemeContext;
@@ -37,7 +39,12 @@ export default class Book extends React.Component {
     let title = metadata["dc:title"][0];
     let description = metadata["dc:description"][0];
     let subject = metadata["dc:subject"];
-    this.setState({ author, description, title, subject });
+    this.setState({ description, title, subject });
+    let key = localStorage.getItem("GOODREADS_KEY");
+    console.log(urls.goodreads.author(author, key));
+    online
+      .get(urls.goodreads.author(author, key))
+      .then((value) => console.log(value.data));
   };
 
   getCover = (blob) => {
@@ -61,7 +68,7 @@ export default class Book extends React.Component {
           <div className={style.scrolled}>
             <img
               className={style.author_img}
-              src="http://placehold.it/70x70"
+              src="http://covers.openlibrary.org/a/olid/OL229501A-S.jpg"
               alt=""
             />
             {this.state.subject.map((item) => (

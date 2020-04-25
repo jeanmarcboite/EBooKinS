@@ -10,6 +10,8 @@
     "@testing-library/user-event": "^7.1.2",
     "@welldone-software/why-did-you-render": "^4.0.6",
     "antd": "^4.1.1",
+    "axios": "^0.19.2",
+    "consola": "^2.11.3",
     "dexie": "^2.0.4",
     "epubjs": "^0.3.85",
     "event-emitter": "^0.3.5",

@@ -98,7 +98,7 @@ class EpubReader extends React.Component {
   };
 
   loadMetadata = (metadata) => {
-    console.log("%c metadata ", "color: green", metadata);
+    // console.log("%c metadata ", "color: green", metadata);
     this.setState({ title: metadata.title });
     document.title = metadata.title;
   };
@@ -276,6 +276,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "EpubReader",
 };

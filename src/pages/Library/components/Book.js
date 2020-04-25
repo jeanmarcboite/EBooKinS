@@ -51,7 +51,6 @@ export default class Book extends React.Component {
   };
 
   render = () => {
-    console.log(this.state.author);
     return (
       <div
         className={style.book}

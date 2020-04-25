@@ -79,5 +79,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(Library);
 
 Library.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
 };

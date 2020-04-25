@@ -45,7 +45,6 @@ class Author {
           author.fans_count = author.data.fans_count[0];
           author.about = author.data.about;
           author.influences = author.data.influences;
-          console.log("resolve", author);
           resolve(author);
         }
       });

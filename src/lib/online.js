@@ -19,12 +19,12 @@ async function get(URL) {
         .get(urls.proxy + URL)
         .then((response) => {
           value = response;
-          localforage.setItem(URL, JSON.stringify(value));
+          cache.setItem(URL, JSON.stringify(value));
           return value;
         })
         .catch((error) => {
           value = error;
-          localforage.setItem(URL, JSON.stringify(value));
+          cache.setItem(URL, JSON.stringify(value));
           return value;
         });
     })

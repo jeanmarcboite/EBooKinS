@@ -50,19 +50,6 @@ class Library extends React.Component {
     DB.ebooks.db.allDocs().then((docs) => {
       this.setState({
         items: docs.rows.map((item) => {
-          let id = item.id.slice(14).replace(".epub", "");
-          let f = {
-            img: "https://www.goodreads.com/en/book/show/6382055",
-            author:
-              "https://www.goodreads.com/author/show/346732.George_R_R_Martin",
-            book: "https://www.goodreads.com/book/show/6382055",
-            cover: (isbn, size) =>
-              "http://covers.openlibrary.org/b/isbn/" +
-              isbn +
-              "-" +
-              size +
-              ".jpg",
-          };
           return <Book id={item.id} key={item.id} />;
         }),
       });

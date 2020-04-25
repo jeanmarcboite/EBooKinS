@@ -10,8 +10,11 @@ let reducer = {
   settings: persistReducer({ key: "settings", storage }, SettingsReducer),
 };
 
+const middleware = [thunk];
+if (false) middleware.push(logger);
+
 export const store = configureStore({
   reducer,
-  middleware: [thunk, logger],
+  middleware,
 });
 export const persistor = persistStore(store);

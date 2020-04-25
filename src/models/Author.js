@@ -17,29 +17,39 @@ class Author {
             if (err != null) {
               reject(err);
             }
-            resolve(result);
+            let a = result.GoodreadsResponse.author[0];
+            let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
+            online
+              .get(urls.goodreads.show_author(author.id, key))
+              .then((response) => {
+                this.parse(response, author, resolve, reject);
+              });
           });
         })
         .catch(reject);
     });
   };
-  parseGoodreads(response) {
-    var author = this;
-    if (response.status != 200) {
-      this.error = "goodreads author request: " + response.statusText;
+  parse(response, author, resolve, reject) {
+    if (response.status !== 200) {
+      author.error = "goodreads author request: " + response.statusText;
+      reject(new Error(author.error));
+    } else {
+      parseString(response.data, function (err, result) {
+        if (err != null) {
+          author.error = "parsing goodreads response: " + err;
+          reject(err);
+        } else {
+          author.data = result.GoodreadsResponse.author[0];
+          author.img = author.data.image_url[0];
+          author.name = author.data.name[0];
+          author.fans_count = author.data.fans_count[0];
+          author.about = author.data.about;
+          author.influences = author.data.influences;
+          console.log("resolve", author);
+          resolve(author);
+        }
+      });
     }
-    parseString(response.data, function (err, result) {
-      if (err != null) {
-        author.error = "parsing goodreads response: " + err;
-      } else {
-        author.data = result.GoodreadsResponse.author[0];
-        author.image_url = author.data.image_url[0];
-        author.name = author.data.name[0];
-        author.fans_count = author.data.fans_count[0];
-        author.about = author.data.about;
-        author.influences = author.data.influences;
-      }
-    });
   }
 }
 

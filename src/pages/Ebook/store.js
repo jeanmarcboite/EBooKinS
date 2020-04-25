@@ -2,9 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import DB from "lib/Database";
 
-const server = "http://localhost";
-const port = 5984;
-
 const links = {
   alice: "https://s3.amazonaws.com/epubjs/books/alice.epub",
   mobydick: "https://s3.amazonaws.com/moby-dick/moby-dick.epub",

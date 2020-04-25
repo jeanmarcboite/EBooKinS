@@ -1,5 +1,6 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
+import { Tag } from "antd";
 import {
   SettingOutlined,
   EditOutlined,
@@ -7,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
-import EpubJS from "epubjs";
 
 import style from "./Book.module.css";
 
@@ -19,13 +19,14 @@ export default class Book extends React.Component {
       img: "http://placehold.it/200x240",
       description: "",
       author: "",
+      subject: [],
     };
   }
   componentDidMount() {
     DB.ebooks.db.get(this.props.id).then(this.getMetadata);
     DB.ebooks.db
       .getAttachment(this.props.id, "cover")
-      .then((blob) => this.setState({ img: URL.createObjectURL(blob) }))
+      .then(this.getCover)
       .catch(console.error);
   }
 
@@ -33,8 +34,15 @@ export default class Book extends React.Component {
     console.log(metadata);
     let creator = metadata["dc:creator"][0];
     let author = creator.$["opf:role"] === "aut" ? creator._ : "";
+    let title = metadata["dc:title"][0];
     let description = metadata["dc:description"][0];
-    this.setState({ author, description });
+    let subject = metadata["dc:subject"];
+    this.setState({ author, description, title, subject });
+  };
+
+  getCover = (blob) => {
+    console.log(blob);
+    this.setState({ img: URL.createObjectURL(blob) });
   };
 
   render = () => {
@@ -56,7 +64,10 @@ export default class Book extends React.Component {
               src="http://placehold.it/70x70"
               alt=""
             />
-            <div>Author: {this.state.author} </div>
+            {this.state.subject.map((item) => (
+              <Tag key={item}>{item}</Tag>
+            ))}
+            <h2>{this.state.author} </h2>
             <div>{renderHTML(this.state.description)}</div>
           </div>
         </div>

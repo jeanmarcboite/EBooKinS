@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { BookTwoTone } from "@ant-design/icons";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
@@ -55,14 +56,18 @@ class ReadPage extends React.Component {
     if (props.match.params.id) {
       this.props.dispatch(loadFile(props.match.params.id));
     }
+
+    this.state = { redirect: null };
   }
 
   componentDidMount = () => {
     document.addEventListener("contextmenu", this.showContextMenu);
+    console.log(this.props.match.params);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener("contextmenu", this.showContextMenu);
+    console.log(this.props.match.params);
   };
 
   importFile = ({ target }) => {
@@ -71,7 +76,7 @@ class ReadPage extends React.Component {
       DB.ebooks
         .put(epub)
         .then((result) => {
-          this.props.dispatch(loadFile(result.id));
+          this.loadFile(result.id);
         })
         .catch((err) => console.error(err));
     }
@@ -79,6 +84,9 @@ class ReadPage extends React.Component {
 
   loadFile = (docId) => {
     this.props.dispatch(loadFile(docId));
+
+    this.props.history.push("/");
+    //this.setState({ redirect: "/read/" + docId });
   };
 
   showContextMenu = (e) => {
@@ -129,6 +137,10 @@ class ReadPage extends React.Component {
   };
 
   render = () => {
+    if (this.state.redirect) {
+      this.setState({ redirect: null });
+      return <Redirect to={this.state.redirect} />;
+    }
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         <ImportFile ref={this.$input} loadFile={this.loadFile} />

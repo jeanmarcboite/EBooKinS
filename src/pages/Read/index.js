@@ -5,6 +5,7 @@ import { BookTwoTone } from "@ant-design/icons";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
 import { loadFile } from "./store";
+import { withRouter } from "react-router-dom";
 
 import RoutesMenu from "routes/Menu";
 import {
@@ -138,9 +139,11 @@ class ReadPage extends React.Component {
 
   render = () => {
     if (this.state.redirect) {
-      this.setState({ redirect: null });
+      //this.setState({ redirect: null });
+      console.log("redirect");
       return <Redirect to={this.state.redirect} />;
     }
+    console.log("read book");
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         <ImportFile ref={this.$input} loadFile={this.loadFile} />
@@ -157,4 +160,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ReadPage);
+// before
+//export default connect(mapStateToProps)(ReadPage)
+
+// after
+export default withRouter(connect(mapStateToProps)(ReadPage));
+
+ReadPage.whyDidYouRender = {
+  logOnDifferentValues: true,
+};

@@ -43,3 +43,11 @@
 .author_img {
   float: right;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: x-large;
+  color: blueviolet;
+  margin: 5px;
+}

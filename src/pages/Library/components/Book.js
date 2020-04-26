@@ -57,16 +57,13 @@ export default class Book extends React.Component {
   render = () => {
     return (
       <div className={style.card}>
-        <div
-          className={style.book}
-          cover={<img alt="example" src={this.state.img} />}
-          actions={[
-            <SettingOutlined key="setting" />,
-            <EditOutlined key="edit" />,
-            <EllipsisOutlined key="ellipsis" />,
-          ]}
-        >
+        <div className={style.book}>
           <img className={style.cover} src={this.state.img} alt="cover" />
+          <div className={style.actions}>
+            <SettingOutlined key="setting" />
+            <EditOutlined key="edit" />
+            <EllipsisOutlined key="ellipsis" />
+          </div>
           <div className={style.description}>
             <div className={style.scrolled}>
               <img

@@ -20,6 +20,10 @@ const routes = [
     component: Ebook,
   },
   {
+    to: "/read/:id",
+    component: Ebook,
+  },
+  {
     to: "/library",
     label: "Library",
     icon: <FileSearchOutlined />,

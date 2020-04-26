@@ -5,6 +5,7 @@ import {
   SettingOutlined,
   EditOutlined,
   EllipsisOutlined,
+  ReadFilled,
 } from "@ant-design/icons";
 
 import Author from "models/Author";
@@ -61,6 +62,7 @@ export default class Book extends React.Component {
           <img className={style.cover} src={this.state.img} alt="cover" />
           <div className={style.actions}>
             <SettingOutlined key="setting" />
+            <ReadFilled />
             <EditOutlined key="edit" />
             <EllipsisOutlined key="ellipsis" />
           </div>

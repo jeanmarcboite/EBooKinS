@@ -4,7 +4,13 @@ import { setSetting } from "pages/Settings/store";
 import SplitPane from "react-split-pane";
 import { ThemeContext, themes } from "ThemeProvider";
 
-import { BarsOutlined } from "@ant-design/icons";
+import {
+  BarsOutlined,
+  SettingOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  FrownTwoTone,
+} from "@ant-design/icons";
 
 import style from "./EpubReader.module.css";
 
@@ -18,6 +24,8 @@ import SelectTheme from "components/SelectTheme";
 
 import ComputedStyles from "components/ComputedStyles";
 import DB from "lib/Database";
+
+import { Card, Avatar, Alert } from "antd";
 
 class EpubReader extends React.Component {
   static contextType = ThemeContext;
@@ -62,13 +70,47 @@ class EpubReader extends React.Component {
     }
   }
 
+  setError = (error) => {
+    this.setState({
+      error: <Alert message={error.toString()} type="error" />,
+    });
+  };
+
   openEpub = () => {
     if (this.props.url.match("^https?://")) {
       this.open(this.props.url);
     } else {
       DB.ebooks
         .get(this.props.url)
-        .then((data) => this.open(data))
+        .then(
+          (data) => this.open(data),
+          (error) => {
+            if (error.status !== 404) this.setError(error);
+            else
+              this.setState({
+                error: (
+                  <Card
+                    style={{ width: 300 }}
+                    actions={[
+                      <SettingOutlined key="setting" />,
+                      <EditOutlined key="edit" />,
+                      <EllipsisOutlined key="ellipsis" />,
+                    ]}
+                  >
+                    <FrownTwoTone
+                      twoToneColor="red"
+                      style={{ fontSize: "120px" }}
+                    />
+                    <Card.Meta
+                      description="Document not found"
+                      title={this.props.url}
+                    />
+                  </Card>
+                ),
+              });
+          }
+        )
+
         .catch((error) => this.setState({ error }));
     }
   };

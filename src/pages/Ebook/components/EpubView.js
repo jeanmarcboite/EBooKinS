@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Alert } from "antd";
 import { connect } from "react-redux";
 import Fullscreen from "./Fullscreen";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
@@ -50,9 +49,7 @@ class EpubView extends React.PureComponent {
               height: "99vh",
             }}
           >
-            {this.props.error ? (
-              <Alert message={this.props.error.toString()} type="error" />
-            ) : null}
+            {this.props.error}
           </div>
           <button
             className={style.leftArrow}

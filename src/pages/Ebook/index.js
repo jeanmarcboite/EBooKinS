@@ -50,8 +50,11 @@ class ContextMenu extends React.Component {
 class EbookPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.$input = React.createRef();
+
+    if (props.match.params.id) {
+      this.props.dispatch(loadFile(props.match.params.id));
+    }
   }
 
   componentDidMount = () => {

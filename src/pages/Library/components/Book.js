@@ -22,6 +22,7 @@ export default class Book extends React.Component {
       description: "",
       author: {},
       subject: [],
+      title: "",
     };
   }
   componentDidMount() {
@@ -29,7 +30,7 @@ export default class Book extends React.Component {
     DB.ebooks.db
       .getAttachment(this.props.id, "cover")
       .then(this.getCover)
-      .catch(console.error);
+      .catch(() => {});
   }
 
   getMetadata = ({ metadata }) => {
@@ -39,11 +40,14 @@ export default class Book extends React.Component {
     let description = metadata["dc:description"]
       ? metadata["dc:description"][0]
       : "no book description available";
-    let subject = metadata["dc:subject"];
+    let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
     this.setState({ description, title, subject });
 
     let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
-    author.get().then((author) => this.setState({ author }));
+    author
+      .get()
+      .then((author) => this.setState({ author }))
+      .catch(console.warn);
   };
 
   getCover = (blob) => {
@@ -74,6 +78,7 @@ export default class Book extends React.Component {
               <Tag key={item}>{item}</Tag>
             ))}
             <h2>{this.state.author.name} </h2>
+            <h3>{this.state.title}</h3>
             <div>{renderHTML(this.state.description)}</div>
           </div>
         </div>

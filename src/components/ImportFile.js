@@ -15,6 +15,10 @@ class ImportFile extends React.PureComponent {
           if (this.props.loadFile) this.props.loadFile(result.id);
         })
         .catch((err) => console.error(err));
+    } else {
+      for (let k = 0; k < target.files.length; k++) {
+        DB.ebooks.put(target.files[k]).catch((err) => console.error(err));
+      }
     }
   };
 
@@ -28,6 +32,7 @@ class ImportFile extends React.PureComponent {
         ref={this.$input}
         accept="application/pdf,.epub"
         type="file"
+        multiple
         onChange={this.importFile}
         style={{ display: "none" }}
       />

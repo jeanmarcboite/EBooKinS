@@ -18,17 +18,24 @@ class Author {
         online
           .get(urls.goodreads.author(this.id, key))
           .then((value) => {
+            if (!value.data) {
+              reject(new Error("goodreads author no found"));
+            }
             parseString(value.data, (err, result) => {
               if (err != null) {
                 reject(err);
               }
-              let a = result.GoodreadsResponse.author[0];
-              let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
-              online
-                .get(urls.goodreads.show_author(author.id, key))
-                .then((response) => {
-                  this.parse(response, author, resolve, reject);
-                });
+              if (!result.GoodreadsResponse.author) {
+                resolve({ name: this.id });
+              } else {
+                let a = result.GoodreadsResponse.author[0];
+                let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
+                online
+                  .get(urls.goodreads.show_author(author.id, key))
+                  .then((response) => {
+                    this.parse(response, author, resolve, reject);
+                  });
+              }
             });
           })
           .catch(reject);

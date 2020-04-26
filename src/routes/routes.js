@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import {
   ReadOutlined,
   FileSearchOutlined,
@@ -11,13 +12,17 @@ import Library from "pages/Library";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
 
+import { store } from "store";
+
 const routes = [
   {
     to: "/",
     exact: true,
     label: "Read",
     icon: <ReadOutlined twoToneColor="#52c41a" />,
-    component: Ebook,
+    component: () => (
+      <Redirect to={"/read/" + store.getState().ebook.url}></Redirect>
+    ),
   },
   {
     to: "/read/:id",

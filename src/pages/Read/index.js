@@ -54,21 +54,28 @@ class ReadPage extends React.Component {
     super(props);
     this.$input = React.createRef();
 
-    if (props.match.params.id) {
-      this.props.dispatch(loadFile(props.match.params.id));
-    }
-
-    this.state = { redirect: null };
+    this.loadFileFromParams();
   }
 
   componentDidMount = () => {
     document.addEventListener("contextmenu", this.showContextMenu);
-    console.log(this.props.match.params);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener("contextmenu", this.showContextMenu);
-    console.log(this.props.match.params);
+  };
+
+  componentDidUpdate = () => {
+    this.loadFileFromParams();
+  };
+
+  loadFileFromParams = () => {
+    if (
+      this.props.match.params.id &&
+      this.props.match.params.id !== this.props.url
+    ) {
+      this.loadFile(this.props.match.params.id);
+    }
   };
 
   importFile = ({ target }) => {
@@ -85,9 +92,7 @@ class ReadPage extends React.Component {
 
   loadFile = (docId) => {
     this.props.dispatch(loadFile(docId));
-
     this.props.history.push("/");
-    //this.setState({ redirect: "/read/" + docId });
   };
 
   showContextMenu = (e) => {
@@ -138,12 +143,6 @@ class ReadPage extends React.Component {
   };
 
   render = () => {
-    if (this.state.redirect) {
-      //this.setState({ redirect: null });
-      console.log("redirect");
-      return <Redirect to={this.state.redirect} />;
-    }
-    console.log("read book");
     return (
       <Hotkeys keyName="alt+i,alt+r" onKeyDown={this.onKeyDown}>
         <ImportFile ref={this.$input} loadFile={this.loadFile} />

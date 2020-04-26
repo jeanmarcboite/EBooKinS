@@ -7,7 +7,7 @@ import {
   SettingTwoTone,
 } from "@ant-design/icons";
 
-import Ebook from "pages/Ebook";
+import Ebook from "pages/Read";
 import Library from "pages/Library";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";

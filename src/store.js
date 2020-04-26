@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import SettingsReducer from "pages/Settings/store";
-import EbookReducer from "pages/Ebook/store";
+import EbookReducer from "pages/Read/store";
 import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web

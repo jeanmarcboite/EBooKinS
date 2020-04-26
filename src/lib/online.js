@@ -1,9 +1,9 @@
 import localforage from "localforage";
 import axios from "axios";
-import urls from "config/urls";
+import config, { urls } from "config";
 import consola from "consola";
 
-const cache = localforage.createInstance({ name: "cache" });
+const cache = localforage.createInstance({ name: config.cache.name });
 async function get(URL) {
   return cache
     .getItem(URL)

@@ -47,7 +47,7 @@ class ContextMenu extends React.Component {
   }
 }
 
-class EbookPage extends React.Component {
+class ReadPage extends React.Component {
   constructor(props) {
     super(props);
     this.$input = React.createRef();
@@ -145,4 +145,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(EbookPage);
+export default connect(mapStateToProps)(ReadPage);

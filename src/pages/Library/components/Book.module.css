@@ -1,40 +1,45 @@
 .card {
-    width: 260px;
+  width: 280px;
+  border-radius: 25px;
+  background-color: antiquewhite;
+}
+
+.cardwidth {
+  width: 260px;
 }
 
 .book {
-    composes: card;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 3px solid #222;
-    height: 450px;
-    margin: auto;
-    overflow: "auto";
+  composes: cardwidth;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 450px;
+  margin: 5px;
+  overflow: "auto";
 }
 
 .cover {
-    margin: auto;
-    display: list-item;
-    width: 160px;
+  margin: auto;
+  display: list-item;
+  width: 160px;
 }
 
 .description {
-    composes: card;
-    overflow: hidden;
-    box-sizing: border-box;
-    color: purple;
-    flex: 1;
+  composes: cardwidth;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: purple;
+  flex: 1;
 }
 
 .scrolled {
-    composes: card;
-    position: relative;
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
+  composes: cardwidth;
+  position: relative;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .author_img {
-    float: right;
+  float: right;
 }

@@ -56,30 +56,32 @@ export default class Book extends React.Component {
 
   render = () => {
     return (
-      <div
-        className={style.book}
-        cover={<img alt="example" src={this.state.img} />}
-        actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
-          <EllipsisOutlined key="ellipsis" />,
-        ]}
-      >
-        <img className={style.cover} src={this.state.img} alt="cover" />
-        <div className={style.description}>
-          <div className={style.scrolled}>
-            <img
-              className={style.author_img}
-              src={this.state.author.img}
-              alt=""
-              height="80"
-            />
-            {this.state.subject.map((item) => (
-              <Tag key={item}>{item}</Tag>
-            ))}
-            <h2>{this.state.author.name} </h2>
-            <h3>{this.state.title}</h3>
-            <div>{renderHTML(this.state.description)}</div>
+      <div className={style.card}>
+        <div
+          className={style.book}
+          cover={<img alt="example" src={this.state.img} />}
+          actions={[
+            <SettingOutlined key="setting" />,
+            <EditOutlined key="edit" />,
+            <EllipsisOutlined key="ellipsis" />,
+          ]}
+        >
+          <img className={style.cover} src={this.state.img} alt="cover" />
+          <div className={style.description}>
+            <div className={style.scrolled}>
+              <img
+                className={style.author_img}
+                src={this.state.author.img}
+                alt=""
+                height="80"
+              />
+              {this.state.subject.map((item) => (
+                <Tag key={item}>{item}</Tag>
+              ))}
+              <h2>{this.state.author.name} </h2>
+              <h3>{this.state.title}</h3>
+              <div>{renderHTML(this.state.description)}</div>
+            </div>
           </div>
         </div>
       </div>

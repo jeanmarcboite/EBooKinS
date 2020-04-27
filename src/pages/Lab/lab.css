@@ -93,3 +93,16 @@
 .Resizer.disabled:hover {
     border-color: transparent;
 }
+
+.footer {
+    background-color: #60424ca9;
+    opacity: 1;
+    position: fixed;
+    bottom: 0;
+    height: 100px;
+    width: 100vw;
+}
+
+.footer:hover {
+    opacity: 1;
+}

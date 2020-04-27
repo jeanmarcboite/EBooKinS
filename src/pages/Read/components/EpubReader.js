@@ -304,6 +304,7 @@ class EpubReader extends React.Component {
             rightArrowVisible={this.state.rightArrowVisible}
           />
         </SplitPane>
+        <div className="style.footer">BLA</div>
       </div>
     );
   };

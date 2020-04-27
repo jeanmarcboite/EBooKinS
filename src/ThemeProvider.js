@@ -18,6 +18,10 @@ const defaultTheme = {
     color: "#000000",
     background: "#FFFFFF",
   },
+  menuitem: {
+    color: "#000000",
+    background: "#FFFFFF",
+  },
   ebook_iframe_body: {
     color: "#000000",
     background: "#FFFFFF",
@@ -31,6 +35,11 @@ const light = {
     ...defaultTheme.submenu,
     background: "papayawhip",
   },
+  menuitem: {
+    ...defaultTheme.menuitem,
+    background: "papayawhip",
+  },
+
   ebook_iframe_body: {
     ...defaultTheme.ebook_iframe_body,
     background: "papayawhip",
@@ -44,16 +53,43 @@ const chocolate = {
     ...defaultTheme.submenu,
     background: "papayawhip",
   },
+  menuitem: {
+    ...defaultTheme.menuitem,
+    background: "papayawhip",
+  },
   ebook_iframe_body: {
     color: "blue",
     background: "#ffddb0",
   },
 };
+
+const gray = {
+  ...defaultTheme,
+  name: "gray",
+  type: "dark",
+  submenu: {
+    color: "#eeeeee",
+    background: "gray",
+  },
+  menuitem: {
+    color: "#eeeeee",
+    background: "gray",
+  },
+  ebook_iframe_body: {
+    color: "white",
+    background: "gray",
+  },
+};
+
 const dark = {
   ...defaultTheme,
   name: "dark",
   type: "dark",
   submenu: {
+    color: "#eeeeee",
+    background: "#212121",
+  },
+  menuitem: {
     color: "#eeeeee",
     background: "#212121",
   },
@@ -67,6 +103,7 @@ export const themes = {
   default: defaultTheme,
   light,
   chocolate,
+  gray,
   dark,
 };
 

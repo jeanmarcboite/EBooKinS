@@ -22,5 +22,9 @@
 }
 
 .menuItemLabel {
-    color: gray;
+    color: white;
+}
+
+.any {
+    background-color: gray;
 }

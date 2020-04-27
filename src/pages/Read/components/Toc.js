@@ -12,8 +12,18 @@ class Toc extends React.PureComponent {
   renderItem = (item) => {
     if (!item.subitems || item.subitems.length === 0)
       return (
-        <Menu.Item className="style.menuItem" key={item.id} href={item.href}>
-          <div className={style.menuItemLabel}>{item.label}</div>
+        <Menu.Item
+          className="style.menuItem"
+          key={item.id}
+          style={this.context.theme.submenu}
+          href={item.href}
+        >
+          <div
+            className={style.menuItemLabel}
+            style={this.context.theme.menuitem}
+          >
+            {item.label}
+          </div>
         </Menu.Item>
       );
 
@@ -39,9 +49,9 @@ class Toc extends React.PureComponent {
           onClick={this.props.selectChapter}
           selectedKeys={[this.props.selectedKey]}
           defaultOpenKeys={defaultOpenKeys}
-          style={{ height: "100%", overflow: "auto" }}
+          style={{ height: "100%", overflow: "auto", color: "white" }}
           className={style.menu}
-          theme={this.context.theme.name}
+          theme={this.context.theme.type}
         >
           {this.props.toc
             ? this.props.toc.subMenus.map((item, key) => (

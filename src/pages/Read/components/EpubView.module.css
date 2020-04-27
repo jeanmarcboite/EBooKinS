@@ -55,7 +55,7 @@
 .viewer {
     height: 100%;
     box-shadow: 0 0 4px #ccc;
-    border: 6px solid purple;
+    border: 1px solid purple;
     border-radius: 30px;
     padding: 0;
     position: relative;

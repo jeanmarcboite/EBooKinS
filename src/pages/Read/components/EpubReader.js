@@ -25,7 +25,7 @@ import SelectTheme from "components/SelectTheme";
 import ComputedStyles from "components/ComputedStyles";
 import DB from "lib/Database";
 
-import { Card, Avatar, Alert } from "antd";
+import { Card, Alert } from "antd";
 
 class EpubReader extends React.Component {
   static contextType = ThemeContext;
@@ -124,7 +124,7 @@ class EpubReader extends React.Component {
     this.epub.book
       .open(url)
       .then(() => {
-        console.log("%c book open ", "color: green", this.props.url);
+        //console.log("%c book open ", "color: green", this.props.url);
         this.epub.book.loaded.navigation.then(this.loadTableOfContents);
         this.epub.book.loaded.metadata.then(this.loadMetadata);
       })

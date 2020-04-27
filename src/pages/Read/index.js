@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { BookTwoTone } from "@ant-design/icons";
 import { ThemeContext } from "ThemeProvider";
 import Hotkeys from "react-hot-keys";
@@ -166,5 +165,5 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps)(ReadPage));
 
 ReadPage.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
 };

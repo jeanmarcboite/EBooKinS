@@ -2,12 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { ThemeContext, themes } from "ThemeProvider";
 
-import routes from "routes/routes";
-import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Layout } from "antd";
 import RoutesHeader from "routes/Header";
 
-import MainLayout from "pages/MainLayout";
 import {
   BarsOutlined,
   SettingOutlined,

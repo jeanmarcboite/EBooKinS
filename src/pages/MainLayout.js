@@ -2,8 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "react-contexify/dist/ReactContexify.min.css";
 import style from "./Layout.module.css";
-import { Layout, Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Layout } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 import RoutesHeader from "routes/Header";
@@ -72,6 +71,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(MainLayout);
 
 MainLayout.whyDidYouRender = {
-  logOnDifferentValues: true,
+  logOnDifferentValues: false,
   customName: "Main Layout",
 };

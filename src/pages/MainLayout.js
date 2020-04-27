@@ -28,19 +28,22 @@ class MainLayout extends React.Component {
           collapsible
           collapsed={this.state.collapsed}
           collapsedWidth={0}
+          trigger={null}
           className={style.sider}
         >
           {this.props.sider}
         </Layout.Sider>
         <div className={style.container}>
-          {React.createElement(
-            this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-            {
-              className: "trigger",
-              onClick: this.toggle,
-            }
-          )}
-          <RoutesHeader />
+          <div style={{ display: "flex" }}>
+            {React.createElement(
+              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: "trigger",
+                onClick: this.toggle,
+              }
+            )}
+            <RoutesHeader />
+          </div>
           <div className={style.content}>{this.props.children}</div>
         </div>
       </Layout>

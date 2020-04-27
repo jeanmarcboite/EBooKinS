@@ -10,6 +10,7 @@ import { Separator, Item } from "react-contexify";
 import "react-contexify/dist/ReactContexify.min.css";
 import { BookTwoTone } from "@ant-design/icons";
 import ImportFile from "components/ImportFile";
+import MainLayout from "pages/MainLayout";
 
 class ContextMenu extends React.Component {
   static contextType = ThemeContext;
@@ -65,6 +66,14 @@ class Library extends React.Component {
           <div className={style.library}>{this.state.items}</div>
         </Page>
       </>
+    );
+  };
+
+  render = () => {
+    return (
+      <MainLayout>
+        <div className={style.library}>{this.state.items}</div>
+      </MainLayout>
     );
   };
 }

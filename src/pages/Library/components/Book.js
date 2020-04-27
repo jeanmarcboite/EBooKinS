@@ -14,6 +14,16 @@ import DB from "lib/Database";
 
 import style from "./Book.module.css";
 
+const get = (metadata, key) => {
+  let value = metadata[key] ? metadata[key][0] : "";
+
+  if (typeof value == "string") return value;
+
+  if ("_" in value) return value._;
+
+  return JSON.stringify(value);
+};
+
 export default class Book extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
@@ -36,19 +46,19 @@ export default class Book extends React.Component {
 
   getMetadata = ({ metadata }) => {
     // console.log(metadata);
-    let creator = metadata["dc:creator"][0];
-    let title = metadata["dc:title"][0];
-    let description = metadata["dc:description"]
-      ? metadata["dc:description"][0]
-      : "no book description available";
+    let creator = get(metadata, "dc:creator");
+    let title = get(metadata, "dc:title");
+    let description = get(metadata, "dc:description");
     let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
     this.setState({ description, title, subject });
 
-    let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
-    author
-      .get()
-      .then((author) => this.setState({ author }))
-      .catch(console.warn);
+    if (creator.$) {
+      let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
+      author
+        .get()
+        .then((author) => this.setState({ author }))
+        .catch(console.warn);
+    }
   };
 
   getCover = (blob) => {

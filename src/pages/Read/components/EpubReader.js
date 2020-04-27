@@ -36,10 +36,8 @@ class EpubReader extends React.Component {
 
     this.$view = React.createRef();
     this.$container = React.createRef();
-    this.$leftPane = React.createRef();
 
     this.state = {
-      leftPanelSize: 0,
       tableOfContents: null,
       chapter: null,
       error: null,
@@ -53,18 +51,14 @@ class EpubReader extends React.Component {
   componentDidMount() {
     // TODO getCurrent
     // TODO better setState to run componentDidUpdate
-    this.setState({ leftPanelSize: this.props.leftPanelSize });
+    this.setState({ error: null });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.error) {
       if (prevProps.url === this.props.url) this.renderNoBook();
       else this.setState({ error: null });
-    } else if (
-      prevProps.url !== this.props.url ||
-      prevProps.leftPanelSize !== this.props.leftPanelSize ||
-      !this.epub
-    ) {
+    } else if (prevProps.url !== this.props.url || !this.epub) {
       this.openEpub();
     } else {
       this.updateView();
@@ -238,25 +232,12 @@ class EpubReader extends React.Component {
     if (this.epub) this.epub.setFontSize(value);
   };
 
-  onResizerDragStarted = () => {};
-
-  onResizerDrag = (e) => {
-    console.log("onDrag", e);
-  };
-
-  onResizerDragFinished = (leftPanelSize) => {
-    // this will trigger update
-    this.props.dispatch(
-      setSetting({ setting: "leftPanelSize", value: leftPanelSize })
-    );
-  };
   debugCards = () => {
     if (true) return "";
     return (
       <ComputedStyles
         elems={{
           container: this.$container,
-          leftPane: this.$leftPane,
           view: this.$view,
         }}
         style_attribute="width"
@@ -300,54 +281,10 @@ class EpubReader extends React.Component {
       </div>
     );
   };
-  renderSP = () => {
-    return (
-      <div ref={this.$container} className={style.reader}>
-        <SplitPane
-          split="vertical"
-          defaultSize={this.props.leftPanelSize}
-          resizerClassName={style.Resizer}
-          onDragStarted={this.onResizerDragStarted}
-          onDrag={this.onResizerDrag}
-          onDragFinished={this.onResizerDragFinished}
-        >
-          <div className={style.leftPane} ref={this.$leftPane}>
-            <Toc
-              className={style.toc}
-              toc={this.state.tableOfContents}
-              selectChapter={this.selectChapter}
-              selectedKey={this.state.href}
-            />
-            <div
-              style={{ position: "absolute", bottom: "20px", width: "100%" }}
-            >
-              {this.debugCards()}
-              <SelectFontSize
-                value={this.context.fontSize}
-                onChange={this.setFontSize}
-              />
-              <SelectTheme />
-            </div>
-          </div>
-          <EpubView
-            ref={this.$view}
-            error={this.state.error}
-            next={this.next}
-            prev={this.prev}
-            leftArrowVisible={this.state.leftArrowVisible}
-            rightArrowVisible={this.state.rightArrowVisible}
-          />
-        </SplitPane>
-        <div className="style.footer">BLA</div>
-      </div>
-    );
-  };
 }
 
 function mapStateToProps(state) {
-  return {
-    leftPanelSize: state.settings.leftPanelSize,
-  };
+  return {};
 }
 
 export default connect(mapStateToProps)(EpubReader);

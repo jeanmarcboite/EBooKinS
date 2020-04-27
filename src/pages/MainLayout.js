@@ -1,50 +1,51 @@
 import React from "react";
 import { connect } from "react-redux";
 import "react-contexify/dist/ReactContexify.min.css";
-import { ThemeContext } from "ThemeProvider";
 import style from "./Layout.module.css";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
-import routes from "routes/routes";
+import RoutesHeader from "routes/Header";
 
-const menuID = "PageMenuID";
-function MainLayout({ id, sider, children }) {
-  const context = React.useContext(ThemeContext);
-  id = id ? id : menuID;
+class MainLayout extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const routeItems = routes
-    .filter((route) => route.label)
-    .map((item, key) => (
-      <Menu.Item key={item.to}>
-        <Link to={item.to}>
-          {item.icon ? item.icon : null}
-          {item.label}
-        </Link>
-      </Menu.Item>
-    ));
+    this.state = { collapsed: false };
+  }
 
-  const header = (
-    <Menu mode="horizontal" defaultSelectedKeys={["2"]} className={style.menu}>
-      {routeItems}
-    </Menu>
-  );
-  return (
-    <Layout className={style.MainLayout}>
-      <Layout.Sider
-        collapsible
-        collapsedWidth={0}
-        defaultCollapsed={true}
-        className={style.sider}
-      >
-        {sider}
-      </Layout.Sider>
-      <div className={style.container}>
-        <div className={style.header}>{header}</div>
-        <div className={style.content}>{children}</div>
-      </div>
-    </Layout>
-  );
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  render = () => {
+    return (
+      <Layout className={style.MainLayout}>
+        <Layout.Sider
+          collapsible
+          collapsed={this.state.collapsed}
+          collapsedWidth={0}
+          className={style.sider}
+        >
+          {this.props.sider}
+        </Layout.Sider>
+        <div className={style.container}>
+          {React.createElement(
+            this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: "trigger",
+              onClick: this.toggle,
+            }
+          )}
+          <RoutesHeader />
+          <div className={style.content}>{this.props.children}</div>
+        </div>
+      </Layout>
+    );
+  };
 }
 
 function mapStateToProps(state) {
@@ -54,3 +55,8 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(MainLayout);
+
+MainLayout.whyDidYouRender = {
+  logOnDifferentValues: true,
+  customName: "Main Layout",
+};

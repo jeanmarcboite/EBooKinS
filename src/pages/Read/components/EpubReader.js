@@ -1,8 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setSetting } from "pages/Settings/store";
-import SplitPane from "react-split-pane";
 import { ThemeContext, themes } from "ThemeProvider";
+
+import routes from "routes/routes";
+import { Layout, Menu } from "antd";
+import { Link } from "react-router-dom";
+import RoutesHeader from "routes/Header";
 
 import MainLayout from "pages/MainLayout";
 import {
@@ -11,6 +14,8 @@ import {
   EditOutlined,
   EllipsisOutlined,
   FrownTwoTone,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
 
 import style from "./EpubReader.module.css";
@@ -45,13 +50,21 @@ class EpubReader extends React.Component {
       rightArrowVisible: true,
       href: null,
       title: "chapters",
+      collapsed: true,
     };
   }
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
 
   componentDidMount() {
     // TODO getCurrent
     // TODO better setState to run componentDidUpdate
-    this.setState({ error: null });
+    //this.setState({ error: null });
+    this.openEpub();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -267,8 +280,27 @@ class EpubReader extends React.Component {
 
   render = () => {
     return (
-      <div ref={this.$container} className={style.reader}>
-        <MainLayout sider={this.sider()}>
+      <Layout className={style.MainLayout}>
+        <Layout.Sider
+          collapsible
+          collapsed={this.state.collapsed}
+          collapsedWidth={0}
+          className={style.sider}
+          trigger={null}
+        >
+          {this.sider()}
+        </Layout.Sider>
+        <div ref={this.$container} className={style.reader}>
+          <div className={style.header} style={{ display: "flex" }}>
+            {React.createElement(
+              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: "trigger",
+                onClick: this.toggle,
+              }
+            )}
+            <RoutesHeader />
+          </div>
           <EpubView
             ref={this.$view}
             error={this.state.error}
@@ -277,8 +309,8 @@ class EpubReader extends React.Component {
             leftArrowVisible={this.state.leftArrowVisible}
             rightArrowVisible={this.state.rightArrowVisible}
           />
-        </MainLayout>
-      </div>
+        </div>
+      </Layout>
     );
   };
 }
@@ -290,6 +322,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "EpubReader",
 };

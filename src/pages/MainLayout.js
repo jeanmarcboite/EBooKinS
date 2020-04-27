@@ -51,7 +51,7 @@ class MainLayout extends React.Component {
       <Layout className={style.MainLayout}>
         {this.sider()}
         <div className={style.container}>
-          <div style={{ display: "flex" }}>
+          <div className={style.header} style={{ display: "flex" }}>
             {this.trigger()}
             <RoutesHeader />
           </div>

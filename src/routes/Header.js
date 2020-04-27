@@ -8,8 +8,8 @@ export default function RoutesHeader() {
   const routeItems = routes
     .filter((route) => route.label)
     .map((item, key) => (
-      <Menu.Item key={item.to}>
-        <Link to={item.to}>
+      <Menu.Item key={item.to} style={{ backgroundColor: "white" }}>
+        <Link to={item.to} style={{ backgroundColor: "white" }}>
           {item.icon ? item.icon : null}
           {item.label}
         </Link>

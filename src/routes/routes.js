@@ -9,6 +9,7 @@ import {
 
 import Ebook from "pages/Read";
 import Library from "pages/Library";
+import About from "pages/About";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
 
@@ -38,7 +39,7 @@ const routes = [
     to: "/about",
     label: "About",
     icon: <ExperimentTwoTone twoToneColor="#52c41a" />,
-    component: Settings,
+    component: About,
   },
   {
     to: "/lab",

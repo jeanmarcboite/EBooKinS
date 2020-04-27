@@ -4,7 +4,7 @@ import { setSetting } from "./store";
 import { Form, Switch, Select } from "antd";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Page from "pages/Page";
-import RoutesMenu from "routes/Menu";
+import RoutesMenu from "routes/ContextMenu";
 import { ThemeContext } from "ThemeProvider";
 
 class Settings extends React.Component {

@@ -1,35 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { contextMenu } from "react-contexify";
-
-import { Layout, Menu } from "antd";
+import { Menu } from "antd";
 import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
 } from "@ant-design/icons";
-import style from "./Lab.module.css";
 
 import content from "assets/hubble_bubble.jpg";
 
-const { SubMenu } = Menu;
-const { Sider, Footer } = Layout;
-
-const menuID = "menu_id";
-class Lab extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.ref = React.createRef();
-  }
-  openContextMenu = (e) => {
-    e.preventDefault();
-    contextMenu.show({
-      id: menuID,
-      event: e,
-    });
-  };
-
+import MainLayout from "pages/MainLayout";
+class AboutPage extends React.Component {
   sider = (
     <Menu
       mode="inline"
@@ -37,7 +18,7 @@ class Lab extends React.Component {
       defaultOpenKeys={["sub1"]}
       style={{ height: "100%", borderRight: 0 }}
     >
-      <SubMenu
+      <Menu.SubMenu
         key="sub1"
         title={
           <span>
@@ -50,8 +31,8 @@ class Lab extends React.Component {
         <Menu.Item key="2">option2</Menu.Item>
         <Menu.Item key="3">option3</Menu.Item>
         <Menu.Item key="4">option4</Menu.Item>
-      </SubMenu>
-      <SubMenu
+      </Menu.SubMenu>
+      <Menu.SubMenu
         key="sub2"
         title={
           <span>
@@ -64,8 +45,8 @@ class Lab extends React.Component {
         <Menu.Item key="6">option6</Menu.Item>
         <Menu.Item key="7">option7</Menu.Item>
         <Menu.Item key="8">option8</Menu.Item>
-      </SubMenu>
-      <SubMenu
+      </Menu.SubMenu>
+      <Menu.SubMenu
         key="sub3"
         title={
           <span>
@@ -78,32 +59,15 @@ class Lab extends React.Component {
         <Menu.Item key="10">option10</Menu.Item>
         <Menu.Item key="11">option11</Menu.Item>
         <Menu.Item key="12">option12</Menu.Item>
-      </SubMenu>
-    </Menu>
-  );
-
-  header = (
-    <Menu mode="horizontal" defaultSelectedKeys={["2"]} className={style.menu}>
-      <Menu.Item key="1">nav 1</Menu.Item>
-      <Menu.Item key="2">nav 2</Menu.Item>
-      <Menu.Item key="3">nav 3</Menu.Item>
+      </Menu.SubMenu>
     </Menu>
   );
 
   render = () => {
     return (
-      <Layout>
-        <Sider collapsible collapsedWidth={0} className={style.sider}>
-          {this.sider}
-        </Sider>
-        <div className={style.container}>
-          <div className={style.header}>{this.header}</div>
-          <div className={content}>
-            <img src={content} alt="bubble" />
-          </div>
-          <Footer className={style.footer}>footer</Footer>
-        </div>
-      </Layout>
+      <MainLayout sider={this.sider}>
+        <img src={content} alt="bubble" />
+      </MainLayout>
     );
   };
 }
@@ -114,4 +78,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Lab);
+export default connect(mapStateToProps)(AboutPage);

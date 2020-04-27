@@ -6,7 +6,7 @@ import Hotkeys from "react-hot-keys";
 import { loadFile } from "./store";
 import { withRouter } from "react-router-dom";
 
-import RoutesMenu from "routes/Menu";
+import RoutesMenu from "routes/ContextMenu";
 import {
   Separator,
   Item,

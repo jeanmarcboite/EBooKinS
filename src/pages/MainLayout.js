@@ -31,7 +31,12 @@ function MainLayout({ id, sider, children }) {
   );
   return (
     <Layout className={style.MainLayout}>
-      <Layout.Sider collapsible collapsedWidth={0} className={style.sider}>
+      <Layout.Sider
+        collapsible
+        collapsedWidth={0}
+        defaultCollapsed={true}
+        className={style.sider}
+      >
         {sider}
       </Layout.Sider>
       <div className={style.container}>

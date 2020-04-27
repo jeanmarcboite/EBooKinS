@@ -30,30 +30,34 @@ class Toc extends React.PureComponent {
     );
   };
   render() {
+    let defaultOpenKeys = [];
+    if (this.props.toc) defaultOpenKeys = [this.props.toc.subMenus[0].id];
     return (
-      <Menu
-        mode="inline"
-        onClick={this.props.selectChapter}
-        selectedKeys={[this.props.selectedKey]}
-        defaultOpenKeys={["chapters"]}
-        style={{ height: "100%" }}
-        className={style.menu}
-        theme={this.context.theme.name}
-      >
-        {this.props.toc
-          ? this.props.toc.subMenus.map((item, key) => (
-              <Menu.SubMenu
-                mode="inline"
-                className={style.subMenu}
-                key={item.id}
-                title={item.title}
-                style={this.context.theme.submenu}
-              >
-                {item.items.map(this.renderItem)}
-              </Menu.SubMenu>
-            ))
-          : null}
-      </Menu>
+      <div className={style.toc}>
+        <Menu
+          mode="inline"
+          onClick={this.props.selectChapter}
+          selectedKeys={[this.props.selectedKey]}
+          defaultOpenKeys={defaultOpenKeys}
+          style={{ height: "100%", overflow: "auto" }}
+          className={style.menu}
+          theme={this.context.theme.name}
+        >
+          {this.props.toc
+            ? this.props.toc.subMenus.map((item, key) => (
+                <Menu.SubMenu
+                  mode="inline"
+                  className={style.subMenu}
+                  key={item.id}
+                  title={item.title}
+                  style={this.context.theme.submenu}
+                >
+                  {item.items.map(this.renderItem)}
+                </Menu.SubMenu>
+              ))
+            : null}
+        </Menu>
+      </div>
     );
   }
 }

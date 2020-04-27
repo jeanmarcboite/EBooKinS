@@ -1,3 +1,10 @@
+.toc {
+    display: flex;
+    flex-direction: column;
+    height: calc(99vh - 60px);
+    overflow: hidden;
+}
+
 .menu {
     display: "block";
     background: red;

@@ -4,6 +4,7 @@ import { setSetting } from "pages/Settings/store";
 import SplitPane from "react-split-pane";
 import { ThemeContext, themes } from "ThemeProvider";
 
+import MainLayout from "pages/MainLayout";
 import {
   BarsOutlined,
   SettingOutlined,
@@ -179,11 +180,8 @@ class EpubReader extends React.Component {
   renderBook = (location) => {
     this.width =
       (
-        parseInt(getComputedStyle(this.$container.current).width) -
-        parseInt(getComputedStyle(this.$leftPane.current).width) -
-        15
+        parseInt(getComputedStyle(this.$container.current).width) - 16
       ).toString() + "px";
-
     this.epub.renderBook(
       this.$view.current,
       this.width,
@@ -266,7 +264,43 @@ class EpubReader extends React.Component {
       />
     );
   };
+
+  sider = () => (
+    <>
+      <Toc
+        className={style.toc}
+        toc={this.state.tableOfContents}
+        selectChapter={this.selectChapter}
+        selectedKey={this.state.href}
+      />
+      <div style={{ position: "absolute", bottom: "20px", width: "100%" }}>
+        {this.debugCards()}
+        <SelectFontSize
+          value={this.context.fontSize}
+          onChange={this.setFontSize}
+        />
+        <SelectTheme />
+      </div>
+    </>
+  );
+
   render = () => {
+    return (
+      <div ref={this.$container} className={style.reader}>
+        <MainLayout sider={this.sider()}>
+          <EpubView
+            ref={this.$view}
+            error={this.state.error}
+            next={this.next}
+            prev={this.prev}
+            leftArrowVisible={this.state.leftArrowVisible}
+            rightArrowVisible={this.state.rightArrowVisible}
+          />
+        </MainLayout>
+      </div>
+    );
+  };
+  renderSP = () => {
     return (
       <div ref={this.$container} className={style.reader}>
         <SplitPane

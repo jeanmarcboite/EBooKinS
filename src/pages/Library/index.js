@@ -1,37 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import Page from "pages/Page";
-import RoutesMenu from "routes/ContextMenu";
 import { ThemeContext } from "ThemeProvider";
 import DB from "lib/Database";
-import Book from "./components/Book";
+import Book from "./components/BookCard";
 import style from "./Library.module.css";
-import { Separator, Item } from "react-contexify";
-import "react-contexify/dist/ReactContexify.min.css";
-import { BookTwoTone } from "@ant-design/icons";
-import ImportFile from "components/ImportFile";
 import MainLayout from "pages/MainLayout";
 
-class ContextMenu extends React.Component {
-  static contextType = ThemeContext;
-
-  render() {
-    return (
-      <>
-        <Item>
-          <label onClick={this.props.onImport}>
-            <BookTwoTone twoToneColor="#52c41a" />
-            Import Ebook
-          </label>
-        </Item>
-        <Separator />
-        <RoutesMenu />
-      </>
-    );
-  }
-}
-
-class Library extends React.Component {
+class LibraryPage extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
@@ -61,18 +36,6 @@ class Library extends React.Component {
 
   render = () => {
     return (
-      <>
-        <ImportFile ref={this.$input} />
-        <Page menu={<ContextMenu onImport={this.importEpub} />}>
-          <ImportFile ref={this.$input} />
-          <div className={style.library}>{this.state.items}</div>
-        </Page>
-      </>
-    );
-  };
-
-  render = () => {
-    return (
       <MainLayout>
         <div className={style.library}>{this.state.items}</div>
       </MainLayout>
@@ -87,8 +50,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Library);
+export default connect(mapStateToProps)(LibraryPage);
 
-Library.whyDidYouRender = {
+LibraryPage.whyDidYouRender = {
   logOnDifferentValues: false,
 };

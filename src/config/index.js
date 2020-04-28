@@ -5,6 +5,9 @@ const config = {
   authors: {
     name: "authors",
   },
+  books: {
+    name: "books",
+  },
 };
 
 export { default as urls } from "./urls";

@@ -1,12 +1,7 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
 import { Tag } from "antd";
-import {
-  SettingOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  ReadFilled,
-} from "@ant-design/icons";
+import { EditOutlined, EllipsisOutlined, ReadFilled } from "@ant-design/icons";
 import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
 
@@ -14,7 +9,9 @@ import Author from "models/Author";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
 
-import style from "./Book.module.css";
+import isbn_validate from "isbn-validate";
+
+import style from "./BookCard.module.css";
 
 const get = (metadata, key) => {
   let value = metadata[key] ? metadata[key][0] : "";
@@ -26,7 +23,7 @@ const get = (metadata, key) => {
   return JSON.stringify(value);
 };
 
-class Book extends React.Component {
+class BookCard extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
@@ -76,9 +73,9 @@ class Book extends React.Component {
   getCover = (blob) => {
     this.setState({ img: URL.createObjectURL(blob) });
   };
-
   onMore = (event) => {
-    console.log(this.state.ISBN);
+    if (isbn_validate.Validate(this.state.ISBN)) {
+    }
   };
 
   onRead = (event) => {
@@ -123,9 +120,8 @@ class Book extends React.Component {
   };
 }
 
-export default withRouter(Book);
+export default withRouter(BookCard);
 
-Book.whyDidYouRender = {
+BookCard.whyDidYouRender = {
   logOnDifferentValues: false,
-  customName: "Library.Book",
 };

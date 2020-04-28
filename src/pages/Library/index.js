@@ -51,7 +51,9 @@ class Library extends React.Component {
     DB.ebooks.db.allDocs().then((docs) => {
       this.setState({
         items: docs.rows.map((item) => {
-          return <Book id={item.id} key={item.id} />;
+          return (
+            <Book id={item.id} key={item.id} dispatch={this.props.dispatch} />
+          );
         }),
       });
     });

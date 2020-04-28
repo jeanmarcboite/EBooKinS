@@ -7,6 +7,8 @@ import {
   EllipsisOutlined,
   ReadFilled,
 } from "@ant-design/icons";
+import { loadFile } from "pages/Read/store";
+import { withRouter } from "react-router-dom";
 
 import Author from "models/Author";
 import renderHTML from "react-render-html";
@@ -24,7 +26,7 @@ const get = (metadata, key) => {
   return JSON.stringify(value);
 };
 
-export default class Book extends React.Component {
+class Book extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
@@ -65,16 +67,29 @@ export default class Book extends React.Component {
     this.setState({ img: URL.createObjectURL(blob) });
   };
 
+  onMore = (event) => {
+    console.log(event);
+  };
+
+  onRead = (event) => {
+    this.props.dispatch(loadFile(this.props.id));
+    this.props.history.push("/");
+  };
+
   render = () => {
     return (
       <div className={style.card}>
         <div className={style.book}>
-          <img className={style.cover} src={this.state.img} alt="cover" />
+          <img
+            className={style.cover}
+            src={this.state.img}
+            alt="cover"
+            onClick={this.onRead}
+          />
           <div className={style.actions}>
-            <SettingOutlined key="setting" />
-            <ReadFilled />
+            <ReadFilled onClick={this.onRead} />
             <EditOutlined key="edit" />
-            <EllipsisOutlined key="ellipsis" />
+            <EllipsisOutlined key="ellipsis" onClick={this.onMore} />
           </div>
           <div className={style.description}>
             <div className={style.scrolled}>
@@ -97,6 +112,8 @@ export default class Book extends React.Component {
     );
   };
 }
+
+export default withRouter(Book);
 
 Book.whyDidYouRender = {
   logOnDifferentValues: false,

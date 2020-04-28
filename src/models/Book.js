@@ -28,7 +28,7 @@ export default class Book {
             Promise.all(promises).then(function (values) {
               const responses = {};
               onlines.forEach((lib, k) => {
-                responses[lib] = values[k].data;
+                responses[lib] = values[k];
               });
               resolve(parseBookResponses(responses));
             });
@@ -39,7 +39,7 @@ export default class Book {
   };
 }
 const parseBookResponses = (responses) => {
-  let book = { data: {} };
+  let book = { data: {}, library: {} };
   if ("goodreads" in responses) {
     let goodreads = { statusText: responses.goodreads.statusText };
     if (responses.goodreads.status === 200) {

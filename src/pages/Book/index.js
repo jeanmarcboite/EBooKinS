@@ -4,9 +4,12 @@ import { connect } from "react-redux";
 import { ThemeContext } from "ThemeProvider";
 import MainLayout from "pages/MainLayout";
 import Book from "models/Book";
+import renderHTML from "react-render-html";
+
 // import the react-json-view component
 import ReactJson from "react-json-view";
-
+import style from "./Book.module.css";
+import "./boxes.css";
 class BookPage extends React.Component {
   static contextType = ThemeContext;
 
@@ -15,19 +18,38 @@ class BookPage extends React.Component {
 
     this.state = {
       isbn: this.props.match.params.isbn,
+      image_url: "",
+      book: { data: { description: "" } },
     };
   }
   componentDidMount() {
     let book = new Book(this.props.match.params.isbn);
     book
       .get()
-      .then((book) => this.setState({ book }))
+      .then((book) => {
+        let image_url = book.data.image_url;
+        this.setState({ book, image_url });
+      })
       .catch(console.warn);
   }
+  json = () => {
+    return <ReactJson src={this.state} />;
+  };
   render = () => {
     return (
       <MainLayout>
-        <ReactJson src={this.state} />
+        <div className={style.container}>
+          <div className={style.cover}>
+            <img src={this.state.image_url} alt="cover" width="100%" />
+          </div>
+          <div className={style.title}>title</div>
+          <div className={style.links}>links</div>
+          <div className={style.author}>author</div>
+          <div className={style.description}>
+            {renderHTML(this.state.book.data.description)}
+          </div>
+          <div className={style.shelves}>shelves</div>
+        </div>
       </MainLayout>
     );
   };

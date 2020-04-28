@@ -9,7 +9,7 @@ const DB = {
   ebooks: new Ebooks("epubs", server, port),
   locations: localforage.createInstance({
     name: "locations",
-    driver: localforage.LOCALSTORAGE,
+    //driver: localforage.LOCALSTORAGE,
   }),
 };
 

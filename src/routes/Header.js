@@ -16,9 +16,5 @@ export default function RoutesHeader() {
       </Menu.Item>
     ));
 
-  return (
-    <Menu mode="horizontal" defaultSelectedKeys={["2"]}>
-      {routeItems}
-    </Menu>
-  );
+  return <Menu mode="horizontal">{routeItems}</Menu>;
 }

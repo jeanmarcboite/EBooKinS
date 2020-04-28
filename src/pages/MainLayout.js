@@ -1,18 +1,29 @@
-import React from "react";
+import React, { createRef } from "react";
 import { connect } from "react-redux";
 import "react-contexify/dist/ReactContexify.min.css";
 import style from "./Layout.module.css";
 import { Layout } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  BookTwoTone,
+} from "@ant-design/icons";
+import { Menu } from "antd";
 
 import RoutesHeader from "routes/Header";
+import ImportFile from "components/ImportFile";
 
 class MainLayout extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = { collapsed: false };
+
+    this.$input = createRef();
   }
+  importEpub = () => {
+    this.$input.current.click();
+  };
 
   toggle = () => {
     this.setState({
@@ -40,7 +51,7 @@ class MainLayout extends React.Component {
     return React.createElement(
       this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
       {
-        className: "trigger",
+        className: style.trigger,
         onClick: this.toggle,
       }
     );
@@ -49,10 +60,19 @@ class MainLayout extends React.Component {
   render = () => {
     return (
       <Layout className={style.MainLayout}>
+        <ImportFile ref={this.$input} />
         {this.sider()}
         <div className={style.container}>
           <div className={style.header} style={{ display: "flex" }}>
             {this.trigger()}
+            <Menu mode="horizontal">
+              <Menu.Item style={{ backgroundColor: "white" }}>
+                <label onClick={this.importEpub}>
+                  <BookTwoTone twoToneColor="#52c41a" />
+                  Import Ebook
+                </label>
+              </Menu.Item>
+            </Menu>
             <RoutesHeader />
           </div>
           <div className={style.content}>{this.props.children}</div>

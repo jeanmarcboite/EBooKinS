@@ -21,3 +21,8 @@
 .header:hover .menu {
   background-color: #60424ca9;
 }
+
+.trigger {
+  background-color: white;
+  width: 60px;
+}

@@ -39,6 +39,11 @@ const goodreads = {
     "https://www.goodreads.com/author/show/" + id + "?format=xml&key=" + devkey,
   author: (id, devkey) =>
     "https://www.goodreads.com/api/author_url/" + id + "?key=" + devkey,
+  search: (q, devkey) =>
+    "https://www.goodreads.com/search/index.xml?key=" +
+    devkey +
+    "&q=" +
+    q.replace(/\s+/g, "+"),
 };
 
 /*

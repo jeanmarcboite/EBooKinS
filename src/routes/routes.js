@@ -10,6 +10,7 @@ import {
 import Ebook from "pages/Read";
 import Library from "pages/Library";
 import Book from "pages/Book";
+import Search from "pages/Book/Search";
 import About from "pages/About";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
@@ -39,6 +40,10 @@ const routes = [
   {
     to: "/book/:isbn",
     component: Book,
+  },
+  {
+    to: "/search/:query",
+    component: Search,
   },
   {
     to: "/about",

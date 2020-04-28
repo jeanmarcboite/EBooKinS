@@ -9,7 +9,7 @@ import Rating from "react-rating";
 // import the react-json-view component
 import ReactJson from "react-json-view";
 import style from "./Book.module.css";
-import "./boxes.css";
+
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 class BookPage extends React.Component {
   static contextType = ThemeContext;
@@ -26,7 +26,7 @@ class BookPage extends React.Component {
   componentDidMount() {
     let book = new Book(this.props.match.params.isbn);
     book
-      .get()
+      .getFromISBN()
       .then((book) => {
         let image_url = book.data.image_url;
         this.setState({ book, image_url });

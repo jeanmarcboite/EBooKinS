@@ -76,6 +76,8 @@ class BookCard extends React.Component {
   onMore = (event) => {
     if (isbn_validate.Validate(this.state.ISBN)) {
       this.props.history.push("/book/" + this.state.ISBN);
+    } else {
+      this.props.history.push("/search/" + this.state.title);
     }
   };
 

@@ -6,7 +6,8 @@ const config = {
     name: "authors",
   },
   books: {
-    name: "books",
+    isbn: "books",
+    goodreads: "goodreads",
   },
 };
 

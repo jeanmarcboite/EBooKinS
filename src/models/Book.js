@@ -4,16 +4,33 @@ import localforage from "localforage";
 import config, { urls } from "config";
 import online from "lib/online";
 
-const cache = localforage.createInstance({ name: config.books.name });
+const cacheISBN = localforage.createInstance({ name: config.books.isbn });
+const cacheGoodreads = localforage.createInstance({
+  name: config.books.goodreads,
+});
 
 export default class Book {
   constructor(id) {
     this.id = id;
   }
 
-  get = () => {
+  getFromGoodreadsID = () => {
     return new Promise((resolve, reject) => {
-      cache
+      cacheGoodreads.getItem(this.id).then((value) => {
+        if (value) resolve(JSON.parse(value));
+        else {
+          let key = localStorage.getItem("GOODREADS_KEY");
+          online.get(urls.goodreads.id(this.id, key)).then((response) => {
+            console.log(response);
+            resolve(response);
+          });
+        }
+      });
+    });
+  };
+  getFromISBN = () => {
+    return new Promise((resolve, reject) => {
+      cacheISBN
         .getItem(this.id)
         .then((value) => {
           if (value) resolve(JSON.parse(value));

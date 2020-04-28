@@ -47,13 +47,23 @@ class Book extends React.Component {
   }
 
   getMetadata = ({ metadata }) => {
-    // console.log(metadata);
+    console.log(metadata);
     let creator = get(metadata, "dc:creator");
     let title = get(metadata, "dc:title");
     let description = get(metadata, "dc:description");
     let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
-    this.setState({ description, title, subject });
-
+    let ISBN = "";
+    metadata["dc:identifier"].forEach((identifier) => {
+      if (typeof identifier == "string") {
+        if (identifier.startsWith("isbn:")) ISBN = identifier.slice(5);
+      } else {
+        if (identifier.$["opf:scheme"] === "ISBN")
+          // TODO "AMAZON_FR"
+          ISBN = identifier._;
+      }
+    });
+    this.setState({ description, title, subject, ISBN });
+    //<dc:identifier opf:scheme="ISBN">2253015547</dc:identifier>;
     if (creator.$) {
       let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
       author
@@ -68,7 +78,7 @@ class Book extends React.Component {
   };
 
   onMore = (event) => {
-    console.log(event);
+    console.log(this.state.ISBN);
   };
 
   onRead = (event) => {

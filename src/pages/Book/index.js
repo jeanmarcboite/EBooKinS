@@ -35,19 +35,23 @@ class BookPage extends React.Component {
   json = () => {
     return <ReactJson src={this.state} />;
   };
+  description = (debug) => {
+    if (debug) return <ReactJson src={this.state} />;
+    else return renderHTML(this.state.book.data.description);
+  };
   render = () => {
+    let data = this.state.book.data;
+    console.log(data);
     return (
       <MainLayout>
         <div className={style.container}>
           <div className={style.cover}>
             <img src={this.state.image_url} alt="cover" width="100%" />
           </div>
-          <div className={style.title}>title</div>
+          <div className={style.title}>{data.title}</div>
           <div className={style.links}>links</div>
           <div className={style.author}>author</div>
-          <div className={style.description}>
-            {renderHTML(this.state.book.data.description)}
-          </div>
+          <div className={style.description}>{this.description(true)}</div>
           <div className={style.shelves}>shelves</div>
         </div>
       </MainLayout>

@@ -5,11 +5,12 @@ import { ThemeContext } from "ThemeProvider";
 import MainLayout from "pages/MainLayout";
 import Book from "models/Book";
 import renderHTML from "react-render-html";
-
+import Rating from "react-rating";
 // import the react-json-view component
 import ReactJson from "react-json-view";
 import style from "./Book.module.css";
 import "./boxes.css";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 class BookPage extends React.Component {
   static contextType = ThemeContext;
 
@@ -39,6 +40,13 @@ class BookPage extends React.Component {
     if (debug) return <ReactJson src={this.state} />;
     else return renderHTML(this.state.book.data.description);
   };
+
+  rating = (work) => {
+    if (!work) return 0;
+    let rating =
+      parseFloat(work.ratings_sum[0]._) / parseFloat(work.ratings_count[0]._);
+    return rating;
+  };
   render = () => {
     let data = this.state.book.data;
     console.log(data);
@@ -47,6 +55,14 @@ class BookPage extends React.Component {
         <div className={style.container}>
           <div className={style.cover}>
             <img src={this.state.image_url} alt="cover" width="100%" />
+          </div>
+          <div className={style.rating}>
+            <Rating
+              readonly
+              initialRating={this.rating(data.work)}
+              emptySymbol={<StarOutlined />}
+              fullSymbol={<StarFilled />}
+            />
           </div>
           <div className={style.title}>{data.title}</div>
           <div className={style.links}>links</div>

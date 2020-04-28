@@ -22,6 +22,12 @@
   grid-row: row / span 2;
 }
 
+.rating {
+  composes: box;
+  grid-column: col / span 2;
+  grid-row: row 3;
+}
+
 .shelves {
   composes: box;
   grid-column: col / span 3;

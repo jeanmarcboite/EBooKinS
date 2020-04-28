@@ -1,50 +1,71 @@
-const librarything = {
-  show: (id) => "http://www.librarything.com/work/" + id,
-  cover: (isbn, devkey, size) => {
-    size = size ? size : "large";
-    return (
-      "http://covers.librarything.com/devkey/" +
-      devkey +
-      "/" +
-      size +
-      "/isbn/" +
-      isbn
-    );
-  },
-  isbn: (isbn, devkey) =>
-    "http://www.librarything.com/services/rest/1.1/?method=librarything.ck.getwork&isbn=" +
-    isbn +
-    "&apikey=" +
-    devkey,
-  id: (id, devkey) =>
-    "http://www.librarything.com/services/rest/1.1/?method=librarything.ck.getwork&id=" +
-    id +
-    "&apikey=" +
-    devkey,
-};
+const librarythingKey = localStorage.getItem("LIBRARYTHING_KEY");
+const librarything = !librarythingKey
+  ? {
+      show: (id) => "http://www.librarything.com/work/" + id,
+    }
+  : {
+      show: (id) => "http://www.librarything.com/work/" + id,
+      cover: (isbn, size) => {
+        size = size ? size : "large";
+        return (
+          "http://covers.librarything.com/devkey/" +
+          librarythingKey +
+          "/" +
+          size +
+          "/isbn/" +
+          isbn
+        );
+      },
+      isbn: (isbn) =>
+        "http://www.librarything.com/services/rest/1.1/?method=librarything.ck.getwork&isbn=" +
+        isbn +
+        "&apikey=" +
+        librarythingKey,
+      id: (id) =>
+        "http://www.librarything.com/services/rest/1.1/?method=librarything.ck.getwork&id=" +
+        id +
+        "&apikey=" +
+        librarythingKey,
+    };
 
-const goodreads = {
-  nocover: "http://www.goodreads.com/images/nocover60x80.jpg",
-  show: (id) => "http://www.goodreads.com/book/show/" + id,
-  id: (id, devkey) =>
-    "https://www.goodreads.com/book/show/" + id + ".xml?key=" + devkey,
-  title: (title, devkey) =>
-    "https://www.goodreads.com/book/title.xml?title=" +
-    title +
-    "&key=" +
-    devkey,
-  isbn: (isbn, devkey) =>
-    "https://www.goodreads.com/book/isbn/" + isbn + "?key=" + devkey,
-  show_author: (id, devkey) =>
-    "https://www.goodreads.com/author/show/" + id + "?format=xml&key=" + devkey,
-  author: (id, devkey) =>
-    "https://www.goodreads.com/api/author_url/" + id + "?key=" + devkey,
-  search: (q, devkey) =>
-    "https://www.goodreads.com/search/index.xml?key=" +
-    devkey +
-    "&q=" +
-    q.replace(/\s+/g, "+"),
-};
+const goodreadsKey = localStorage.getItem("GOODREADS_KEY");
+
+const goodreads = !goodreadsKey
+  ? {
+      nocover: "http://www.goodreads.com/images/nocover60x80.jpg",
+      show: (id) => "http://www.goodreads.com/book/show/" + id,
+    }
+  : {
+      nocover: "http://www.goodreads.com/images/nocover60x80.jpg",
+      show: (id) => "http://www.goodreads.com/book/show/" + id,
+      id: (id) =>
+        "https://www.goodreads.com/book/show/" +
+        id +
+        ".xml?key=" +
+        goodreadsKey,
+      title: (title) =>
+        "https://www.goodreads.com/book/title.xml?title=" +
+        title +
+        "&key=" +
+        goodreadsKey,
+      isbn: (isbn) =>
+        "https://www.goodreads.com/book/isbn/" + isbn + "?key=" + goodreadsKey,
+      show_author: (id) =>
+        "https://www.goodreads.com/author/show/" +
+        id +
+        "?format=xml&key=" +
+        goodreadsKey,
+      author: (id) =>
+        "https://www.goodreads.com/api/author_url/" +
+        id +
+        "?key=" +
+        goodreadsKey,
+      search: (q) =>
+        "https://www.goodreads.com/search/index.xml?key=" +
+        goodreadsKey +
+        "&q=" +
+        q.replace(/\s+/g, "+"),
+    };
 
 /*
 openlibrary:

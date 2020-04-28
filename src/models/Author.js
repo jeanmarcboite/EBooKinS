@@ -11,12 +11,12 @@ class Author {
     this.id = id;
   }
   get = () => {
-    let key = localStorage.getItem("GOODREADS_KEY");
     return new Promise((resolve, reject) => {
       cache.getItem(this.id).then((value) => {
         if (value) resolve(JSON.parse(value));
+        if (!urls.goodreads.author) reject(new Error("no goodreads key"));
         online
-          .get(urls.goodreads.author(this.id, key))
+          .get(urls.goodreads.author(this.id))
           .then((value) => {
             if (!value.data) {
               reject(new Error("goodreads author no found"));
@@ -31,7 +31,7 @@ class Author {
                 let a = result.GoodreadsResponse.author[0];
                 let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
                 online
-                  .get(urls.goodreads.show_author(author.id, key))
+                  .get(urls.goodreads.show_author(author.id))
                   .then((response) => {
                     this.parse(response, author, resolve, reject);
                   });

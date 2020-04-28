@@ -19,8 +19,8 @@ export default class Book {
       cacheGoodreads.getItem(this.id).then((value) => {
         if (value) resolve(JSON.parse(value));
         else {
-          let key = localStorage.getItem("GOODREADS_KEY");
-          online.get(urls.goodreads.id(this.id, key)).then((response) => {
+          if (!urls.goodreads.id) reject(new Error("no goodreads key"));
+          online.get(urls.goodreads.id(this.id)).then((response) => {
             console.log(response);
             resolve(response);
           });
@@ -37,8 +37,7 @@ export default class Book {
           else {
             let onlines = ["librarything", "goodreads"];
             let promises = onlines.map((lib) => {
-              let key = localStorage.getItem(lib.toUpperCase() + "_KEY");
-              let URL = urls[lib].isbn(this.id, key);
+              let URL = urls[lib].isbn(this.id);
 
               return online.get(URL);
             });

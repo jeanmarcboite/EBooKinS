@@ -16,31 +16,21 @@ export default class SearchPage extends React.Component {
     };
   }
   componentDidMount() {
-    online
-      .get(
-        urls.goodreads.search(
-          this.state.query,
-          localStorage.getItem("GOODREADS_KEY")
-        )
-      )
-      .then((result) => {
-        parseString(result.data, (err, parsed) => {
-          console.log(parsed, result);
-          let promises = parsed.GoodreadsResponse.search[0].results[0].work
-            .slice(0, 1)
-            .map((w) =>
-              online.get(
-                urls.goodreads.id(
-                  w.id[0]._,
-                  localStorage.getItem("GOODREADS_KEY")
-                )
-              )
-            );
+    if (urls.goodreads.search) {
+      online
+        .get(urls.goodreads.search(this.state.query))
+        .then((result) => {
+          parseString(result.data, (err, parsed) => {
+            console.log(parsed, result);
+            let promises = parsed.GoodreadsResponse.search[0].results[0].work
+              .slice(0, 1)
+              .map((w) => online.get(urls.goodreads.id(w.id[0]._)));
 
-          Promise.all(promises).then((works) => this.setState({ works }));
-        });
-      })
-      .catch(console.warn);
+            Promise.all(promises).then((works) => this.setState({ works }));
+          });
+        })
+        .catch(console.warn);
+    }
   }
 
   render = () => {

@@ -9,6 +9,8 @@ import Rating from "react-rating";
 // import the react-json-view component
 import ReactJson from "react-json-view";
 import style from "./Book.module.css";
+import { loadFile } from "pages/Read/store";
+import { withRouter } from "react-router-dom";
 
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 class BookPage extends React.Component {
@@ -41,6 +43,11 @@ class BookPage extends React.Component {
     else return renderHTML(this.state.book.data.description);
   };
 
+  onRead = (event) => {
+    this.props.dispatch(loadFile(this.state.isbn));
+    this.props.history.push("/");
+  };
+
   rating = (work) => {
     if (!work) return 0;
     let rating =
@@ -54,7 +61,12 @@ class BookPage extends React.Component {
       <MainLayout>
         <div className={style.container}>
           <div className={style.cover}>
-            <img src={this.state.image_url} alt="cover" width="100%" />
+            <img
+              src={this.state.image_url}
+              alt="cover"
+              width="100%"
+              onClick={this.onRead}
+            />
           </div>
           <div className={style.rating}>
             <Rating
@@ -82,7 +94,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(BookPage);
+export default withRouter(connect(mapStateToProps)(BookPage));
 
 BookPage.whyDidYouRender = {
   logOnDifferentValues: false,

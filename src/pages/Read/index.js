@@ -97,11 +97,11 @@ class ReadPage extends React.Component {
   showContextMenu = (e) => {
     e.preventDefault();
     DB.ebooks.db
-      .allDocs()
+      .allDocs({ include_docs: true })
       .then((docs) => {
         let items = docs.rows.map((item) => (
           <Item key={item.id} onClick={() => this.loadFile(item.id)}>
-            {item.id.slice(14).replace(".epub", "")}
+            {item.doc.title}
           </Item>
         ));
         contextMenu.show({

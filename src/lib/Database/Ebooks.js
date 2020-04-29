@@ -92,6 +92,7 @@ export default class Ebooks {
       let cover = result.package.manifest[0].item[0].$;
       let metadata = result.package.metadata[0];
       let title = metadata["dc:title"][0];
+      if (typeof title !== "string") title = title._;
       let identifier = metadata["dc:identifier"][0]._;
 
       let data = {

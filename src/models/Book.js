@@ -35,7 +35,9 @@ export default class Book {
         .then((value) => {
           if (value) resolve(JSON.parse(value));
           else {
-            let onlines = ["librarything", "goodreads"];
+            let onlines = ["librarything", "goodreads"].filter((lib) => {
+              return "isbn" in urls[lib];
+            });
             let promises = onlines.map((lib) => {
               let URL = urls[lib].isbn(this.id);
 

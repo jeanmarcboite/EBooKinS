@@ -2,7 +2,7 @@ import EpubJS from "epubjs";
 
 import * as EPUBJS_CONSTANTS from "./constants";
 
-const debug = true;
+const debug = false;
 
 const render = ({ view, book, settings, themes }) => {
   let consoleGroup = false;

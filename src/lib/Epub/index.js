@@ -2,7 +2,7 @@ import EpubJS from "epubjs";
 
 import * as EPUBJS_CONSTANTS from "./constants";
 
-const debug = false;
+const debug = true;
 
 const render = ({ view, book, settings, themes }) => {
   let consoleGroup = false;
@@ -71,10 +71,6 @@ class Epub {
           break;
       }
     }
-  };
-
-  rendition = () => {
-    return this.book.rendition;
   };
 
   renderBook = (view, width, themes, location, onContextMenu) => {

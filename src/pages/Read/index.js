@@ -52,7 +52,7 @@ class ReadPage extends React.Component {
   constructor(props) {
     super(props);
     this.$input = React.createRef();
-
+    console.log("ReadPage: ", props);
     this.loadFileFromParams();
   }
 
@@ -69,6 +69,7 @@ class ReadPage extends React.Component {
   };
 
   loadFileFromParams = () => {
+    console.log(`loadFileFromParams(${this.props.match.params.id})`);
     if (
       this.props.match.params.id &&
       this.props.match.params.id !== this.props.url
@@ -165,5 +166,5 @@ function mapStateToProps(state) {
 export default withRouter(connect(mapStateToProps)(ReadPage));
 
 ReadPage.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
 };

@@ -62,16 +62,18 @@ class EpubReader extends React.Component {
     // TODO better setState to run componentDidUpdate
     //this.setState({ error: null });
     this.openEpub();
+    console.log("didMount", this.epub);
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps, this.props, this.epub);
     if (this.state.error) {
       if (prevProps.url === this.props.url) this.renderNoBook();
       else this.setState({ error: null });
     } else if (prevProps.url !== this.props.url || !this.epub) {
       this.openEpub();
     } else {
-      this.updateView();
+      //this.updateView();
     }
   }
 
@@ -319,6 +321,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(EpubReader);
 
 EpubReader.whyDidYouRender = {
-  logOnDifferentValues: false,
+  logOnDifferentValues: true,
   customName: "EpubReader",
 };

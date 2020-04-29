@@ -23,12 +23,14 @@ const routes = [
     exact: true,
     label: "Read",
     icon: <ReadOutlined twoToneColor="#52c41a" />,
-    component: () => (
-      <Redirect to={"/read/" + store.getState().ebook.url}></Redirect>
-    ),
+    component: () => <Redirect to={"/read/"}></Redirect>,
   },
   {
     to: "/read/:id",
+    component: Ebook,
+  },
+  {
+    to: "/read",
     component: Ebook,
   },
   {

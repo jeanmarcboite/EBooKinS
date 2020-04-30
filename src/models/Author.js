@@ -19,7 +19,11 @@ class Author {
           .get(urls.goodreads.author(this.id))
           .then((value) => {
             if (!value.data) {
-              reject(new Error("goodreads author no found"));
+              reject(
+                new Error(
+                  `goodreads: author ${this.id} not found: ${value.message}`
+                )
+              );
             }
             parseString(value.data, (err, result) => {
               if (err != null) {

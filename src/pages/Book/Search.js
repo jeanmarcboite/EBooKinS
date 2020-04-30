@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import online from "lib/online";
 import MainLayout from "pages/MainLayout";
-import ReactJson from "react-json-view";
 import { parseString } from "xml2js";
 import style from "./Search.module.css";
-import config, { urls } from "config";
+import { urls } from "config";
 import Book from "models/Book";
 
 const SearchCard = ({ data, onClick }) => {
-  if (data.$.type != "Book") return <></>;
+  if (data.$.type !== "Book") return <></>;
   return (
     <div>
       <img
@@ -26,7 +25,7 @@ const SelectedBook = ({ id }) => {
   const [state, setState] = useState({ book: {}, image_url: "", id: null });
   if (!id) return null;
 
-  if (id != state.id) {
+  if (id !== state.id) {
     console.log(id);
     let book = new Book(id);
     book.getFromGoodreadsID().then((book) => {
@@ -54,7 +53,6 @@ export default class SearchPage extends React.Component {
         .get(urls.goodreads.search(this.state.query))
         .then((result) => {
           parseString(result.data, (err, parsed) => {
-            console.log(parsed, result);
             this.setState({
               works: parsed.GoodreadsResponse.search[0].results[0].work.map(
                 (w) => w.best_book[0]

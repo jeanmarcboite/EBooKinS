@@ -9,8 +9,6 @@ import renderHTML from "react-render-html";
 import ReactJson from "react-json-view";
 import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
-import Author from "models/Author";
-import DB from "lib/Database";
 
 import BookDetails from "./components/BookDetails";
 class BookPage extends React.Component {

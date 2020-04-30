@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 
 import { ThemeContext } from "ThemeProvider";
 import Tags from "components/Tags";

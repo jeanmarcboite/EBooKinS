@@ -11,6 +11,8 @@ import ReactJson from "react-json-view";
 import style from "./Book.module.css";
 import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
+import Author from "models/Author";
+import DB from "lib/Database";
 
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 class BookPage extends React.Component {
@@ -23,10 +25,25 @@ class BookPage extends React.Component {
       isbn: this.props.match.params.isbn,
       image_url: "",
       book: { data: { description: "" } },
+      db_book: {},
+      author: { img: "", name: "" },
     };
   }
   componentDidMount() {
-    let book = new Book(this.props.match.params.isbn);
+    let ISBN = this.props.match.params.isbn;
+    let book = new Book(ISBN);
+    DB.ebooks.db.get(ISBN).then((book) => {
+      this.setState({ db_book: book });
+      if (book.creator && book.creator.$) {
+        let author = new Author(
+          book.creator.$["opf:role"] === "aut" ? book.creator._ : ""
+        );
+        author
+          .get()
+          .then((author) => this.setState({ author }))
+          .catch(console.warn);
+      }
+    });
     book
       .getFromISBN()
       .then((book) => {
@@ -94,9 +111,20 @@ class BookPage extends React.Component {
           </div>
           <div className={style.title}>{data.title}</div>
           <a className={style.links} href={this.get(data, "url")}>
-            <img src="http://d.gr-assets.com/misc/1454549125-1454549125_goodreads_misc.png" />
+            <img
+              alt="goodreads"
+              src="http://d.gr-assets.com/misc/1454549125-1454549125_goodreads_misc.png"
+            />
           </a>
-          <div className={style.author}>author</div>
+          <div className={style.author}>
+            <img
+              className={style.author_img}
+              src={this.state.author.img}
+              alt={this.state.author.name}
+              height="80"
+            />
+            <h2>{this.state.author.name} </h2>
+          </div>
           <div className={style.description}>{this.description(true)}</div>
           <div className={style.shelves}>shelves</div>
         </div>

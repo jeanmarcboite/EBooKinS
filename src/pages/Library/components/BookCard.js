@@ -1,7 +1,12 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
 import { Tag } from "antd";
-import { EditOutlined, EllipsisOutlined, ReadFilled } from "@ant-design/icons";
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  ReadFilled,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
 
@@ -45,12 +50,22 @@ class BookCard extends React.Component {
   getCover = (blob) => {
     this.setState({ img: URL.createObjectURL(blob) });
   };
-  onMore = (event) => {
-    if (isbn_validate.Validate(this.state.book.ISBN)) {
-      this.props.history.push("/book/" + this.state.book.ISBN);
+  more = () => {
+    if (this.state.book.ISBN && isbn_validate.Validate(this.state.book.ISBN)) {
+      return <EllipsisOutlined onClick={this.onMore}></EllipsisOutlined>;
     } else {
-      this.props.history.push("/search/" + this.state.book.title);
+      return (
+        <QuestionCircleOutlined
+          onClick={this.onSearch}
+        ></QuestionCircleOutlined>
+      );
     }
+  };
+  onMore = (event) => {
+    this.props.history.push("/book/" + this.state.book.ISBN);
+  };
+  onSearch = (event) => {
+    this.props.history.push("/search/" + this.state.book.title);
   };
 
   onRead = (event) => {
@@ -71,7 +86,7 @@ class BookCard extends React.Component {
           <div className={style.actions}>
             <ReadFilled onClick={this.onRead} />
             <EditOutlined key="edit" />
-            <EllipsisOutlined key="ellipsis" onClick={this.onMore} />
+            {this.more()}
           </div>
           <div className={style.description}>
             <div className={style.scrolled}>

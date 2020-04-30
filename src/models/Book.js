@@ -63,9 +63,9 @@ const parseGoodreadsValue = (value) => {
     return parseGoodreadsValue(value[0]);
   let val = value;
   let keys = Object.keys(val);
-  if (keys.length == 1 && keys[0] === "$" && val.$.nil === "true")
+  if (keys.length === 1 && keys[0] === "$" && val.$.nil === "true")
     return undefined;
-  if (keys.length == 2 && keys.includes("_") && keys.includes("$")) {
+  if (keys.length === 2 && keys.includes("_") && keys.includes("$")) {
     if (val.$.type === "integer") return parseInt(val._);
     return val._;
   } else {
@@ -74,7 +74,6 @@ const parseGoodreadsValue = (value) => {
     }
     return val;
   }
-  return value;
 };
 
 const parseBookResponses = (responses) => {

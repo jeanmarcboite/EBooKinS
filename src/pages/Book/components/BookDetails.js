@@ -94,9 +94,11 @@ export default class BookDetails extends React.Component {
           <h2>{this.state.author.name} </h2>
         </div>
         <div className={style.description}>
-          {this.state.book.description
-            ? renderHTML(this.state.book.description)
-            : this.props.data.description}
+          {renderHTML(
+            (this.state.book.description
+              ? this.state.book.description
+              : this.props.data.description) || ""
+          )}
         </div>
         <div className={style.shelves}>
           <Tags subject={this.state.book.subject}></Tags>

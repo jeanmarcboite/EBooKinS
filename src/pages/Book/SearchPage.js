@@ -63,7 +63,7 @@ class SearchPage extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.query != this.state.query) this.search();
+    if (prevState.query !== this.state.query) this.search();
   }
 
   search() {

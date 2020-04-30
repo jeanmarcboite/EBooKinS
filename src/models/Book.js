@@ -16,16 +16,20 @@ export default class Book {
 
   getFromGoodreadsID = () => {
     return new Promise((resolve, reject) => {
-      cacheGoodreads.getItem(this.id).then((value) => {
-        if (value) resolve(JSON.parse(value));
-        else {
-          if (!urls.goodreads.id) reject(new Error("no goodreads key"));
-          online.get(urls.goodreads.id(this.id)).then((response) => {
-            cacheGoodreads.setItem(response);
-            resolve(response);
-          });
-        }
-      });
+      cacheGoodreads
+        .getItem(this.id)
+        .then((value) => {
+          if (value) resolve(JSON.parse(value));
+          else {
+            if (!urls.goodreads.id) reject(new Error("no goodreads key"));
+            online.get(urls.goodreads.id(this.id)).then((goodreads) => {
+              let value = parseBookResponses({ goodreads });
+              cacheGoodreads.setItem(this.id, JSON.stringify(value));
+              resolve(value);
+            });
+          }
+        })
+        .catch(reject);
     });
   };
   getFromISBN = () => {

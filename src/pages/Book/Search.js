@@ -1,23 +1,41 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import online from "lib/online";
 import MainLayout from "pages/MainLayout";
 import ReactJson from "react-json-view";
 import { parseString } from "xml2js";
 import style from "./Search.module.css";
 import config, { urls } from "config";
+import Book from "models/Book";
 
-const SearchCard = ({ data }) => {
-  console.log(data);
-
+const SearchCard = ({ data, onClick }) => {
   if (data.$.type != "Book") return <></>;
   return (
     <div>
-      <img src={data.image_url[0]} alt="cover" />
+      <img
+        src={data.image_url[0]}
+        alt="cover"
+        onClick={() => onClick(data.id[0]._)}
+      />
       <h3>{data.title[0]}</h3>
       <h2>{data.author[0].name}</h2>
     </div>
   );
+};
+
+const SelectedBook = ({ id }) => {
+  const [state, setState] = useState({ book: {}, image_url: "", id: null });
+  if (!id) return null;
+
+  if (id != state.id) {
+    console.log(id);
+    let book = new Book(id);
+    book.getFromGoodreadsID().then((book) => {
+      let image_url = book.data.image_url;
+      setState({ id, book, image_url });
+    });
+  }
+  console.log(state);
+  return <div>{id}</div>;
 };
 
 export default class SearchPage extends React.Component {
@@ -26,6 +44,7 @@ export default class SearchPage extends React.Component {
 
     this.state = {
       query: this.props.match.params.query,
+      selected: undefined,
       works: [],
     };
   }
@@ -54,15 +73,20 @@ export default class SearchPage extends React.Component {
     }
   }
 
+  onClick = (selected) => {
+    this.setState({ selected });
+  };
+
   render = () => {
     return (
       <MainLayout>
         <h1>{this.state.query}</h1>
         <div className={style.gallery}>
           {this.state.works.map((w, key) => (
-            <SearchCard data={w} key={key} />
+            <SearchCard data={w} key={key} onClick={this.onClick} />
           ))}
         </div>
+        <SelectedBook id={this.state.selected} />
       </MainLayout>
     );
   };

@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemeContext } from "ThemeProvider";
-import { Tag } from "antd";
+import Tags from "components/Tags";
 import {
   EditOutlined,
   EllipsisOutlined,
@@ -31,10 +31,8 @@ class BookCard extends React.Component {
   componentDidMount() {
     DB.ebooks.db.get(this.props.id).then((book) => {
       this.setState({ book });
-      if (book.creator && book.creator.$) {
-        let author = new Author(
-          book.creator.$["opf:role"] === "aut" ? book.creator._ : ""
-        );
+      if (book.author) {
+        let author = new Author(book.author);
         author
           .get()
           .then((author) => this.setState({ author }))
@@ -96,9 +94,7 @@ class BookCard extends React.Component {
                 alt={this.state.author.name}
                 height="80"
               />
-              {this.state.book.subject.map((item) => (
-                <Tag key={item}>{item}</Tag>
-              ))}
+              <Tags subject={this.state.book.subject}></Tags>
               <h2>{this.state.author.name} </h2>
               <h3>{this.state.book.title}</h3>
               <div>{renderHTML(this.state.book.description)}</div>

@@ -103,7 +103,6 @@ export default class Ebooks {
       let metadata = result.package.metadata[0];
       let identifier = metadata["dc:identifier"][0]._;
 
-      let creator = get(metadata, "dc:creator");
       let title = get(metadata, "dc:title");
       let description = get(metadata, "dc:description");
       let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
@@ -121,7 +120,6 @@ export default class Ebooks {
       let data = {
         _id,
         title,
-        creator,
         description,
         subject,
         identifier,
@@ -136,6 +134,11 @@ export default class Ebooks {
       if (ISBN.length > 0) {
         data._id = ISBN;
         data.ISBN = ISBN;
+      }
+
+      if (metadata["dc:creator"]) {
+        data.creator = metadata["dc:creator"][0];
+        if (data.creator.$["opf:role"] === "aut") data.author = data.creator._;
       }
 
       let zipCover = zip.file(cover.href);

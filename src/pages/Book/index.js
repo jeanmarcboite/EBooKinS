@@ -13,6 +13,7 @@ import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
 import Author from "models/Author";
 import DB from "lib/Database";
+import Tags from "components/Tags";
 
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 class BookPage extends React.Component {
@@ -34,10 +35,8 @@ class BookPage extends React.Component {
     let book = new Book(ISBN);
     DB.ebooks.db.get(ISBN).then((book) => {
       this.setState({ db_book: book });
-      if (book.creator && book.creator.$) {
-        let author = new Author(
-          book.creator.$["opf:role"] === "aut" ? book.creator._ : ""
-        );
+      if (book.author) {
+        let author = new Author(book.author);
         author
           .get()
           .then((author) => this.setState({ author }))
@@ -86,7 +85,6 @@ class BookPage extends React.Component {
   };
   render = () => {
     let data = this.state.book.data;
-    console.log(data);
     return (
       <MainLayout>
         <div className={style.container}>
@@ -125,8 +123,10 @@ class BookPage extends React.Component {
             />
             <h2>{this.state.author.name} </h2>
           </div>
-          <div className={style.description}>{this.description(true)}</div>
-          <div className={style.shelves}>shelves</div>
+          <div className={style.description}>{this.description(false)}</div>
+          <div className={style.shelves}>
+            <Tags subject={this.state.db_book.subject}></Tags>
+          </div>
         </div>
       </MainLayout>
     );

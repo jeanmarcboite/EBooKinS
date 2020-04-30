@@ -43,7 +43,7 @@ export default class Book {
 
               return online.get(URL);
             });
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
               const responses = {};
               onlines.forEach((lib, k) => {
                 responses[lib] = values[k];

@@ -21,7 +21,7 @@ export default class Book {
         else {
           if (!urls.goodreads.id) reject(new Error("no goodreads key"));
           online.get(urls.goodreads.id(this.id)).then((response) => {
-            console.log(response);
+            cacheGoodreads.setItem(response);
             resolve(response);
           });
         }
@@ -48,7 +48,9 @@ export default class Book {
               onlines.forEach((lib, k) => {
                 responses[lib] = values[k];
               });
-              resolve(parseBookResponses(responses));
+              let value = parseBookResponses(responses);
+              cacheISBN.setItem(this.id, JSON.stringify(value));
+              resolve(value);
             });
           }
         })

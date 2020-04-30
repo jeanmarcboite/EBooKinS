@@ -7,12 +7,14 @@ import {
   SettingTwoTone,
 } from "@ant-design/icons";
 
-import Ebook from "pages/Read";
-import Library from "pages/Library";
-import Book from "pages/Book";
-import Search from "pages/Book/Search";
-import About from "pages/About";
-import Settings from "pages/Settings";
+import {
+  BookPage,
+  SearchPage,
+  ReadPage,
+  LibraryPage,
+  AboutPage,
+  SettingsPage,
+} from "pages";
 import Lab from "pages/Lab";
 
 const routes = [
@@ -25,31 +27,31 @@ const routes = [
   },
   {
     to: "/read/:id",
-    component: Ebook,
+    component: ReadPage,
   },
   {
     to: "/read",
-    component: Ebook,
+    component: ReadPage,
   },
   {
     to: "/library",
     label: "Library",
     icon: <FileSearchOutlined />,
-    component: Library,
+    component: LibraryPage,
   },
   {
     to: "/book/:isbn",
-    component: Book,
+    component: BookPage,
   },
   {
     to: "/search/:query",
-    component: Search,
+    component: SearchPage,
   },
   {
     to: "/about",
     label: "About",
     icon: <ExperimentTwoTone twoToneColor="#52c41a" />,
-    component: About,
+    component: AboutPage,
   },
   {
     to: "/lab",
@@ -61,7 +63,7 @@ const routes = [
     to: "/settings",
     label: "Settings",
     icon: <SettingTwoTone twoToneColor="#52c41a" />,
-    component: Settings,
+    component: SettingsPage,
   },
 ];
 

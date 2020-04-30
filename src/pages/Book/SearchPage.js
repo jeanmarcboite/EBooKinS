@@ -61,14 +61,18 @@ export default class SearchPage extends React.Component {
         .get(urls.goodreads.search(this.state.query))
         .then((result) => {
           parseString(result.data, (err, parsed) => {
-            let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
-              (w) => w.best_book[0]
-            );
+            let work = parsed.GoodreadsResponse.search[0].results[0].work;
+            if (work) {
+              let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
+                (w) => w.best_book[0]
+              );
 
-            this.setState({
-              works,
-            });
-            if (works.length > 0) this.setState({ selected: works[0].id[0]._ });
+              this.setState({
+                works,
+              });
+              if (works.length > 0)
+                this.setState({ selected: works[0].id[0]._ });
+            }
             /*
             let promises = parsed.GoodreadsResponse.search[0].results[0].work
               .slice(0, 1)

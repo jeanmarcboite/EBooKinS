@@ -138,7 +138,12 @@ export default class Ebooks {
 
       if (metadata["dc:creator"]) {
         data.creator = metadata["dc:creator"][0];
-        if (data.creator.$["opf:role"] === "aut") data.author = data.creator._;
+        if (
+          data.creator &&
+          data.creator.$ &&
+          data.creator.$["opf:role"] === "aut"
+        )
+          data.author = data.creator._;
       }
 
       let zipCover = zip.file(cover.href);

@@ -5,6 +5,7 @@ import { parseString } from "xml2js";
 import style from "./Search.module.css";
 import { urls } from "config";
 import Book from "models/Book";
+import BookDetails from "./components/BookDetails";
 
 const SearchCard = ({ data, onClick }) => {
   if (data.$.type !== "Book") return <></>;
@@ -22,19 +23,26 @@ const SearchCard = ({ data, onClick }) => {
 };
 
 const SelectedBook = ({ id }) => {
-  const [state, setState] = useState({ book: {}, image_url: "", id: null });
+  const [state, setState] = useState({
+    book: { data: {} },
+    image_url: "",
+    id: null,
+  });
   if (!id) return null;
 
   if (id !== state.id) {
-    console.log(id);
     let book = new Book(id);
     book.getFromGoodreadsID().then((book) => {
       let image_url = book.data.image_url;
       setState({ id, book, image_url });
     });
   }
-  console.log(state);
-  return <div>{id}</div>;
+  return (
+    <div>
+      {id}
+      <BookDetails image_url={state.image_url} data={state.book.data} />
+    </div>
+  );
 };
 
 export default class SearchPage extends React.Component {
@@ -53,11 +61,14 @@ export default class SearchPage extends React.Component {
         .get(urls.goodreads.search(this.state.query))
         .then((result) => {
           parseString(result.data, (err, parsed) => {
+            let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
+              (w) => w.best_book[0]
+            );
+
             this.setState({
-              works: parsed.GoodreadsResponse.search[0].results[0].work.map(
-                (w) => w.best_book[0]
-              ),
+              works,
             });
+            if (works.length > 0) this.setState({ selected: works[0].id[0]._ });
             /*
             let promises = parsed.GoodreadsResponse.search[0].results[0].work
               .slice(0, 1)

@@ -14,7 +14,6 @@ export default class BookDetails extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
       book: {},
       author: { img: "", name: "" },
@@ -57,7 +56,6 @@ export default class BookDetails extends React.Component {
   };
 
   render = () => {
-    console.log("DETAILSprops", this.props);
     return (
       <div className={style.container}>
         <div className={style.cover}>

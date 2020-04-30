@@ -6,6 +6,8 @@ import style from "./Search.module.css";
 import { urls } from "config";
 import Book from "models/Book";
 import BookDetails from "./components/BookDetails";
+import { Input } from "antd";
+import { withRouter } from "react-router-dom";
 
 const SearchCard = ({ data, onClick }) => {
   if (data.$.type !== "Book") return <></>;
@@ -45,7 +47,7 @@ const SelectedBook = ({ id }) => {
   );
 };
 
-export default class SearchPage extends React.Component {
+class SearchPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -55,14 +57,24 @@ export default class SearchPage extends React.Component {
       works: [],
     };
   }
+
   componentDidMount() {
+    this.search();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.query != this.state.query) this.search();
+  }
+
+  search() {
     if (urls.goodreads.search) {
       online
         .get(urls.goodreads.search(this.state.query))
         .then((result) => {
           parseString(result.data, (err, parsed) => {
             let work = parsed.GoodreadsResponse.search[0].results[0].work;
-            if (work) {
+            if (!work) {
+            } else {
               let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
                 (w) => w.best_book[0]
               );
@@ -90,17 +102,30 @@ export default class SearchPage extends React.Component {
     this.setState({ selected });
   };
 
+  onSearch = (query) => {
+    this.setState({ query });
+  };
+
   render = () => {
     return (
-      <MainLayout>
-        <h1>{this.state.query}</h1>
+      <MainLayout show_header>
+        <Input.Search
+          defaultValue={this.state.query}
+          onSearch={this.onSearch}
+          enterButton
+        />
         <div className={style.gallery}>
-          {this.state.works.map((w, key) => (
-            <SearchCard data={w} key={key} onClick={this.onClick} />
-          ))}
+          {this.state.works.length === 0 ? (
+            <h2>Nothing found</h2>
+          ) : (
+            this.state.works.map((w, key) => (
+              <SearchCard data={w} key={key} onClick={this.onClick} />
+            ))
+          )}
         </div>
         <SelectedBook id={this.state.selected} />
       </MainLayout>
     );
   };
 }
+export default withRouter(SearchPage);

@@ -63,7 +63,12 @@ class MainLayout extends React.Component {
         <ImportFile ref={this.$input} />
         {this.sider()}
         <div className={style.container}>
-          <div className={style.header} style={{ display: "flex" }}>
+          <div
+            className={
+              this.props.show_header ? style.show_header : style.header
+            }
+            style={{ display: "flex" }}
+          >
             {this.trigger()}
             <Menu mode="horizontal">
               <Menu.Item style={{ backgroundColor: "white" }}>

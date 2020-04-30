@@ -50,9 +50,22 @@ class BookPage extends React.Component {
 
   rating = (work) => {
     if (!work) return 0;
-    let rating =
-      parseFloat(work.ratings_sum[0]._) / parseFloat(work.ratings_count[0]._);
+    let rating = parseFloat(work.ratings_sum) / parseFloat(work.ratings_count);
     return rating;
+  };
+  get = (work, what) => {
+    if (!work || !work[what]) return "";
+    return work[what];
+  };
+  getOriginalPublicationDate = () => {
+    let work = this.state.book.data.work;
+    if (!work || !work.original_publication_year) return "";
+    if (
+      work.original_publication_day === 1 &&
+      work.original_publication_month === 1
+    )
+      return work.original_publication_year;
+    return `${work.original_publication_day}/${work.original_publication_month}/${work.original_publication_year}`;
   };
   render = () => {
     let data = this.state.book.data;
@@ -67,6 +80,7 @@ class BookPage extends React.Component {
               width="100%"
               onClick={this.onRead}
             />
+            <div>{this.getOriginalPublicationDate()}</div>
           </div>
           <div className={style.rating}>
             <Rating
@@ -75,9 +89,13 @@ class BookPage extends React.Component {
               emptySymbol={<StarOutlined />}
               fullSymbol={<StarFilled />}
             />
+            <div>{this.get(data.work, "ratings_count")} ratings</div>
+            <div>{this.get(data.work, "reviews_count")} reviews</div>
           </div>
           <div className={style.title}>{data.title}</div>
-          <div className={style.links}>links</div>
+          <a className={style.links} href={this.get(data, "url")}>
+            <img src="http://d.gr-assets.com/misc/1454549125-1454549125_goodreads_misc.png" />
+          </a>
           <div className={style.author}>author</div>
           <div className={style.description}>{this.description(true)}</div>
           <div className={style.shelves}>shelves</div>

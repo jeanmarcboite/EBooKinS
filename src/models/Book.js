@@ -56,6 +56,27 @@ export default class Book {
     });
   };
 }
+
+const parseGoodreadsValue = (value) => {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value) && value.length === 1)
+    return parseGoodreadsValue(value[0]);
+  let val = value;
+  let keys = Object.keys(val);
+  if (keys.length == 1 && keys[0] === "$" && val.$.nil === "true")
+    return undefined;
+  if (keys.length == 2 && keys.includes("_") && keys.includes("$")) {
+    if (val.$.type === "integer") return parseInt(val._);
+    return val._;
+  } else {
+    for (let k in val) {
+      val[k] = parseGoodreadsValue(val[k]);
+    }
+    return val;
+  }
+  return value;
+};
+
 const parseBookResponses = (responses) => {
   let book = { data: {}, library: {} };
   if ("goodreads" in responses) {
@@ -65,11 +86,10 @@ const parseBookResponses = (responses) => {
         let gbook = result.GoodreadsResponse.book[0];
         for (var key in gbook) {
           if (gbook.hasOwnProperty(key)) {
-            if (Array.isArray(gbook[key]) && gbook[key].length === 1) {
-              goodreads[key] = gbook[key][0];
-            } else {
-              goodreads[key] = gbook[key];
-            }
+            if (key === "work")
+              goodreads[key] = parseGoodreadsValue(gbook[key], true);
+            else goodreads[key] = parseGoodreadsValue(gbook[key]);
+
             if (!(key in book.data)) {
               book.data[key] = goodreads[key];
             }

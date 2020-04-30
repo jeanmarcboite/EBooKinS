@@ -19,14 +19,14 @@ class BookCard extends React.Component {
     super(props);
     this.state = {
       img: "http://placehold.it/200x240",
-      book: { title: "", description: "" },
+      book: { title: "", description: "", subject: [] },
       author: { img: "", name: "" },
     };
   }
   componentDidMount() {
     DB.ebooks.db.get(this.props.id).then((book) => {
       this.setState({ book });
-      if (book.creator.$) {
+      if (book.creator && book.creator.$) {
         let author = new Author(
           book.creator.$["opf:role"] === "aut" ? book.creator._ : ""
         );

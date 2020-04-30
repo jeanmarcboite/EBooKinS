@@ -15,8 +15,6 @@ import About from "pages/About";
 import Settings from "pages/Settings";
 import Lab from "pages/Lab";
 
-import { store } from "store";
-
 const routes = [
   {
     to: "/",

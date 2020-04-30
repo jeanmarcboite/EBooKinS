@@ -6,6 +6,15 @@ import PouchDB from "pouchdb";
 import EventEmitter from "event-emitter";
 
 const logChanges = false;
+const get = (metadata, key) => {
+  let value = metadata[key] ? metadata[key][0] : "";
+
+  if (typeof value == "string") return value;
+
+  if ("_" in value) return value._;
+
+  return JSON.stringify(value);
+};
 
 export default class Ebooks {
   constructor(name, server, port) {
@@ -90,14 +99,31 @@ export default class Ebooks {
       if (err) reject(err);
       let _id = epub.lastModified + " " + epub.name;
       let cover = result.package.manifest[0].item[0].$;
+
       let metadata = result.package.metadata[0];
-      let title = metadata["dc:title"][0];
-      if (typeof title !== "string") title = title._;
       let identifier = metadata["dc:identifier"][0]._;
+
+      let creator = get(metadata, "dc:creator");
+      let title = get(metadata, "dc:title");
+      let description = get(metadata, "dc:description");
+      let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
+      let ISBN = "";
+      metadata["dc:identifier"].forEach((identifier) => {
+        if (typeof identifier == "string") {
+          if (identifier.startsWith("isbn:")) ISBN = identifier.slice(5);
+        } else {
+          if (identifier.$["opf:scheme"] === "ISBN")
+            // TODO "AMAZON_FR"
+            ISBN = identifier._;
+        }
+      });
 
       let data = {
         _id,
         title,
+        creator,
+        description,
+        subject,
         identifier,
         metadata,
         _attachments: {
@@ -107,6 +133,10 @@ export default class Ebooks {
           },
         },
       };
+      if (ISBN.length > 0) {
+        data._id = ISBN;
+        data.ISBN = ISBN;
+      }
 
       let zipCover = zip.file(cover.href);
       if (!zipCover) this.db.put(data).then(resolve).catch(reject);

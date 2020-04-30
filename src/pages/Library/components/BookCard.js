@@ -13,71 +13,43 @@ import isbn_validate from "isbn-validate";
 
 import style from "./BookCard.module.css";
 
-const get = (metadata, key) => {
-  let value = metadata[key] ? metadata[key][0] : "";
-
-  if (typeof value == "string") return value;
-
-  if ("_" in value) return value._;
-
-  return JSON.stringify(value);
-};
-
 class BookCard extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
     super(props);
     this.state = {
       img: "http://placehold.it/200x240",
-      description: "",
-      author: {},
-      subject: [],
-      title: "",
+      book: { title: "", description: "" },
+      author: { img: "", name: "" },
     };
   }
   componentDidMount() {
-    DB.ebooks.db.get(this.props.id).then(this.getMetadata);
+    DB.ebooks.db.get(this.props.id).then((book) => {
+      this.setState({ book });
+      if (book.creator.$) {
+        let author = new Author(
+          book.creator.$["opf:role"] === "aut" ? book.creator._ : ""
+        );
+        author
+          .get()
+          .then((author) => this.setState({ author }))
+          .catch(console.warn);
+      }
+    });
     DB.ebooks.db
       .getAttachment(this.props.id, "cover")
       .then(this.getCover)
       .catch(() => {});
   }
 
-  getMetadata = ({ metadata }) => {
-    console.log(metadata);
-    let creator = get(metadata, "dc:creator");
-    let title = get(metadata, "dc:title");
-    let description = get(metadata, "dc:description");
-    let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
-    let ISBN = "";
-    metadata["dc:identifier"].forEach((identifier) => {
-      if (typeof identifier == "string") {
-        if (identifier.startsWith("isbn:")) ISBN = identifier.slice(5);
-      } else {
-        if (identifier.$["opf:scheme"] === "ISBN")
-          // TODO "AMAZON_FR"
-          ISBN = identifier._;
-      }
-    });
-    this.setState({ description, title, subject, ISBN });
-    //<dc:identifier opf:scheme="ISBN">2253015547</dc:identifier>;
-    if (creator.$) {
-      let author = new Author(creator.$["opf:role"] === "aut" ? creator._ : "");
-      author
-        .get()
-        .then((author) => this.setState({ author }))
-        .catch(console.warn);
-    }
-  };
-
   getCover = (blob) => {
     this.setState({ img: URL.createObjectURL(blob) });
   };
   onMore = (event) => {
-    if (isbn_validate.Validate(this.state.ISBN)) {
-      this.props.history.push("/book/" + this.state.ISBN);
+    if (isbn_validate.Validate(this.state.book.ISBN)) {
+      this.props.history.push("/book/" + this.state.book.ISBN);
     } else {
-      this.props.history.push("/search/" + this.state.title);
+      this.props.history.push("/search/" + this.state.book.title);
     }
   };
 
@@ -106,15 +78,15 @@ class BookCard extends React.Component {
               <img
                 className={style.author_img}
                 src={this.state.author.img}
-                alt=""
+                alt={this.state.author.name}
                 height="80"
               />
-              {this.state.subject.map((item) => (
+              {this.state.book.subject.map((item) => (
                 <Tag key={item}>{item}</Tag>
               ))}
               <h2>{this.state.author.name} </h2>
-              <h3>{this.state.title}</h3>
-              <div>{renderHTML(this.state.description)}</div>
+              <h3>{this.state.book.title}</h3>
+              <div>{renderHTML(this.state.book.description)}</div>
             </div>
           </div>
         </div>

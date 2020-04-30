@@ -47,7 +47,6 @@ class BookPage extends React.Component {
     this.props.history.push("/");
   };
   render = () => {
-    console.log("RENDER", this.state);
     return (
       <MainLayout>
         <BookDetails

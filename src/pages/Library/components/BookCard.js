@@ -53,7 +53,7 @@ class BookCard extends React.Component {
     this.setState({ img: URL.createObjectURL(blob) });
   };
   more = () => {
-    if (this.state.book.ISBN && isbn_validate.Validate(this.state.book.ISBN)) {
+    if (this.state.book.identifier) {
       return <EllipsisOutlined onClick={this.onMore}></EllipsisOutlined>;
     } else {
       return (
@@ -64,7 +64,13 @@ class BookCard extends React.Component {
     }
   };
   onMore = (event) => {
-    this.props.history.push("/book/" + this.state.book.ISBN);
+    if (this.state.book.identifier) {
+      let key = Object.keys(this.state.book.identifier)[0];
+      if (this.state.book.identifier.ISBN) key = "ISBN";
+      this.props.history.push(
+        `/book/${key}=${this.state.book.identifier[key]}`
+      );
+    }
   };
   onSearch = (event) => {
     this.props.history.push("/search/" + this.state.book.title);

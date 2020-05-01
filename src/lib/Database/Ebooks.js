@@ -19,7 +19,8 @@ const get = (metadata, key) => {
 export default class Ebooks {
   constructor(name, server, port) {
     this.name = name;
-    this.db = new PouchDB(name);
+    this.db = new PouchDB(name, { auto_compaction: true });
+
     this.sync(server, port);
   }
 
@@ -101,28 +102,16 @@ export default class Ebooks {
       let cover = result.package.manifest[0].item[0].$;
 
       let metadata = result.package.metadata[0];
-      let identifier = metadata["dc:identifier"][0]._;
 
       let title = get(metadata, "dc:title");
       let description = get(metadata, "dc:description");
       let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
-      let ISBN = "";
-      metadata["dc:identifier"].forEach((identifier) => {
-        if (typeof identifier == "string") {
-          if (identifier.startsWith("isbn:")) ISBN = identifier.slice(5);
-        } else {
-          if (identifier.$["opf:scheme"] === "ISBN")
-            // TODO "AMAZON_FR"
-            ISBN = identifier._;
-        }
-      });
 
       let data = {
         _id,
         title,
         description,
         subject,
-        identifier,
         metadata,
         _attachments: {
           epub: {
@@ -131,9 +120,28 @@ export default class Ebooks {
           },
         },
       };
-      if (ISBN.length > 0) {
-        data._id = ISBN;
-        data.ISBN = ISBN;
+
+      if (metadata["dc:identifier"]) {
+        metadata["dc:identifier"].forEach((identifier) => {
+          if (!data.identifier) data.identifier = {};
+          if (typeof identifier == "string") {
+            data._id = identifier;
+            if (identifier.startsWith("isbn:"))
+              data.identifier.ISBN = identifier.slice(5);
+          } else {
+            let scheme =
+              identifier.$["opf:scheme"] ||
+              identifier.$["ns1:scheme"] ||
+              identifier.$.id;
+            data.identifier[scheme] = identifier._;
+            data._id = `${scheme}:${identifier._}:`;
+          }
+        });
+
+        // prefer ISBN
+        if (data.identifier && data.identifier.ISBN) {
+          data._id = `isbn:${data.identifier.ISBN}`;
+        }
       }
 
       if (metadata["dc:creator"]) {

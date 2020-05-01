@@ -6,7 +6,7 @@ import style from "./Search.module.css";
 import { urls } from "config";
 import Book from "models/Book";
 import BookDetails from "./components/BookDetails";
-import { Input } from "antd";
+import { Input, Spin } from "antd";
 import { withRouter } from "react-router-dom";
 
 const SearchCard = ({ data, onClick }) => {
@@ -55,6 +55,7 @@ class SearchPage extends React.Component {
       query: this.props.match.params.query,
       selected: undefined,
       works: [],
+      loading: true,
     };
   }
 
@@ -74,6 +75,7 @@ class SearchPage extends React.Component {
           parseString(result.data, (err, parsed) => {
             let work = parsed.GoodreadsResponse.search[0].results[0].work;
             if (!work) {
+              this.setState({ works: null, loading: false });
             } else {
               let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
                 (w) => w.best_book[0]
@@ -81,6 +83,7 @@ class SearchPage extends React.Component {
 
               this.setState({
                 works,
+                loading: false,
               });
               if (works.length > 0)
                 this.setState({ selected: works[0].id[0]._ });
@@ -103,19 +106,21 @@ class SearchPage extends React.Component {
   };
 
   onSearch = (query) => {
-    this.setState({ query });
+    this.setState({ query, loading: true });
   };
 
   render = () => {
+    if (this.state.loading) return <MainLayout show_header></MainLayout>;
     return (
       <MainLayout show_header>
         <div className={style.container}>
-          <SelectedBook id={this.state.selected} className={style.selected} />
-          <Input.Search
-            defaultValue={this.state.query}
-            onSearch={this.onSearch}
-            enterButton
-          />
+          <Spin spinning={this.state.loading}>
+            <Input.Search
+              defaultValue={this.state.query}
+              onSearch={this.onSearch}
+              enterButton
+            />
+          </Spin>
           <div className={style.gallery}>
             {this.state.works.length === 0 ? (
               <h2>Nothing found</h2>
@@ -125,6 +130,7 @@ class SearchPage extends React.Component {
               ))
             )}
           </div>
+          <SelectedBook id={this.state.selected} className={style.selected} />
         </div>
       </MainLayout>
     );

@@ -36,7 +36,7 @@ class LibraryPage extends React.Component {
 
   render = () => {
     return (
-      <MainLayout>
+      <MainLayout show_header>
         <div className={style.library}>{this.state.items}</div>
       </MainLayout>
     );

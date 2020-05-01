@@ -111,7 +111,8 @@ class BookCard extends React.Component {
 }
 
 export default withRouter(BookCard);
-
-BookCard.whyDidYouRender = {
+/*
+BookCard.whyDidYouRender =  {
   logOnDifferentValues: false,
 };
+*/

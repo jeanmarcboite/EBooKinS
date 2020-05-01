@@ -10,10 +10,10 @@ class Author {
   constructor(id) {
     this.id = id;
   }
-  get = () => {
+  get = (getOnline) => {
     return new Promise((resolve, reject) => {
       cache.getItem(this.id).then((value) => {
-        if (value) resolve(JSON.parse(value));
+        if (!getOnline || value) resolve(JSON.parse(value));
         if (!urls.goodreads.author) reject(new Error("no goodreads key"));
         online
           .get(urls.goodreads.author(this.id))

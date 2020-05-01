@@ -18,6 +18,7 @@ import isbn_validate from "isbn-validate";
 
 import style from "./BookCard.module.css";
 
+const unknown = { name: "", img: "http://placehold.it/200x240" };
 class BookCard extends React.Component {
   static contextType = ThemeContext;
   constructor(props) {
@@ -25,7 +26,7 @@ class BookCard extends React.Component {
     this.state = {
       img: "http://placehold.it/200x240",
       book: { title: "", description: "", subject: [] },
-      author: { img: "", name: "" },
+      author: unknown,
     };
   }
   componentDidMount() {
@@ -34,8 +35,11 @@ class BookCard extends React.Component {
       if (book.author) {
         let author = new Author(book.author);
         author
-          .get()
-          .then((author) => this.setState({ author }))
+          .get(false)
+          .then((author) => {
+            if (!author) author = unknown;
+            this.setState({ author });
+          })
           .catch(console.warn);
       }
     });

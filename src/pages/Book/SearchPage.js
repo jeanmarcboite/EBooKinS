@@ -109,21 +109,23 @@ class SearchPage extends React.Component {
   render = () => {
     return (
       <MainLayout show_header>
-        <Input.Search
-          defaultValue={this.state.query}
-          onSearch={this.onSearch}
-          enterButton
-        />
-        <div className={style.gallery}>
-          {this.state.works.length === 0 ? (
-            <h2>Nothing found</h2>
-          ) : (
-            this.state.works.map((w, key) => (
-              <SearchCard data={w} key={key} onClick={this.onClick} />
-            ))
-          )}
+        <div className={style.container}>
+          <SelectedBook id={this.state.selected} className={style.selected} />
+          <Input.Search
+            defaultValue={this.state.query}
+            onSearch={this.onSearch}
+            enterButton
+          />
+          <div className={style.gallery}>
+            {this.state.works.length === 0 ? (
+              <h2>Nothing found</h2>
+            ) : (
+              this.state.works.map((w, key) => (
+                <SearchCard data={w} key={key} onClick={this.onClick} />
+              ))
+            )}
+          </div>
         </div>
-        <SelectedBook id={this.state.selected} />
       </MainLayout>
     );
   };

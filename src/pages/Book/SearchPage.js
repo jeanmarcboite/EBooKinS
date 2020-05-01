@@ -6,7 +6,7 @@ import style from "./Search.module.css";
 import { urls } from "config";
 import Book from "models/Book";
 import BookDetails from "./components/BookDetails";
-import { Input, Spin } from "antd";
+import { Input, Spin, Button } from "antd";
 import { withRouter } from "react-router-dom";
 
 const SearchCard = ({ data, onClick }) => {
@@ -24,7 +24,7 @@ const SearchCard = ({ data, onClick }) => {
   );
 };
 
-const SelectedBook = ({ id }) => {
+const SelectedBook = ({ id, onValidate }) => {
   const [state, setState] = useState({
     book: { data: {} },
     image_url: "",
@@ -39,9 +39,12 @@ const SelectedBook = ({ id }) => {
       setState({ id, book, image_url });
     });
   }
+
   return (
     <div>
-      {id}
+      <Button type="danger" block onClick={onValidate}>
+        Validate
+      </Button>
       <BookDetails image_url={state.image_url} data={state.book.data} />
     </div>
   );
@@ -109,6 +112,10 @@ class SearchPage extends React.Component {
     this.setState({ query, loading: true });
   };
 
+  onValidate = () => {
+    console.log("validate " + this.state.selected);
+  };
+
   render = () => {
     if (this.state.loading) return <MainLayout show_header></MainLayout>;
     return (
@@ -130,7 +137,11 @@ class SearchPage extends React.Component {
               ))
             )}
           </div>
-          <SelectedBook id={this.state.selected} className={style.selected} />
+          <SelectedBook
+            id={this.state.selected}
+            className={style.selected}
+            onValidate={this.onValidate}
+          />
         </div>
       </MainLayout>
     );

@@ -14,7 +14,10 @@ class ImportFile extends React.PureComponent {
         .then((result) => {
           if (this.props.loadFile) this.props.loadFile(result.id);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.log(`Cannot put ${epub.name} in database`);
+          console.error(err);
+        });
     } else {
       for (let k = 0; k < target.files.length; k++) {
         DB.ebooks.put(target.files[k]).catch((err) => console.error(err));

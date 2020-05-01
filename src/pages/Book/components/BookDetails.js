@@ -21,17 +21,24 @@ export default class BookDetails extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.isbn) {
-      DB.ebooks.db.get(this.props.isbn).then((book) => {
-        this.setState({ book: book });
-        if (book.author) {
-          let author = new Author(book.author);
-          author
-            .get()
-            .then((author) => this.setState({ author }))
-            .catch(console.warn);
-        }
-      });
+    if (this.props.book_id) {
+      let bookID = this.props.book_id;
+      console.log(bookID);
+      DB.ebooks.db
+        .get(bookID)
+        .then((book) => {
+          this.setState({ book: book });
+          if (book.author) {
+            let author = new Author(book.author);
+            author
+              .get()
+              .then((author) => this.setState({ author }))
+              .catch(console.warn);
+          }
+        })
+        .catch((error) => {
+          console.error(`book ${bookID} not found in database`);
+        });
     }
   }
   rating = (work) => {

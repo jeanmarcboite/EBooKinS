@@ -98,7 +98,6 @@ export default class Ebooks {
   parseContentOPF = (epub, content_opf, zip, resolve, reject) => {
     parseXml(content_opf, (err, result) => {
       if (err) reject(err);
-      let _id = epub.lastModified + " " + epub.name;
       let cover = result.package.manifest[0].item[0].$;
 
       let metadata = result.package.metadata[0];
@@ -108,7 +107,6 @@ export default class Ebooks {
       let subject = metadata["dc:subject"] ? metadata["dc:subject"] : [];
 
       let data = {
-        _id,
         title,
         description,
         subject,
@@ -127,22 +125,27 @@ export default class Ebooks {
           if (typeof identifier == "string") {
             data._id = identifier;
             if (identifier.startsWith("isbn:"))
-              data.identifier.ISBN = identifier.slice(5);
+              data.identifier.isbn = identifier.slice(5);
           } else {
-            let scheme =
+            let scheme = (
               identifier.$["opf:scheme"] ||
               identifier.$["ns1:scheme"] ||
-              identifier.$.id;
+              identifier.$.id
+            ).toLowerCase();
             data.identifier[scheme] = identifier._;
-            data._id = `${scheme}:${identifier._}:`;
+            if (!data._id) {
+              data._id = `${scheme}:${identifier._}:`;
+            }
           }
         });
 
         // prefer ISBN
-        if (data.identifier && data.identifier.ISBN) {
-          data._id = `isbn:${data.identifier.ISBN}`;
+        if (data.identifier && data.identifier.isbn) {
+          data._id = `isbn:${data.identifier.isbn}`;
         }
       }
+      if (!data._id) data._id = epub.lastModified + " " + epub.name;
+      data.identifier._id = data._id;
 
       if (metadata["dc:creator"]) {
         data.creator = metadata["dc:creator"][0];

@@ -65,11 +65,7 @@ class BookCard extends React.Component {
   };
   onMore = (event) => {
     if (this.state.book.identifier) {
-      let key = Object.keys(this.state.book.identifier)[0];
-      if (this.state.book.identifier.ISBN) key = "ISBN";
-      this.props.history.push(
-        `/book/${key}=${this.state.book.identifier[key]}`
-      );
+      this.props.history.push(`/book/${this.state.book._id}`);
     }
   };
   onSearch = (event) => {

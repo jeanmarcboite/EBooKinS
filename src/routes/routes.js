@@ -40,7 +40,7 @@ const routes = [
     component: LibraryPage,
   },
   {
-    to: "/book/:isbn",
+    to: "/book/:book_id",
     component: BookPage,
   },
   {

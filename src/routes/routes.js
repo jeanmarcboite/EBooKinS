@@ -9,7 +9,6 @@ import {
 
 import {
   BookPage,
-  SearchPage,
   ReadPage,
   LibraryPage,
   AboutPage,

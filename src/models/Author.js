@@ -6,6 +6,9 @@ import online from "lib/online";
 
 const cache = localforage.createInstance({ name: config.authors.name });
 
+//const logg = console.log;
+const logg = () => {};
+
 class Author {
   constructor(id) {
     // goodreads not happy with Dick,Philip K.
@@ -20,7 +23,7 @@ class Author {
           online
             .get(urls.goodreads.author(this.id))
             .then((value) => {
-              console.log("get author online: ", value.data);
+              logg("get author online: ", value.data);
               if (!value.data) {
                 reject(
                   new Error(
@@ -29,7 +32,7 @@ class Author {
                 );
               }
               parseString(value.data, (err, result) => {
-                console.log("get author online, parsed: ", result);
+                logg("get author online, parsed: ", result);
                 if (err != null) {
                   reject(err);
                 }
@@ -68,7 +71,7 @@ class Author {
           author.about = author.data.about;
           author.influences = author.data.influences;
           cache.setItem(this.id, JSON.stringify(author));
-          console.log(author);
+          logg(author);
           resolve(author);
         }
       });

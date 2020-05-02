@@ -9,6 +9,9 @@ import { StarOutlined, StarFilled } from "@ant-design/icons";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
 
+//const logg = console.log;
+const logg = () => {};
+
 export default class BookDetails extends React.Component {
   static contextType = ThemeContext;
 
@@ -29,7 +32,7 @@ export default class BookDetails extends React.Component {
     }
 
     if (this.props.book.data.identifier.isbn) {
-      console.log(this.props.book.data.identifier);
+      logg(this.props.book.data.identifier);
       this.props.book
         .getFromISBN(this.props.book.data.identifier.isbn)
         .then(() => this.setState({ isbn: true }));
@@ -84,7 +87,7 @@ export default class BookDetails extends React.Component {
     );
   };
   render = () => {
-    console.log(this.props.book);
+    logg(this.props.book);
     let popular_shelves = [];
     let gurl = "#";
     if (this.props.book.data) {

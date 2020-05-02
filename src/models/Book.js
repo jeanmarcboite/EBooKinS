@@ -5,6 +5,9 @@ import config, { urls } from "config";
 import online from "lib/online";
 import DB from "lib/Database";
 
+//const logg = console.log;
+const logg = () => {};
+
 const cacheISBN = localforage.createInstance({ name: config.books.isbn });
 const cacheGoodreads = localforage.createInstance({
   name: config.books.goodreads,
@@ -29,7 +32,7 @@ export default class Book {
   };
 
   setData = (data) => {
-    console.warn("setData", data);
+    //console.warn("setData", data);
     let this_data = this.data;
     this.data = { ...this_data, ...data };
   };
@@ -39,7 +42,7 @@ export default class Book {
     return new Promise((resolve, reject) => {
       DB.ebooks.db.get(dbID).then((data) => {
         this.setData(data);
-        console.log("A getFromDB: ", this.data, data);
+        logg("A getFromDB: ", this.data, data);
         resolve(data);
       }, reject);
     });
@@ -52,7 +55,7 @@ export default class Book {
         .then((value) => {
           if (value) {
             this.setData({ goodreads: JSON.parse(value) });
-            console.log("B getFromG cache", this.data, JSON.parse(value));
+            logg("B getFromG cache", this.data, JSON.parse(value));
             resolve(this.data.goodreads);
           } else {
             if (!urls.goodreads.id) reject(new Error("no goodreads key"));
@@ -60,7 +63,7 @@ export default class Book {
               let data = parseBookResponses({ goodreads });
               this.setData({ goodreads: data });
               cacheGoodreads.setItem(goodreadsID, JSON.stringify(data));
-              console.log("C getFromG online", this.data, JSON.parse(value));
+              logg("C getFromG online", this.data, JSON.parse(value));
               resolve(data);
             });
           }
@@ -75,11 +78,7 @@ export default class Book {
         .then((value) => {
           if (value) {
             this.setData({ library: JSON.parse(value).library });
-            console.log(
-              "D get from isbn cache: ",
-              this.data,
-              JSON.parse(value)
-            );
+            logg("D get from isbn cache: ", this.data, JSON.parse(value));
             resolve(this.data);
           } else {
             let onlines = ["librarything", "goodreads"].filter((lib) => {
@@ -98,7 +97,7 @@ export default class Book {
               let data = parseBookResponses(responses);
               this.setData(data);
               cacheISBN.setItem(isbn, JSON.stringify(data));
-              console.log("D get from isbn online: ", this.data, data);
+              logg("D get from isbn online: ", this.data, data);
               resolve(this.data);
             });
           }
@@ -164,7 +163,7 @@ const parseBookResponses = (responses) => {
           }
         });
         if (librarything.author.$.authorcode) {
-          console.log(librarything.author.$.id);
+          logg(librarything.author.$.id);
         }
 
         book.library.librarything = librarything;

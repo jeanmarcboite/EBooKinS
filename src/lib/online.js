@@ -1,7 +1,6 @@
 import localforage from "localforage";
 import axios from "axios";
 import config, { urls } from "config";
-import consola from "consola";
 
 const cache = localforage.createInstance({ name: config.cache.name });
 async function get(URL) {
@@ -24,13 +23,14 @@ async function get(URL) {
         })
         .catch((error) => {
           value = error;
+          console.log(`Book not found: ${error}`);
           cache.setItem(URL, JSON.stringify(value));
           return value;
         });
     })
     .catch(function (err) {
       // This code runs if there were any errors
-      consola.log("no value from forage " + err);
+      console.log("no value from forage " + err);
 
       return err;
     });

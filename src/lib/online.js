@@ -10,12 +10,11 @@ async function get(URL) {
       // This code runs once the value has been loaded
       // from the offline store.
       if (value != null) {
-        value = JSON.parse(value);
-
-        return value;
+        return JSON.parse(value);
       }
+      console.warn("get online: ", URL);
       return axios
-        .get(urls.proxy + URL)
+        .get(urls.proxy.local + URL)
         .then((response) => {
           value = response;
           cache.setItem(URL, JSON.stringify(value));
@@ -23,8 +22,8 @@ async function get(URL) {
         })
         .catch((error) => {
           value = error;
-          console.log(`Book not found: ${error}`);
-          cache.setItem(URL, JSON.stringify(value));
+          console.log(`Book not found at ${URL}: ${error}`);
+          //cache.setItem(URL, JSON.stringify(value));
           return value;
         });
     })

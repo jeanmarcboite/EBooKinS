@@ -57,7 +57,7 @@ const goodreads = !goodreadsKey
         goodreadsKey,
       author: (id) =>
         "https://www.goodreads.com/api/author_url/" +
-        id.replace(" le ", "").replace(/\s+/g, ",") +
+        id.replace(" le ", " ").replace(/\s+/g, ",") +
         "?key=" +
         goodreadsKey,
       search: (q) =>
@@ -92,6 +92,9 @@ const openlibrary = {
     "http://covers.openlibrary.org/b/isbn/" + isbn + "-" + size + ".jpg",
 };
 
-const proxy = "https://cors-anywhere.herokuapp.com/";
+const proxy {
+  local: "http://localhost:8090/",
+  heroku: "https://cors-anywhere.herokuapp.com/"
+}
 
 export default { librarything, goodreads, openlibrary, proxy };

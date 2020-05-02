@@ -24,8 +24,8 @@ class BookPage extends React.Component {
     };
   }
   componentDidMount() {
-    let ISBN = this.props.match.params.isbn;
-    let book = new Book(ISBN);
+    let [type, book_id] = this.props.match.params.book_id.split(":");
+    let book = new Book(book_id);
     book
       .getFromISBN()
       .then((book) => {

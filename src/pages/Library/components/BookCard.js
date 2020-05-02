@@ -51,7 +51,10 @@ class BookCard extends React.Component {
     this.setState({ img: URL.createObjectURL(blob) });
   };
   more = () => {
-    if (this.state.book.identifier && this.state.book.identifier.isbn) {
+    if (
+      this.state.book.identifier &&
+      (this.state.book.identifier.isbn || this.state.book.identifier.goodreads)
+    ) {
       return (
         <EllipsisOutlined
           onClick={() => this.props.onMore(this.state.book)}

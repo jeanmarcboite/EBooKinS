@@ -11,8 +11,16 @@ const cacheGoodreads = localforage.createInstance({
 
 export default class Book {
   constructor(id) {
-    this.id = id;
+    let [type, book_id] = id.split(":");
+    this.id = book_id;
+    this.type = type;
   }
+
+  get = () => {
+    let f = { goodreads: this.getFromGoodreadsID, isbn: this.getFromISBN };
+
+    return f[this.type]();
+  };
 
   getFromGoodreadsID = () => {
     return new Promise((resolve, reject) => {

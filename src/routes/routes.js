@@ -44,10 +44,6 @@ const routes = [
     component: BookPage,
   },
   {
-    to: "/search/:query",
-    component: SearchPage,
-  },
-  {
     to: "/about",
     label: "About",
     icon: <ExperimentTwoTone twoToneColor="#52c41a" />,

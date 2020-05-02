@@ -24,10 +24,9 @@ class BookPage extends React.Component {
     };
   }
   componentDidMount() {
-    let [type, book_id] = this.props.match.params.book_id.split(":");
-    let book = new Book(book_id);
+    let book = new Book(this.props.match.params.book_id);
     book
-      .getFromISBN()
+      .get()
       .then((book) => {
         let image_url = book.data.image_url;
         this.setState({ book: book, image_url });

@@ -29,9 +29,14 @@ class LibraryPage extends React.Component {
   onSearch = (book) => {
     this.setState({ search: book });
   };
+
   onMore = (book) => {
-    this.props.history.push(`/book/${book._id}`);
+    if (book.identifier.isbn)
+      this.props.history.push(`/book/isbn:${book.identifier.isbn}`);
+    else if (book.identifier.goodreads)
+      this.props.history.push(`/book/goodreads:${book.identifier.goodreads}`);
   };
+
   onValidate = (selected) => {
     let book = this.state.search;
     this.setState({ search: null });

@@ -30,8 +30,8 @@ const SelectedBook = ({ id, onValidate }) => {
   if (!id) return null;
 
   if (id !== state.id) {
-    let book = new Book(id);
-    book.getFromGoodreadsID().then((book) => {
+    let book = new Book("goodreads:" + id);
+    book.get().then((book) => {
       let image_url = book.data.image_url;
       setState({ id, book, image_url });
     });

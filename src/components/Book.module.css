@@ -1,60 +1,61 @@
 .container {
-  width: 100%;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(12, [col] 1fr);
-  grid-template-rows: repeat(8, [row] 120px);
-  background-color: #fff;
-  color: #444;
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(12, [col] 1fr);
+    grid-template-rows: repeat(16, [row] 60px);
+    background-color: #fff;
+    color: #444;
 }
 
 .box {
-  background-color: gray;
-  color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  font-size: 150%;
+    background-color: gray;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 150%;
 }
 
 .cover {
-  composes: box;
-  grid-column: col / span 2;
-  grid-row: row / span 2;
+    composes: box;
+    grid-column: col / span 2;
+    grid-row: row / span 5;
 }
 
-.rating {
-  composes: box;
-  grid-column: col / span 2;
-  grid-row: row 3;
+.subjects {
+    composes: box;
+    grid-column: col / span 2;
+    grid-row: row 6;
 }
 
 .shelves {
-  composes: box;
-  grid-column: col / span 3;
-  grid-row: row 4 / span 4;
+    composes: box;
+    overflow-y: auto;
+    grid-column: col / span 3;
+    grid-row: row 8 / span 8;
 }
 
 .title {
-  composes: box;
-  grid-column: col 3 / span 6;
-  grid-row: row;
+    composes: box;
+    grid-column: col 3 / span 6;
+    grid-row: row / span 2;
 }
 
 .links {
-  composes: box;
-  grid-column: col 3 / span 6;
-  grid-row: row 2 / span 2;
+    composes: box;
+    grid-column: col 3 / span 6;
+    grid-row: row 3 / span 5;
 }
 
 .author {
-  composes: box;
-  grid-column: col 9 / span 3;
-  grid-row: row / span 3;
+    composes: box;
+    grid-column: col 9 / span 3;
+    grid-row: row / span 7;
 }
 
 .description {
-  composes: box;
-  grid-column: col 4 / span 8;
-  grid-row: row 4 / span 4;
-  overflow: auto;
+    composes: box;
+    grid-column: col 4 / span 8;
+    grid-row: row 8 / span 8;
+    overflow: auto;
 }

@@ -85,36 +85,33 @@ class EpubReader extends React.Component {
     if (this.props.url.match("^https?://")) {
       this.open(this.props.url);
     } else {
-      DB.ebooks
-        .get(this.props.url)
-        .then(
-          (data) => this.open(data),
-          (error) => {
-            if (error.status !== 404) this.setError(error);
-            else
-              this.setState({
-                error: (
-                  <Card
-                    style={{ width: 300 }}
-                    actions={[
-                      <SettingOutlined key="setting" />,
-                      <EditOutlined key="edit" />,
-                      <EllipsisOutlined key="ellipsis" />,
-                    ]}
-                  >
-                    <FrownTwoTone
-                      twoToneColor="red"
-                      style={{ fontSize: "120px" }}
-                    />
-                    <Card.Meta
-                      description="Document not found"
-                      title={this.props.url}
-                    />
-                  </Card>
-                ),
-              });
-          }
-        )
+      DB.ebooks.db
+        .getAttachment(this.props.url, "epub")
+        .then(this.open, (error) => {
+          if (error.status !== 404) this.setError(error);
+          else
+            this.setState({
+              error: (
+                <Card
+                  style={{ width: 300 }}
+                  actions={[
+                    <SettingOutlined key="setting" />,
+                    <EditOutlined key="edit" />,
+                    <EllipsisOutlined key="ellipsis" />,
+                  ]}
+                >
+                  <FrownTwoTone
+                    twoToneColor="red"
+                    style={{ fontSize: "120px" }}
+                  />
+                  <Card.Meta
+                    description="Document not found"
+                    title={this.props.url}
+                  />
+                </Card>
+              ),
+            });
+        })
 
         .catch((error) => this.setState({ error }));
     }

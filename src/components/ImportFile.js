@@ -10,7 +10,7 @@ class ImportFile extends React.PureComponent {
     if (target.files.length === 1) {
       let epub = target.files[0];
       DB.ebooks
-        .put(epub)
+        .putEpub(epub)
         .then((result) => {
           if (this.props.loadFile) this.props.loadFile(result.id);
         })
@@ -20,7 +20,7 @@ class ImportFile extends React.PureComponent {
         });
     } else {
       for (let k = 0; k < target.files.length; k++) {
-        DB.ebooks.put(target.files[k]).catch((err) => console.error(err));
+        DB.ebooks.putEpub(target.files[k]).catch((err) => console.error(err));
       }
     }
   };

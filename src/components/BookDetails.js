@@ -1,45 +1,44 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import { ThemeContext } from "ThemeProvider";
 import Tags from "components/Tags";
 import style from "./Book.module.css";
 import Rating from "react-rating";
-import DB from "lib/Database";
 import Author from "models/Author";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import renderHTML from "react-render-html";
+import DB from "lib/Database";
 
 export default class BookDetails extends React.Component {
   static contextType = ThemeContext;
 
   constructor(props) {
     super(props);
-    this.state = {
-      book: {},
-      author: { img: "", name: "" },
-    };
-  }
 
+    this.state = { author: { image_url: "", name: "" } };
+  }
   componentDidMount() {
-    if (this.props.book_id) {
-      let bookID = this.props.book_id;
-      console.log(bookID);
-      DB.ebooks.db
-        .get(bookID)
-        .then((book) => {
-          this.setState({ book: book });
-          if (book.author) {
-            let author = new Author(book.author);
-            author
-              .get()
-              .then((author) => this.setState({ author }))
-              .catch(console.warn);
-          }
-        })
-        .catch((error) => {
-          console.error(`book ${bookID} not found in database`);
-        });
+    if (this.props.book.data.authors && this.props.book.data.authors.author) {
+      this.setState({ author: this.props.book.data.authors.author });
+    } else if (this.props.book.data.author) {
+      let author = new Author(this.props.book.data.author);
+      author
+        .get(true)
+        .then((author) => this.setState({ author }))
+        .catch(console.warn);
     }
+
+    if (this.props.book.data.identifier.isbn) {
+      console.log(this.props.book.data.identifier);
+      this.props.book
+        .getFromISBN(this.props.book.data.identifier.isbn)
+        .then(() => this.setState({ isbn: true }));
+    }
+
+    DB.ebooks.db
+      .getAttachment(this.props.book.id, "cover")
+      .then((blob) => this.setState({ coverURL: URL.createObjectURL(blob) }))
+      .catch(() => {});
   }
   rating = (work) => {
     if (!work) return 0;
@@ -52,7 +51,8 @@ export default class BookDetails extends React.Component {
   };
 
   getOriginalPublicationDate = () => {
-    let work = this.props.data.work;
+    if (!this.props.book.data) return "";
+    let work = this.props.book.data.work;
     if (!work || !work.original_publication_year) return "";
     if (
       work.original_publication_day === 1 &&
@@ -62,30 +62,52 @@ export default class BookDetails extends React.Component {
     return `${work.original_publication_day}/${work.original_publication_month}/${work.original_publication_year}`;
   };
 
+  getStars = () => {
+    if (!this.props.book.data || !this.props.book.data.work) return null;
+    return (
+      <>
+        <Rating
+          readonly
+          initialRating={this.rating(this.props.book.data.work)}
+          emptySymbol={<StarOutlined />}
+          fullSymbol={<StarFilled />}
+        />
+        <div>
+          {this.get(this.props.book.data.work, "ratings_count")} ratings
+        </div>
+        <div>
+          {this.get(this.props.book.data.work, "reviews_count")} reviews
+        </div>
+      </>
+    );
+  };
   render = () => {
+    console.log(this.props.book);
+    let popular_shelves = [];
+    if (this.props.book.data) {
+      if (
+        this.props.book.data.library &&
+        this.props.book.data.library.goodreads
+      )
+        popular_shelves = this.props.book.data.library.goodreads.popular_shelves
+          .shelf;
+    }
     return (
       <div className={style.container}>
         <div className={style.cover}>
           <img
-            src={this.props.image_url}
+            src={this.state.coverURL}
             alt="cover"
             width="100%"
             onClick={this.props.onRead}
           />
           <div>{this.getOriginalPublicationDate()}</div>
         </div>
-        <div className={style.rating}>
-          <Rating
-            readonly
-            initialRating={this.rating(this.props.data.work)}
-            emptySymbol={<StarOutlined />}
-            fullSymbol={<StarFilled />}
-          />
-          <div>{this.get(this.props.data.work, "ratings_count")} ratings</div>
-          <div>{this.get(this.props.data.work, "reviews_count")} reviews</div>
+        <div className={style.subjects}>
+          <Tags subject={this.props.book.data.subject}></Tags>
         </div>
-        <div className={style.title}>{this.props.data.title}</div>
-        <a className={style.links} href={this.get(this.props.data, "url")}>
+        <div className={style.title}>{this.props.book.data.title}</div>
+        <a className={style.links} href={this.get(this.props.book, "url")}>
           <img
             alt="goodreads"
             src="http://d.gr-assets.com/misc/1454549125-1454549125_goodreads_misc.png"
@@ -94,23 +116,23 @@ export default class BookDetails extends React.Component {
         <div className={style.author}>
           <img
             className={style.author_img}
-            src={this.state.author.img}
+            src={this.state.author.image_url}
             alt={this.state.author.name}
             height="80"
           />
           <h2>{this.state.author.name} </h2>
         </div>
         <div className={style.description}>
-          {renderHTML(
-            (this.state.book.description
-              ? this.state.book.description
-              : this.props.data.description) || ""
-          )}
+          {renderHTML(this.props.book.data.description || "")}
         </div>
         <div className={style.shelves}>
-          <Tags subject={this.state.book.subject}></Tags>
+          <Tags shelves={popular_shelves}></Tags>
         </div>
       </div>
     );
   };
 }
+
+BookDetails.propTypes = {
+  book: PropTypes.object.isRequired,
+};

@@ -31,10 +31,13 @@ class LibraryPage extends React.Component {
   };
 
   onMore = (book) => {
+    this.props.history.push(`/book/db:${book._id}`);
+    /*
     if (book.identifier.isbn)
       this.props.history.push(`/book/isbn:${book.identifier.isbn}`);
     else if (book.identifier.goodreads)
       this.props.history.push(`/book/goodreads:${book.identifier.goodreads}`);
+      */
   };
 
   onValidate = (selected) => {

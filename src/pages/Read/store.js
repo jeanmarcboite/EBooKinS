@@ -18,7 +18,7 @@ export const slice = createSlice({
     },
     importFile: (state, action) => {
       DB.ebooks
-        .put(action.payload)
+        .putEpub(action.payload)
         .then(() => console.log("import OK"))
         .catch((err) => console.error(err));
       // state is not modified

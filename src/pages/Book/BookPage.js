@@ -17,28 +17,27 @@ class BookPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      image_url: "",
-      book: { data: { description: "" } },
-      author: { img: "", name: "" },
-    };
+    this.state = {};
   }
   componentDidMount() {
     let book = new Book(this.props.match.params.book_id);
     book
       .get()
-      .then((book) => {
-        let image_url = book.data.image_url;
-        this.setState({ book: book, image_url });
+      .then(() => {
+        this.setState({ book });
       })
       .catch(console.warn);
   }
+
   json = () => {
     return <ReactJson src={this.state} />;
   };
+
   description = (debug) => {
     if (debug) return <ReactJson src={this.state} />;
-    else return renderHTML(this.state.book.data.description);
+    else if (this.state.book.data)
+      return renderHTML(this.state.book.data.description);
+    return null;
   };
 
   onRead = (event) => {
@@ -48,11 +47,7 @@ class BookPage extends React.Component {
   render = () => {
     return (
       <MainLayout>
-        <BookDetails
-          image_url={this.state.image_url}
-          isbn={this.props.match.params.isbn}
-          data={this.state.book.data}
-        />
+        {this.state.book ? <BookDetails book={this.state.book} /> : null}
       </MainLayout>
     );
   };

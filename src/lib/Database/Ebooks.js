@@ -50,19 +50,8 @@ export default class Ebooks {
     return 0;
   };
 
-  get = (_id) => {
-    return new Promise((resolve, reject) => {
-      this.db
-        .getAttachment(_id, "epub")
-        .then(resolve)
-        /*   .then((url) => {
-          DB.locations.get(_id).then(resolve).catch(resolve);
-        })*/
-        .catch(reject);
-    });
-  };
   // put in a db, returning a promise
-  put = (epub) => {
+  putEpub = (epub) => {
     let reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.onerror = reject;

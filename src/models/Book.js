@@ -3,6 +3,7 @@ import localforage from "localforage";
 
 import config, { urls } from "config";
 import online from "lib/online";
+import DB from "lib/Database";
 
 const cacheISBN = localforage.createInstance({ name: config.books.isbn });
 const cacheGoodreads = localforage.createInstance({
@@ -11,47 +12,81 @@ const cacheGoodreads = localforage.createInstance({
 
 export default class Book {
   constructor(id) {
-    let [type, book_id] = id.split(":");
-    this.id = book_id;
-    this.type = type;
+    this.type = id.split(":", 1)[0];
+    this.id = id.substring(this.type.length + 1);
   }
 
   get = () => {
-    let f = { goodreads: this.getFromGoodreadsID, isbn: this.getFromISBN };
+    if (this.data) return new Promise((resolve) => resolve(this.data));
 
-    return f[this.type]();
+    let f = {
+      db: this.getFromDB,
+      goodreads: this.getFromGoodreadsID,
+      isbn: this.getFromISBN,
+    };
+
+    return f[this.type](this.id);
   };
 
-  getFromGoodreadsID = () => {
+  setData = (data) => {
+    console.warn("setData", data);
+    let this_data = this.data;
+    this.data = { ...this_data, ...data };
+  };
+
+  getFromDB = (id) => {
+    let dbID = id || this.id;
+    return new Promise((resolve, reject) => {
+      DB.ebooks.db.get(dbID).then((data) => {
+        this.setData(data);
+        console.log("A getFromDB: ", this.data, data);
+        resolve(data);
+      }, reject);
+    });
+  };
+
+  getFromGoodreadsID = (goodreadsID) => {
     return new Promise((resolve, reject) => {
       cacheGoodreads
-        .getItem(this.id)
+        .getItem(goodreadsID)
         .then((value) => {
-          if (value) resolve(JSON.parse(value));
-          else {
+          if (value) {
+            this.setData({ goodreads: JSON.parse(value) });
+            console.log("B getFromG cache", this.data, JSON.parse(value));
+            resolve(this.data.goodreads);
+          } else {
             if (!urls.goodreads.id) reject(new Error("no goodreads key"));
             online.get(urls.goodreads.id(this.id)).then((goodreads) => {
-              let value = parseBookResponses({ goodreads });
-              cacheGoodreads.setItem(this.id, JSON.stringify(value));
-              resolve(value);
+              let data = parseBookResponses({ goodreads });
+              this.setData({ goodreads: data });
+              cacheGoodreads.setItem(goodreadsID, JSON.stringify(data));
+              console.log("C getFromG online", this.data, JSON.parse(value));
+              resolve(data);
             });
           }
         })
         .catch(reject);
     });
   };
-  getFromISBN = () => {
+  getFromISBN = (isbn) => {
     return new Promise((resolve, reject) => {
       cacheISBN
-        .getItem(this.id)
+        .getItem(isbn)
         .then((value) => {
-          if (value) resolve(JSON.parse(value));
-          else {
+          if (value) {
+            this.setData({ library: JSON.parse(value).library });
+            console.log(
+              "D get from isbn cache: ",
+              this.data,
+              JSON.parse(value)
+            );
+            resolve(this.data);
+          } else {
             let onlines = ["librarything", "goodreads"].filter((lib) => {
               return "isbn" in urls[lib];
             });
             let promises = onlines.map((lib) => {
-              let URL = urls[lib].isbn(this.id);
+              let URL = urls[lib].isbn(isbn);
 
               return online.get(URL);
             });
@@ -60,9 +95,11 @@ export default class Book {
               onlines.forEach((lib, k) => {
                 responses[lib] = values[k];
               });
-              let value = parseBookResponses(responses);
-              cacheISBN.setItem(this.id, JSON.stringify(value));
-              resolve(value);
+              let data = parseBookResponses(responses);
+              this.setData(data);
+              cacheISBN.setItem(isbn, JSON.stringify(data));
+              console.log("D get from isbn online: ", this.data, data);
+              resolve(this.data);
             });
           }
         })

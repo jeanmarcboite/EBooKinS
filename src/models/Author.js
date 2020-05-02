@@ -8,41 +8,46 @@ const cache = localforage.createInstance({ name: config.authors.name });
 
 class Author {
   constructor(id) {
-    this.id = id;
+    // goodreads not happy with Dick,Philip K.
+    this.id = id.replace(" K.", "");
   }
   get = (getOnline) => {
     return new Promise((resolve, reject) => {
       cache.getItem(this.id).then((value) => {
         if (!getOnline || value) resolve(JSON.parse(value));
-        if (!urls.goodreads.author) reject(new Error("no goodreads key"));
-        online
-          .get(urls.goodreads.author(this.id))
-          .then((value) => {
-            if (!value.data) {
-              reject(
-                new Error(
-                  `goodreads: author ${this.id} not found: ${value.message}`
-                )
-              );
-            }
-            parseString(value.data, (err, result) => {
-              if (err != null) {
-                reject(err);
+        else {
+          if (!urls.goodreads.author) reject(new Error("no goodreads key"));
+          online
+            .get(urls.goodreads.author(this.id))
+            .then((value) => {
+              console.log("get author online: ", value.data);
+              if (!value.data) {
+                reject(
+                  new Error(
+                    `goodreads: author ${this.id} not found: ${value.message}`
+                  )
+                );
               }
-              if (!result.GoodreadsResponse.author) {
-                resolve({ name: this.id });
-              } else {
-                let a = result.GoodreadsResponse.author[0];
-                let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
-                online
-                  .get(urls.goodreads.show_author(author.id))
-                  .then((response) => {
-                    this.parse(response, author, resolve, reject);
-                  });
-              }
-            });
-          })
-          .catch(reject);
+              parseString(value.data, (err, result) => {
+                console.log("get author online, parsed: ", result);
+                if (err != null) {
+                  reject(err);
+                }
+                if (!result.GoodreadsResponse.author) {
+                  resolve({ name: this.id });
+                } else {
+                  let a = result.GoodreadsResponse.author[0];
+                  let author = { name: a.name[0], id: a.$.id, link: a.link[0] };
+                  online
+                    .get(urls.goodreads.show_author(author.id))
+                    .then((response) => {
+                      this.parse(response, author, resolve, reject);
+                    });
+                }
+              });
+            })
+            .catch(reject);
+        }
       });
     });
   };
@@ -57,12 +62,13 @@ class Author {
           reject(err);
         } else {
           author.data = result.GoodreadsResponse.author[0];
-          author.img = author.data.image_url[0];
+          author.image_url = author.data.image_url[0];
           author.name = author.data.name[0];
           author.fans_count = author.data.fans_count[0];
           author.about = author.data.about;
           author.influences = author.data.influences;
           cache.setItem(this.id, JSON.stringify(author));
+          console.log(author);
           resolve(author);
         }
       });

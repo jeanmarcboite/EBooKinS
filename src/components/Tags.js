@@ -9,20 +9,23 @@ const getTag = (subject) => {
   if (keys.length === 2 && keys.includes("_") && keys.includes("$"))
     return subject._;
 };
+const tags = (names) =>
+  names
+    .filter((v, i, a) => a.indexOf(v) === i) // get unique names
+    .map((subject) => <Tag key={subject}>{subject}</Tag>);
 
-export default function Tags({ subject }) {
+export default function Tags({ subject, shelves }) {
   if (subject) {
     if (typeof subject === "string") return <Tag>{subject}</Tag>;
 
-    // get unique subjects
-    let subjects = subject.map(getTag).filter((v, i, a) => a.indexOf(v) === i);
-    return (
-      <div>
-        {subjects.map((subject) => (
-          <Tag key={subject}>{subject}</Tag>
-        ))}
-      </div>
-    );
+    return tags(subject.map(getTag));
+  }
+
+  if (shelves) {
+    let shelve_names = shelves
+      .map((shelve) => shelve.$.name)
+      .filter((v, i, a) => a.indexOf(v) === i);
+    return tags(shelve_names);
   }
   return null;
 }

@@ -57,7 +57,7 @@ const goodreads = !goodreadsKey
         goodreadsKey,
       author: (id) =>
         "https://www.goodreads.com/api/author_url/" +
-        id.replace(/\s+/g, ",") +
+        id.replace(" le ", "").replace(/\s+/g, ",") +
         "?key=" +
         goodreadsKey,
       search: (q) =>

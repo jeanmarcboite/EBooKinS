@@ -81,7 +81,7 @@ class ReadPage extends React.Component {
     if (target.files.length === 1) {
       let epub = target.files[0];
       DB.ebooks
-        .put(epub)
+        .putEpub(epub)
         .then((result) => {
           this.loadFile(result.id);
         })

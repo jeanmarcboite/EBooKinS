@@ -74,10 +74,6 @@ class SearchTitle extends React.Component {
     this.setState({ query, loading: true });
   };
 
-  onValidate = () => {
-    console.log("validate " + this.state.selected);
-  };
-
   search() {
     if (urls.goodreads.search) {
       online
@@ -127,7 +123,7 @@ class SearchTitle extends React.Component {
         <SelectedBook
           id={this.state.selected}
           className={style.selected}
-          onValidate={this.onValidate}
+          onValidate={() => this.props.onValidate(this.state.selected)}
         />
       </div>
     );

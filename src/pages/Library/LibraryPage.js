@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { ThemeContext } from "ThemeProvider";
 import DB from "lib/Database";
-import Book from "./components/BookCard";
+import BookCard from "./components/BookCard";
 import style from "./Library.module.css";
 import MainLayout from "pages/MainLayout";
 import SearchTitle from "./components/SearchTitle";
@@ -32,13 +32,19 @@ class LibraryPage extends React.Component {
   onMore = (book) => {
     this.props.history.push(`/book/${book._id}`);
   };
+  onValidate = (selected) => {
+    let book = this.state.search;
+    this.setState({ search: null });
+    book.identifier.goodreads = selected;
+    DB.ebooks.db.put(book);
+  };
 
   getItems = () => {
     DB.ebooks.db.allDocs().then((docs) => {
       this.setState({
         items: docs.rows.map((item) => {
           return (
-            <Book
+            <BookCard
               id={item.id}
               key={item.id}
               dispatch={this.props.dispatch}
@@ -54,7 +60,12 @@ class LibraryPage extends React.Component {
   render = () => {
     let content;
     if (this.state.search) {
-      content = <SearchTitle query={this.state.search.title} />;
+      content = (
+        <SearchTitle
+          query={this.state.search.title}
+          onValidate={this.onValidate}
+        />
+      );
     } else {
       content = <div className={style.library}>{this.state.items}</div>;
     }

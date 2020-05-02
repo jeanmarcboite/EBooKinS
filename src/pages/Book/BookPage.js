@@ -10,7 +10,7 @@ import ReactJson from "react-json-view";
 import { loadFile } from "pages/Read/store";
 import { withRouter } from "react-router-dom";
 
-import BookDetails from "./components/BookDetails";
+import BookDetails from "../../components/BookDetails";
 class BookPage extends React.Component {
   static contextType = ThemeContext;
 

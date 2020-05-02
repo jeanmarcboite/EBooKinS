@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import online from "lib/online";
-import MainLayout from "pages/MainLayout";
-import { parseString } from "xml2js";
-import style from "./Search.module.css";
-import { urls } from "config";
 import Book from "models/Book";
+import style from "./Search.module.css";
 import BookDetails from "components/BookDetails";
 import { Input, Spin, Button } from "antd";
-import { withRouter } from "react-router-dom";
+import { urls } from "config";
+import { parseString } from "xml2js";
 
 const SearchCard = ({ data, onClick }) => {
   if (data.$.type !== "Book") return <></>;
@@ -23,7 +21,6 @@ const SearchCard = ({ data, onClick }) => {
     </div>
   );
 };
-
 const SelectedBook = ({ id, onValidate }) => {
   const [state, setState] = useState({
     book: { data: {} },
@@ -50,18 +47,17 @@ const SelectedBook = ({ id, onValidate }) => {
   );
 };
 
-class SearchPage extends React.Component {
+class SearchTitle extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      query: this.props.match.params.query,
+      query: this.props.query,
       selected: undefined,
       works: [],
       loading: true,
     };
   }
-
   componentDidMount() {
     this.search();
   }
@@ -69,6 +65,18 @@ class SearchPage extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) this.search();
   }
+
+  onClick = (selected) => {
+    this.setState({ selected });
+  };
+
+  onSearch = (query) => {
+    this.setState({ query, loading: true });
+  };
+
+  onValidate = () => {
+    console.log("validate " + this.state.selected);
+  };
 
   search() {
     if (urls.goodreads.search) {
@@ -91,60 +99,38 @@ class SearchPage extends React.Component {
               if (works.length > 0)
                 this.setState({ selected: works[0].id[0]._ });
             }
-            /*
-            let promises = parsed.GoodreadsResponse.search[0].results[0].work
-              .slice(0, 1)
-              .map((w) => online.get(urls.goodreads.id(w.id[0]._)));
-
-            Promise.all(promises).then((works) => this.setState({ works }));
-            */
           });
         })
         .catch(console.warn);
     }
   }
 
-  onClick = (selected) => {
-    this.setState({ selected });
-  };
-
-  onSearch = (query) => {
-    this.setState({ query, loading: true });
-  };
-
-  onValidate = () => {
-    console.log("validate " + this.state.selected);
-  };
-
   render = () => {
-    if (this.state.loading) return <MainLayout show_header></MainLayout>;
     return (
-      <MainLayout show_header>
-        <div className={style.container}>
-          <Spin spinning={this.state.loading}>
-            <Input.Search
-              defaultValue={this.state.query}
-              onSearch={this.onSearch}
-              enterButton
-            />
-          </Spin>
-          <div className={style.gallery}>
-            {this.state.works.length === 0 ? (
-              <h2>Nothing found</h2>
-            ) : (
-              this.state.works.map((w, key) => (
-                <SearchCard data={w} key={key} onClick={this.onClick} />
-              ))
-            )}
-          </div>
-          <SelectedBook
-            id={this.state.selected}
-            className={style.selected}
-            onValidate={this.onValidate}
+      <div className={style.container}>
+        <Spin spinning={this.state.loading}>
+          <Input.Search
+            defaultValue={this.state.query}
+            onSearch={this.onSearch}
+            enterButton
           />
+        </Spin>
+        <div className={style.gallery}>
+          {!this.state.loading && this.state.works.length === 0 ? (
+            <h2>Nothing found</h2>
+          ) : (
+            this.state.works.map((w, key) => (
+              <SearchCard data={w} key={key} onClick={this.onClick} />
+            ))
+          )}
         </div>
-      </MainLayout>
+        <SelectedBook
+          id={this.state.selected}
+          className={style.selected}
+          onValidate={this.onValidate}
+        />
+      </div>
     );
   };
 }
-export default withRouter(SearchPage);
+export default SearchTitle;

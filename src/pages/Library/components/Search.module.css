@@ -1,0 +1,13 @@
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.container {}
+
+.selected {
+    display: block;
+    height: 300px;
+    overflow: "hidden";
+}

@@ -14,8 +14,6 @@ import Author from "models/Author";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
 
-import isbn_validate from "isbn-validate";
-
 import style from "./BookCard.module.css";
 
 const unknown = { name: "", img: "http://placehold.it/200x240" };
@@ -54,22 +52,18 @@ class BookCard extends React.Component {
   };
   more = () => {
     if (this.state.book.identifier && this.state.book.identifier.isbn) {
-      return <EllipsisOutlined onClick={this.onMore}></EllipsisOutlined>;
+      return (
+        <EllipsisOutlined
+          onClick={() => this.props.onMore(this.state.book)}
+        ></EllipsisOutlined>
+      );
     } else {
       return (
         <QuestionCircleOutlined
-          onClick={this.onSearch}
+          onClick={() => this.props.onSearch(this.state.book)}
         ></QuestionCircleOutlined>
       );
     }
-  };
-  onMore = (event) => {
-    if (this.state.book.identifier) {
-      this.props.history.push(`/book/${this.state.book._id}`);
-    }
-  };
-  onSearch = (event) => {
-    this.props.history.push("/search/" + this.state.book.title);
   };
 
   onRead = (event) => {

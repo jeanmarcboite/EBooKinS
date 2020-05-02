@@ -92,9 +92,9 @@ const openlibrary = {
     "http://covers.openlibrary.org/b/isbn/" + isbn + "-" + size + ".jpg",
 };
 
-const proxy {
+const proxy = {
   local: "http://localhost:8090/",
-  heroku: "https://cors-anywhere.herokuapp.com/"
-}
+  heroku: "https://cors-anywhere.herokuapp.com/",
+};
 
 export default { librarything, goodreads, openlibrary, proxy };

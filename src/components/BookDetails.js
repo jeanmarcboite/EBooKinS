@@ -63,34 +63,39 @@ export default class BookDetails extends React.Component {
   };
 
   getStars = () => {
-    if (!this.props.book.data || !this.props.book.data.work) return null;
+    if (
+      !this.props.book.data ||
+      !this.props.book.data.library ||
+      !this.props.book.data.library.goodreads
+    )
+      return null;
+    let goodreads = this.props.book.data.library.goodreads;
     return (
       <>
         <Rating
           readonly
-          initialRating={this.rating(this.props.book.data.work)}
+          initialRating={goodreads.average_rating}
           emptySymbol={<StarOutlined />}
           fullSymbol={<StarFilled />}
         />
-        <div>
-          {this.get(this.props.book.data.work, "ratings_count")} ratings
-        </div>
-        <div>
-          {this.get(this.props.book.data.work, "reviews_count")} reviews
-        </div>
+        <div>{goodreads.ratings_count} ratings</div>
+        <div>{goodreads.text_reviews_count} reviews</div>
       </>
     );
   };
   render = () => {
     console.log(this.props.book);
     let popular_shelves = [];
+    let gurl = "#";
     if (this.props.book.data) {
       if (
         this.props.book.data.library &&
         this.props.book.data.library.goodreads
-      )
-        popular_shelves = this.props.book.data.library.goodreads.popular_shelves
-          .shelf;
+      ) {
+        let goodreads = this.props.book.data.library.goodreads;
+        popular_shelves = goodreads.popular_shelves.shelf;
+        gurl = goodreads.url;
+      }
     }
     return (
       <div className={style.container}>
@@ -107,11 +112,12 @@ export default class BookDetails extends React.Component {
           <Tags subject={this.props.book.data.subject}></Tags>
         </div>
         <div className={style.title}>{this.props.book.data.title}</div>
-        <a className={style.links} href={this.get(this.props.book, "url")}>
+        <a className={style.links} href={gurl}>
           <img
             alt="goodreads"
             src="http://d.gr-assets.com/misc/1454549125-1454549125_goodreads_misc.png"
           />
+          {this.getStars()}
         </a>
         <div className={style.author}>
           <img

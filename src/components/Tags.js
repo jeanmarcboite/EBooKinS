@@ -12,7 +12,11 @@ const getTag = (subject) => {
 const tags = (names) =>
   names
     .filter((v, i, a) => a.indexOf(v) === i) // get unique names
-    .map((subject) => <Tag key={subject}>{subject}</Tag>);
+    .map((subject) => (
+      <Tag color={"geekblue"} key={subject}>
+        {subject}
+      </Tag>
+    ));
 
 export default function Tags({ subject, shelves }) {
   if (subject) {
@@ -22,10 +26,8 @@ export default function Tags({ subject, shelves }) {
   }
 
   if (shelves) {
-    let shelve_names = shelves
-      .map((shelve) => shelve.$.name)
-      .filter((v, i, a) => a.indexOf(v) === i);
-    return tags(shelve_names);
+    if (!Array.isArray(shelves)) shelves = [shelves];
+    return tags(shelves.map((shelve) => shelve.$.name));
   }
   return null;
 }

@@ -19,6 +19,20 @@ export default class Book {
     this.id = id.substring(this.type.length + 1);
   }
 
+  find = (what) => {
+    switch (what) {
+      default:
+        // would like to return:
+        // return this.data?[what] || this.library?.goodreads?[what])
+
+        if (this.data) {
+          if (this.data[what]) return this.data[what];
+        }
+
+        if (this.library?.goodreads) return this.library.goodreads[what];
+    }
+  };
+
   get = () => {
     if (this.data) return new Promise((resolve) => resolve(this.data));
 

@@ -41,16 +41,11 @@ export default class BookDetails extends React.Component {
   }
 
   mount = (book) => {
-    if (
-      book.library &&
-      book.library.goodreads &&
-      book.library.goodreads.authors &&
-      book.library.goodreads.authors.author
-    ) {
+    if (book.library?.goodreads?.authors?.author) {
       this.setState({
         author: book.library.goodreads.authors.author,
       });
-    } else if (book.data && book.data.author) {
+    } else if (book.data?.author) {
       let author = new Author(book.data.author);
       author
         .get(true)
@@ -60,7 +55,7 @@ export default class BookDetails extends React.Component {
 
     console.log(book);
 
-    if (book.data && book.data.identifier.isbn) {
+    if (book.data?.identifier?.isbn) {
       book
         .getFromISBN(book.data.identifier.isbn)
         .then(() => this.setState({ isbn: true })); // trigger render()
@@ -84,9 +79,7 @@ export default class BookDetails extends React.Component {
   };
 
   getOriginalPublicationDate = () => {
-    if (!this.state.book.library || !this.state.book.library.goodreads)
-      return "";
-    let work = this.state.book.library.goodreads.work;
+    let work = this.state.book.library?.goodreads?.work;
     if (!work || !work.original_publication_year) return "";
     if (
       work.original_publication_day === 1 &&
@@ -97,9 +90,9 @@ export default class BookDetails extends React.Component {
   };
 
   getStars = () => {
-    if (!this.state.book.library || !this.state.book.library.goodreads)
-      return null;
-    let goodreads = this.state.book.library.goodreads;
+    let goodreads = this.state.book.library?.goodreads;
+    if (!goodreads) return null;
+
     return (
       <>
         <Rating
@@ -114,7 +107,7 @@ export default class BookDetails extends React.Component {
     );
   };
   more = () => {
-    let identifier = this.state.book.data.identifier;
+    let identifier = this.state.book.data?.identifier;
     if (identifier && (identifier.isbn || identifier.goodreads)) {
       return (
         <EllipsisOutlined
@@ -164,10 +157,10 @@ export default class BookDetails extends React.Component {
                 alt={this.state.author.name}
                 height="80"
               />
-              <Tags subject={this.state.book.data.subject}></Tags>
+              <Tags subject={this.state.book.find("subject")}></Tags>
               <h2>{this.state.author.name} </h2>
-              <h3>{this.state.book.data.title}</h3>
-              <div>{renderHTML(this.state.book.data.description || "")}</div>
+              <h3>{this.state.book.find("title")}</h3>
+              <div>{renderHTML(this.state.book.find("description") || "")}</div>
             </div>
           </div>
         </div>
@@ -176,34 +169,34 @@ export default class BookDetails extends React.Component {
   };
 
   renderDetails = () => {
-    logg(this.state, this.state.book);
+    console.log(this.state);
     let popular_shelves = [];
     let gurl = "#";
-    if (this.state.book.data) {
-      if (
-        this.state.book.data.library &&
-        this.state.book.data.library.goodreads
-      ) {
-        let goodreads = this.state.book.data.library.goodreads;
-        popular_shelves = goodreads.popular_shelves.shelf;
-        gurl = goodreads.url;
-      }
+    let goodreads = this.state.book.library?.goodreads;
+    if (goodreads) {
+      popular_shelves = goodreads.popular_shelves.shelf;
+      gurl = goodreads.url;
     }
+    let coverURL =
+      this.state.coverURL || this.state.book.library?.goodreads?.image_url;
+
     return (
       <div className={styleDetails.container}>
         <div className={styleDetails.cover}>
           <img
-            src={this.state.coverURL}
-            alt="cover"
+            src={coverURL}
+            alt="no_cover"
             width="100%"
             onClick={this.props.onRead}
           />
           <div>{this.getOriginalPublicationDate()}</div>
         </div>
         <div className={styleDetails.subjects}>
-          <Tags subject={this.state.book.data.subject}></Tags>
+          <Tags subject={this.state.book.find("subject")}></Tags>
         </div>
-        <div className={styleDetails.title}>{this.state.book.data.title}</div>
+        <div className={styleDetails.title}>
+          {this.state.book.find("title")}
+        </div>
         <a className={styleDetails.links} href={gurl}>
           <img
             alt="goodreads"
@@ -221,7 +214,7 @@ export default class BookDetails extends React.Component {
           <h2>{this.state.author.name} </h2>
         </div>
         <div className={styleDetails.description}>
-          {renderHTML(this.state.book.data.description || "")}
+          {renderHTML(this.state.book.find("description") || "")}
         </div>
         <div className={styleDetails.shelves}>
           <Tags shelves={popular_shelves}></Tags>

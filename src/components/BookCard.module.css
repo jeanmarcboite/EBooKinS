@@ -1,0 +1,54 @@
+.card {
+    width: 280px;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    margin: 10px;
+}
+
+.cardwidth {
+    width: 260px;
+}
+
+.book {
+    composes: cardwidth;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 450px;
+    margin: 5px;
+    overflow: "auto";
+}
+
+.cover {
+    margin: auto;
+    display: list-item;
+    width: 160px;
+}
+
+.description {
+    composes: cardwidth;
+    overflow: hidden;
+    box-sizing: border-box;
+    color: purple;
+    flex: 1;
+}
+
+.scrolled {
+    composes: cardwidth;
+    position: relative;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.author_img {
+    float: right;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: x-large;
+    color: blueviolet;
+    margin: 5px;
+}

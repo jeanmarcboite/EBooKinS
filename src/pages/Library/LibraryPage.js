@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { ThemeContext } from "ThemeProvider";
 import DB from "lib/Database";
-import BookCard from "./components/BookCard";
+import BookDetails from "components/BookDetails";
 import style from "./Library.module.css";
 import MainLayout from "pages/MainLayout";
 import SearchTitle from "./components/SearchTitle";
@@ -52,8 +52,9 @@ class LibraryPage extends React.Component {
       this.setState({
         items: docs.rows.map((item) => {
           return (
-            <BookCard
-              id={item.id}
+            <BookDetails
+              card
+              bookID={"db:" + item.id}
               key={item.id}
               dispatch={this.props.dispatch}
               onMore={this.onMore}

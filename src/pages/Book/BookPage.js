@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { ThemeContext } from "ThemeProvider";
 import MainLayout from "pages/MainLayout";
-import { Book } from "models";
 import renderHTML from "react-render-html";
 // import the react-json-view component
 import ReactJson from "react-json-view";
@@ -19,16 +18,6 @@ class BookPage extends React.Component {
 
     this.state = {};
   }
-  componentDidMount() {
-    let book = new Book(this.props.match.params.book_id);
-    book
-      .get()
-      .then(() => {
-        this.setState({ book });
-      })
-      .catch(console.warn);
-  }
-
   json = () => {
     return <ReactJson src={this.state} />;
   };
@@ -47,7 +36,7 @@ class BookPage extends React.Component {
   render = () => {
     return (
       <MainLayout>
-        {this.state.book ? <BookDetails book={this.state.book} /> : null}
+        <BookDetails bookID={this.props.match.params.book_id} />
       </MainLayout>
     );
   };

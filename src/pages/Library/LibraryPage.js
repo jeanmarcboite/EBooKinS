@@ -31,7 +31,7 @@ class LibraryPage extends React.Component {
   };
 
   onMore = (book) => {
-    this.props.history.push(`/book/db:${book._id}`);
+    this.props.history.push(`/book/db:${book.data._id}`);
     /*
     if (book.identifier.isbn)
       this.props.history.push(`/book/isbn:${book.identifier.isbn}`);
@@ -71,7 +71,7 @@ class LibraryPage extends React.Component {
     if (this.state.search) {
       content = (
         <SearchTitle
-          query={this.state.search.title}
+          query={this.state.search.data.title}
           onValidate={this.onValidate}
         />
       );

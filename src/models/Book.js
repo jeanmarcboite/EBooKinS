@@ -5,8 +5,8 @@ import config, { urls } from "config";
 import online from "lib/online";
 import DB from "lib/Database";
 
-//const logg = console.log;
-const logg = () => {};
+const logg = console.log;
+//const logg = () => {};
 
 const cacheISBN = localforage.createInstance({ name: config.books.isbn });
 const cacheGoodreads = localforage.createInstance({
@@ -31,17 +31,11 @@ export default class Book {
     return f[this.type](this.id);
   };
 
-  setData = (data) => {
-    //console.warn("setData", data);
-    let this_data = this.data;
-    this.data = { ...this_data, ...data };
-  };
-
   getFromDB = (id) => {
     let dbID = id || this.id;
     return new Promise((resolve, reject) => {
       DB.ebooks.db.get(dbID).then((data) => {
-        this.setData(data);
+        this.data = data;
         logg("A getFromDB: ", this.data, data);
         resolve(data);
       }, reject);
@@ -54,17 +48,16 @@ export default class Book {
         .getItem(goodreadsID)
         .then((value) => {
           if (value) {
-            this.setData({ goodreads: JSON.parse(value) });
-            logg("B getFromG cache", this.data, JSON.parse(value));
-            resolve(this.data.goodreads);
+            this.library = JSON.parse(value);
+            logg("B getFromG cache", this);
+            resolve();
           } else {
             if (!urls.goodreads.id) reject(new Error("no goodreads key"));
             online.get(urls.goodreads.id(this.id)).then((goodreads) => {
-              let data = parseBookResponses({ goodreads });
-              this.setData({ goodreads: data });
-              cacheGoodreads.setItem(goodreadsID, JSON.stringify(data));
-              logg("C getFromG online", this.data, JSON.parse(value));
-              resolve(data);
+              this.library = parseBookResponses({ goodreads });
+              cacheGoodreads.setItem(goodreadsID, JSON.stringify(this.library));
+              logg("C getFromG online", this);
+              resolve();
             });
           }
         })
@@ -77,9 +70,9 @@ export default class Book {
         .getItem(isbn)
         .then((value) => {
           if (value) {
-            this.setData({ library: JSON.parse(value).library });
-            logg("D get from isbn cache: ", this.data, JSON.parse(value));
-            resolve(this.data);
+            this.library = JSON.parse(value);
+            logg("D get from isbn cache: ", this);
+            resolve();
           } else {
             let onlines = ["librarything", "goodreads"].filter((lib) => {
               return "isbn" in urls[lib];
@@ -94,11 +87,10 @@ export default class Book {
               onlines.forEach((lib, k) => {
                 responses[lib] = values[k];
               });
-              let data = parseBookResponses(responses);
-              this.setData(data);
-              cacheISBN.setItem(isbn, JSON.stringify(data));
-              logg("D get from isbn online: ", this.data, data);
-              resolve(this.data);
+              this.library = parseBookResponses(responses);
+              cacheISBN.setItem(isbn, JSON.stringify(this.library));
+              logg("D get from isbn online: ", this);
+              resolve();
             });
           }
         })
@@ -127,7 +119,8 @@ const parseGoodreadsValue = (value) => {
 };
 
 const parseBookResponses = (responses) => {
-  let book = { data: {}, library: {} };
+  let library = {};
+
   if ("goodreads" in responses) {
     let goodreads = { statusText: responses.goodreads.statusText };
     if (responses.goodreads.status === 200) {
@@ -138,17 +131,14 @@ const parseBookResponses = (responses) => {
             if (key === "work")
               goodreads[key] = parseGoodreadsValue(gbook[key], true);
             else goodreads[key] = parseGoodreadsValue(gbook[key]);
-
-            if (!(key in book.data)) {
-              book.data[key] = goodreads[key];
-            }
           }
         }
       });
 
-      book.library.goodreads = goodreads;
+      library.goodreads = goodreads;
     }
   }
+
   if ("librarything" in responses) {
     parseString(responses.librarything.data, function (err, result) {
       if (result && result.response.$.stat === "ok") {
@@ -158,25 +148,22 @@ const parseBookResponses = (responses) => {
         let fields = ["author", "title", "rating", "url"];
         fields.forEach(function (f) {
           librarything[f] = ltml[f][0];
-          if (!(f in book.data)) {
-            book.data[f] = ltml[f][0];
-          }
         });
         if (librarything.author.$.authorcode) {
           logg(librarything.author.$.id);
         }
 
-        book.library.librarything = librarything;
+        library.librarything = librarything;
       }
     });
   }
 
   if ("openlibrary" in responses) {
     if (responses.openlibrary.status !== 200) {
-      book.errors.openlibrary = responses.openlibrary;
+      console.log(responses.openlibrary);
     } else {
-      book.library.openlibrary = responses.openlibrary;
-
+      library.openlibrary = responses.openlibrary;
+      /*
       for (var key in book.library.openlibrary.data) {
         let data = book.library.openlibrary.data[key];
         book.library.openlibrary.url = data.info_url;
@@ -184,9 +171,9 @@ const parseBookResponses = (responses) => {
           book.data.series = data.details.series;
         }
         break;
-      }
+      }*/
     }
   }
 
-  return book;
+  return library;
 };

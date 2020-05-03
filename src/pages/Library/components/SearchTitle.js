@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import online from "lib/online";
-import Book from "models/Book";
 import style from "./Search.module.css";
 import BookDetails from "components/BookDetails";
 import { Input, Spin, Button } from "antd";
@@ -22,27 +21,13 @@ const SearchCard = ({ data, onClick }) => {
   );
 };
 const SelectedBook = ({ id, onValidate }) => {
-  const [state, setState] = useState({
-    book: { data: {} },
-    image_url: "",
-    id: null,
-  });
   if (!id) return null;
-
-  if (id !== state.id) {
-    let book = new Book("goodreads:" + id);
-    book.get().then((book) => {
-      let image_url = book.data.image_url;
-      setState({ id, book, image_url });
-    });
-  }
-
   return (
     <div>
       <Button type="danger" block onClick={onValidate}>
         Validate
       </Button>
-      <BookDetails image_url={state.image_url} data={state.book.data} />
+      <BookDetails bookID={"goodreads:" + id} />
     </div>
   );
 };
@@ -74,7 +59,7 @@ class SearchTitle extends React.Component {
     this.setState({ query, loading: true });
   };
 
-  search() {
+  search = () => {
     if (urls.goodreads.search) {
       online
         .get(urls.goodreads.search(this.state.query))
@@ -82,7 +67,7 @@ class SearchTitle extends React.Component {
           parseString(result.data, (err, parsed) => {
             let work = parsed.GoodreadsResponse.search[0].results[0].work;
             if (!work) {
-              this.setState({ works: null, loading: false });
+              this.setState({ works: [], loading: false });
             } else {
               let works = parsed.GoodreadsResponse.search[0].results[0].work.map(
                 (w) => w.best_book[0]
@@ -99,9 +84,10 @@ class SearchTitle extends React.Component {
         })
         .catch(console.warn);
     }
-  }
+  };
 
   render = () => {
+    console.log(this.state);
     return (
       <div className={style.container}>
         <Spin spinning={this.state.loading}>

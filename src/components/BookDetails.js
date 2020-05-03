@@ -41,11 +41,16 @@ export default class BookDetails extends React.Component {
   }
 
   mount = (book) => {
-    if (book.data.authors && book.data.authors.author) {
+    if (
+      book.library &&
+      book.library.goodreads &&
+      book.library.goodreads.authors &&
+      book.library.goodreads.authors.author
+    ) {
       this.setState({
-        author: book.data.authors.author,
+        author: book.library.goodreads.authors.author,
       });
-    } else if (book.data.author) {
+    } else if (book.data && book.data.author) {
       let author = new Author(book.data.author);
       author
         .get(true)
@@ -53,11 +58,12 @@ export default class BookDetails extends React.Component {
         .catch(console.warn);
     }
 
-    if (book.data.identifier.isbn) {
-      logg(book.data.identifier);
+    console.log(book);
+
+    if (book.data && book.data.identifier.isbn) {
       book
         .getFromISBN(book.data.identifier.isbn)
-        .then(() => this.setState({ isbn: true }));
+        .then(() => this.setState({ isbn: true })); // trigger render()
     }
 
     DB.ebooks.db
@@ -78,8 +84,9 @@ export default class BookDetails extends React.Component {
   };
 
   getOriginalPublicationDate = () => {
-    if (!this.state.book.data) return "";
-    let work = this.state.book.data.work;
+    if (!this.state.book.library || !this.state.book.library.goodreads)
+      return "";
+    let work = this.state.book.library.goodreads.work;
     if (!work || !work.original_publication_year) return "";
     if (
       work.original_publication_day === 1 &&
@@ -90,13 +97,9 @@ export default class BookDetails extends React.Component {
   };
 
   getStars = () => {
-    if (
-      !this.state.book.data ||
-      !this.state.book.data.library ||
-      !this.state.book.data.library.goodreads
-    )
+    if (!this.state.book.library || !this.state.book.library.goodreads)
       return null;
-    let goodreads = this.state.book.data.library.goodreads;
+    let goodreads = this.state.book.library.goodreads;
     return (
       <>
         <Rating
@@ -111,10 +114,8 @@ export default class BookDetails extends React.Component {
     );
   };
   more = () => {
-    if (
-      this.state.book.identifier &&
-      (this.state.book.identifier.isbn || this.state.book.identifier.goodreads)
-    ) {
+    let identifier = this.state.book.data.identifier;
+    if (identifier && (identifier.isbn || identifier.goodreads)) {
       return (
         <EllipsisOutlined
           onClick={() => this.props.onMore(this.state.book)}
@@ -140,6 +141,7 @@ export default class BookDetails extends React.Component {
     return this.renderDetails();
   };
   renderCard = () => {
+    console.log("renderCard", this.state);
     return (
       <div className={styleCard.card}>
         <div className={styleCard.book}>

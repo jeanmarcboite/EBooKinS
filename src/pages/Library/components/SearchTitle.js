@@ -22,12 +22,14 @@ const SearchCard = ({ data, onClick }) => {
 };
 const SelectedBook = ({ id, onValidate }) => {
   if (!id) return null;
+  let bookID = "goodreads:" + id;
+  console.log(bookID);
   return (
     <div>
       <Button type="danger" block onClick={onValidate}>
         Validate
       </Button>
-      <BookDetails bookID={"goodreads:" + id} />
+      <BookDetails bookID={bookID} />
     </div>
   );
 };

@@ -5,11 +5,11 @@ import Tags from "components/Tags";
 import styleDetails from "./BookDetails.module.css";
 import styleCard from "./BookCard.module.css";
 import Rating from "react-rating";
-import Author from "models/Author";
+import AuthorCard from "components/AuthorCard";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import renderHTML from "react-render-html";
 import DB from "lib/Database";
-import { Book } from "models";
+import { Author, Book } from "models";
 import {
   EditOutlined,
   EllipsisOutlined,
@@ -31,6 +31,14 @@ export default class BookDetails extends React.Component {
   }
 
   componentDidMount() {
+    this.getBook();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.bookID !== prevProps.bookID) this.getBook();
+  }
+
+  getBook() {
     let book = new Book(this.props.bookID);
     book
       .get()
@@ -201,13 +209,7 @@ export default class BookDetails extends React.Component {
           {this.getStars()}
         </a>
         <div className={styleDetails.author}>
-          <img
-            className={styleDetails.author_img}
-            src={this.state.author.image_url}
-            alt={this.state.author.name}
-            height="80"
-          />
-          <h2>{this.state.author.name} </h2>
+          <AuthorCard author={this.state.author} />
         </div>
         <div className={styleDetails.description}>
           {renderHTML(this.state.book.find("description") || "")}
@@ -222,4 +224,8 @@ export default class BookDetails extends React.Component {
 
 BookDetails.propTypes = {
   bookID: PropTypes.string.isRequired,
+};
+
+BookDetails.whyDidYouRender = {
+  logOnDifferentValues: true,
 };

@@ -87,7 +87,7 @@ export default class BookDetails extends React.Component {
     );
   };
   render = () => {
-    logg(this.props.book);
+    logg(this.state, this.props.book);
     let popular_shelves = [];
     let gurl = "#";
     if (this.props.book.data) {

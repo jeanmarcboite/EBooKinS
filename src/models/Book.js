@@ -5,8 +5,8 @@ import config, { urls } from "config";
 import online from "lib/online";
 import DB from "lib/Database";
 
-const logg = console.log;
-//const logg = () => {};
+//const logg = console.log;
+const logg = () => {};
 
 const cacheISBN = localforage.createInstance({ name: config.books.isbn });
 const cacheGoodreads = localforage.createInstance({

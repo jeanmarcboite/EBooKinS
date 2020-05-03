@@ -43,8 +43,9 @@ class LibraryPage extends React.Component {
   onValidate = (selected) => {
     let book = this.state.search;
     this.setState({ search: null });
-    book.identifier.goodreads = selected;
-    DB.ebooks.db.put(book);
+    book.data.identifier.goodreads = selected;
+    console.log(book);
+    DB.ebooks.db.put(book.data);
   };
 
   getItems = () => {

@@ -19,7 +19,7 @@ import {
 import { loadFile } from "pages/Read/store";
 
 //const logg = console.log;
-const logg = () => {};
+//const logg = () => {};
 
 export default class BookDetails extends React.Component {
   static contextType = ThemeContext;
@@ -52,8 +52,6 @@ export default class BookDetails extends React.Component {
         .then((author) => this.setState({ author }))
         .catch(console.warn);
     }
-
-    console.log(book);
 
     if (book.data?.identifier?.isbn) {
       book
@@ -134,7 +132,6 @@ export default class BookDetails extends React.Component {
     return this.renderDetails();
   };
   renderCard = () => {
-    console.log("renderCard", this.state);
     return (
       <div className={styleCard.card}>
         <div className={styleCard.book}>
@@ -169,7 +166,6 @@ export default class BookDetails extends React.Component {
   };
 
   renderDetails = () => {
-    console.log(this.state);
     let popular_shelves = [];
     let gurl = "#";
     let goodreads = this.state.book.library?.goodreads;
